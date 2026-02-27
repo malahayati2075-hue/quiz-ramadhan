@@ -7,231 +7,262 @@
           "id": 1,
           "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...",
           "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"],
-          "answer": "Iqlab"
+          "answer": "Iqlab",
+          "explanation": "Huruf Nun Mati bertemu Huruf Ba (ب) hukumnya Iqlab, yaitu dibaca dengung samar seperti huruf Mim."
         },
         {
           "id": 2,
           "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...",
           "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"],
-          "answer": "Idgham Bighunnah"
+          "answer": "Idgham Bighunnah",
+          "explanation": "Huruf Nun Mati bertemu huruf Nun (salah satu dari Yarmalun), hukumnya Idgham Bighunnah (disukun dan didengungkan)."
         },
         {
           "id": 3,
           "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...",
           "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"],
-          "answer": "Idgham Bila Ghunnah"
+          "answer": "Idgham Bila Ghunnah",
+          "explanation": "Huruf Nun Mati bertemu huruf Ra (ر), salah satu huruf Idgham Bila Ghunnah (disukun tanpa dengung)."
         },
         {
           "id": 4,
           "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...",
           "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"],
-          "answer": "مِن شَرٍّ"
+          "answer": "مِن شَرٍّ",
+          "explanation": "Huruf Nun Mati bertemu huruf Syin (س) termasuk Ikhfa Haqiqi (samar dibaca dengung 1 harakat)."
         },
         {
           "id": 5,
           "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...",
           "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"],
-          "answer": "Ikhfa Haqiqi"
+          "answer": "Ikhfa Haqiqi",
+          "explanation": "Huruf Nun Mati bertemu huruf Jim (ج) termasuk salah satu dari 15 huruf Ikhfa Haqiqi."
         },
         {
           "id": 6,
           "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...",
           "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"],
-          "answer": "Idgham Mimi"
+          "answer": "Idgham Mimi",
+          "explanation": "Mim Mati bertemu Mim, hukumnya Idgham Mimi (disatukan bacaannya) atau disebut juga Idgham Mutamasilain."
         },
         {
           "id": 7,
           "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...",
           "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
-          "answer": "Ikhfa Syafawi"
+          "answer": "Ikhfa Syafawi",
+          "explanation": "Mim Mati bertemu Huruf Ba (ب), hukumnya Ikhfa Syafawi (samar dibaca dengung)."
         },
         {
           "id": 8,
           "question": "Pada kata عَلَيْهِمْ وَلَا, hukum bacaan mim mati bertemu huruf wau adalah...",
           "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
-          "answer": "Idzhar Syafawi"
+          "answer": "Idzhar Syafawi",
+          "explanation": "Mim Mati bertemu Huruf Wau (selain Mim dan Ba), hukumnya Idzhar Syafawi (dibaca jelas)."
         },
         {
           "id": 9,
           "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan (berhenti) adalah...",
           "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"],
-          "answer": "Qalqalah Kubra"
+          "answer": "Qalqalah Kubra",
+          "explanation": "Karena huruf Qalqalah (Qaf) mati karena Waqaf (berhenti), hukumnya Qalqalah Kubra (lebih keras/nyata)."
         },
         {
           "id": 10,
           "question": "Pada kata يَقْطِينَ, huruf qaf termasuk bacaan qalqalah...",
           "options": ["Kubra", "Shugra", "Wustha", "Kubra dan Shugra"],
-          "answer": "Shugra"
+          "answer": "Shugra",
+          "explanation": "Huruf Qaf mati asli (bukan karena waqaf), hukumnya Qalqalah Shugra (ringan)."
         },
         {
           "id": 11,
           "question": "Panjang mad pada kata نُوحِيهَا adalah...",
           "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"],
-          "answer": "2 harakat"
+          "answer": "2 harakat",
+          "explanation": "Ini adalah Mad Thabi'i (Wajib), panjangnya 1 alif atau 2 harakat."
         },
         {
           "id": 12,
           "question": "Hukum bacaan mad pada kata جَآءَ adalah...",
           "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad"],
-          "answer": "Mad Wajib Muttashil"
+          "answer": "Mad Wajib Muttashil",
+          "explanation": "Mad bertemu Hamzah dalam satu kata, hukumnya Mad Wajib Muttashil, panjang 4-5 harakat."
         },
         {
           "id": 13,
           "question": "Pada kata بِمَآ أُنزِلَ, hukum bacaan madnya adalah...",
           "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad", "Mad Thabi'i"],
-          "answer": "Mad Jaiz Munfashil"
+          "answer": "Mad Jaiz Munfashil",
+          "explanation": "Mad bertemu Hamzah di kata yang berbeda (terpisah), hukumnya Mad Jaiz Munfashil."
         },
         {
           "id": 14,
           "question": "Jika kita berhenti (waqaf) pada kata الرَّحِيمِ, hukum madnya berubah menjadi...",
           "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Aridh Lissukun", "Mad Lazim"],
-          "answer": "Mad Aridh Lissukun"
+          "answer": "Mad Aridh Lissukun",
+          "explanation": "Mad bertemu sukun karena waqaf (bukan sukun asli), hukumnya Mad Aridh Lissukun (boleh 2, 4, atau 6 harakat)."
         },
         {
           "id": 15,
           "question": "Hukum bacaan pada kata دَآبَّةٍ adalah...",
           "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad Lazim Mutsaqqal Kalimi", "Mad Aridh Lissukun"],
-          "answer": "Mad Lazim Mutsaqqal Kalimi"
+          "answer": "Mad Lazim Mutsaqqal Kalimi",
+          "explanation": "Mad bertemu sukun asli (tasydid) dalam satu kata, hukumnya Mad Lazim Mutsaqqal Kalimi (wajib panjang 6 harakat)."
         },
         {
           "id": 16,
           "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...",
           "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"],
-          "answer": "Tafkhim (Tebal)"
+          "answer": "Tafkhim (Tebal)",
+          "explanation": "Huruf Ra berharakat Fathah, maka dibaca Tafkhim (Tebal)."
         },
         {
           "id": 17,
           "question": "Huruf Ra pada kata رِجَالٌ dibaca dengan hukum...",
           "options": ["Tafkhim", "Tarqiq", "Qalqalah", "Ghunnah"],
-          "answer": "Tarqiq"
+          "answer": "Tarqiq",
+          "explanation": "Huruf Ra berharakat Kasrah, maka dibaca Tarqiq (Tipis)."
         },
         {
           "id": 18,
           "question": "Pada kata فِرْعَوْنَ, huruf Ra dibaca...",
           "options": ["Tarqiq", "Tafkhim", "Samar", "Jelas"],
-          "answer": "Tafkhim"
+          "answer": "Tarqiq",
+          "explanation": "Huruf Ra sukun setelah Kasrah (bukan untuk menyambung), hukumnya Tarqiq."
         },
         {
           "id": 19,
           "question": "Hukum bacaan Ghunnah Musyaddadah terdapat pada kata...",
           "options": ["كَانَ", "إِنَّا", "قُلْ", "مِنْ"],
-          "answer": "إِنَّا"
+          "answer": "إِنَّا",
+          "explanation": "Huruf Nun bertasydid (نّ) dalam kata إِنَّا mengharuskan dibaca Ghunnah Musyaddadah (dengung penuh)."
         },
         {
           "id": 20,
           "question": "Huruf-huruf Idzhar Halqi berjumlah...",
           "options": ["4", "5", "6", "7"],
-          "answer": "6"
+          "answer": "6",
+          "explanation": "Huruf Idzhar Halqi ada 6: Hamzah (ء), Ha (ه), 'Ain (ع), Ghain (غ), Kha (خ), dan Ha (ح)."
         },
         {
           "id": 21,
           "question": "Contoh bacaan Idzhar Halqi yang benar terdapat pada kata...",
           "options": ["مِنْ خَيْرٍ", "مِنۢ بَعْدِ", "مِن نُّورٍ", "مِن وَلِيٍّ"],
-          "answer": "مِنْ خَيْرٍ"
+          "answer": "مِنْ خَيْرٍ",
+          "explanation": "Nun mati bertemu Kha (خ) adalah Idzhar Halqi karena Kha adalah salah satu dari 6 huruf halqi."
         },
         {
           "id": 22,
           "question": "Ikhfa dibaca dengan cara...",
           "options": ["Jelas", "Dengung", "Samar disertai dengung", "Terputus"],
-          "answer": "Samar disertai dengung"
+          "answer": "Samar disertai dengung",
+          "explanation": "Ikhfa artinya menyembunyikan, dibaca samar antara idzhar dan idgham dengan nada dengung."
         },
         {
           "id": 23,
           "question": "Pada kata السُّوءَ, mad wajib muttashil dibaca panjang...",
           "options": ["2 harakat", "4-5 harakat", "6 harakat", "Bebas"],
-          "answer": "4-5 harakat"
+          "answer": "4-5 harakat",
+          "explanation": "Mad Wajib Muttashil ketika washal (tersambung) bacaannya panjang 4 atau 5 harakat."
         },
         {
           "id": 24,
           "question": "Huruf Isti'la (huruf yang dibaca tebal) berjumlah...",
           "options": ["5", "6", "7", "8"],
-          "answer": "7"
+          "answer": "7",
+          "explanation": "Huruf Isti'la ada 7: خ، ص، ض، غ، ط، ق، ظ. Huruf-huruf ini diucapkan dengan menaikkan pangkal lidah."
         },
         {
           "id": 25,
           "question": "Pada kata طَائِفَةٌ, huruf Tho (ط) termasuk huruf...",
           "options": ["Istifal", "Isti'la", "Inhiraf", "Qalqalah saja"],
-          "answer": "Isti'la"
+          "answer": "Isti'la",
+          "explanation": "Huruf Tho (ط) adalah huruf Isti'la (dibaca tebal) sekaligus huruf Qalqalah."
         }
       ]
     },
-
     {
       "category": "Sirah Nabawi",
       "questions": [
-        { "id": 1, "question": "Rasulullah ﷺ lahir di kota...", "options": ["Madinah", "Thaif", "Makkah", "Yaman"], "answer": "Makkah" },
-        { "id": 2, "question": "Tahun kelahiran Nabi dikenal sebagai Tahun...", "options": ["Hijrah", "Badar", "Gajah", "Uhud"], "answer": "Gajah" },
-        { "id": 3, "question": "Nama ayah Nabi Muhammad ﷺ adalah...", "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"], "answer": "Abdullah" },
-        { "id": 4, "question": "Nama ibu Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"], "answer": "Aminah" },
-        { "id": 5, "question": "Nabi menerima wahyu pertama di Gua...", "options": ["Hira", "Tsur", "Uhud", "Badar"], "answer": "Hira" },
-        { "id": 6, "question": "Malaikat yang menyampaikan wahyu adalah...", "options": ["Mikail", "Israfil", "Jibril", "Izrail"], "answer": "Jibril" },
-        { "id": 7, "question": "Istri pertama Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"], "answer": "Khadijah" },
-        { "id": 8, "question": "Hijrah Nabi terjadi dari Makkah ke...", "options": ["Thaif", "Madinah", "Yaman", "Syam"], "answer": "Madinah" },
-        { "id": 9, "question": "Perang pertama dalam Islam adalah...", "options": ["Uhud", "Badar", "Khandaq", "Hunain"], "answer": "Badar" },
-        { "id": 10, "question": "Nabi wafat pada usia...", "options": ["60", "61", "62", "63"], "answer": "63" },
-        { "id": 11, "question": "Masjid pertama dalam Islam adalah...", "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"], "answer": "Masjid Quba" },
-        { "id": 12, "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...", "options": ["4", "5", "6", "7"], "answer": "6" },
-        { "id": 13, "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...", "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"], "answer": "Terpercaya" },
-        { "id": 14, "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...", "options": ["Thaif", "Madinah", "Badar", "Uhud"], "answer": "Madinah" },
-        { "id": 15, "question": "Shalat lima waktu diwajibkan pada peristiwa...", "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"], "answer": "Isra Mi'raj" },
-        { "id": 16, "question": "Penaklukan Makkah disebut juga...", "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"], "answer": "Fathu Makkah" },
-        { "id": 17, "question": "Paman Nabi yang paling membela beliau adalah...", "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"], "answer": "Abu Thalib" },
-        { "id": 18, "question": "Nabi berdakwah secara sembunyi-sembunyi selama...", "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"], "answer": "3 tahun" },
-        { "id": 19, "question": "Istri Nabi yang paling muda adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah" },
-        { "id": 20, "question": "Wafatnya Nabi Muhammad ﷺ terjadi pada bulan...", "options": ["Ramadhan", "Syawal", "Rabiul Awal", "Dzulhijjah"], "answer": "Rabiul Awal" }
-      ]
-    },
-
-    {
-      "category": "Asmaul Husna",
-      "questions": [
-        { "id": 1, "question": "Ar-Rahman artinya...", "options": ["Maha Adil", "Maha Penyayang", "Maha Pengasih", "Maha Bijaksana"], "answer": "Maha Pengasih" },
-        { "id": 2, "question": "Al-Malik artinya...", "options": ["Maha Raja", "Maha Mengetahui", "Maha Kuasa", "Maha Kaya"], "answer": "Maha Raja" },
-        { "id": 3, "question": "Al-Quddus artinya...", "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"], "answer": "Maha Suci" },
-        { "id": 4, "question": "As-Salam artinya...", "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"], "answer": "Maha Pemberi Keselamatan" },
-        { "id": 5, "question": "Al-Khaliq artinya...", "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"], "answer": "Maha Pencipta" },
-        { "id": 6, "question": "Ar-Razzaq artinya...", "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"], "answer": "Maha Pemberi Rezeki" },
-        { "id": 7, "question": "Al-Ghaffar artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"], "answer": "Maha Pengampun" },
-        { "id": 8, "question": "Al-Alim artinya...", "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"], "answer": "Maha Mengetahui" },
-        { "id": 9, "question": "As-Sami artinya...", "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"], "answer": "Maha Mendengar" },
-        { "id": 10, "question": "Al-Bashir artinya...", "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"], "answer": "Maha Melihat" },
-        { "id": 11, "question": "Al-Adl artinya...", "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"], "answer": "Maha Adil" },
-        { "id": 12, "question": "Al-Latif artinya...", "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"], "answer": "Maha Lembut" },
-        { "id": 13, "question": "Al-Hakim artinya...", "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"], "answer": "Maha Bijaksana" },
-        { "id": 14, "question": "Al-Aziz artinya...", "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"], "answer": "Maha Perkasa" },
-        { "id": 15, "question": "Al-Ghafur artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"], "answer": "Maha Pengampun" },
-        { "id": 16, "question": "Al-Wadud artinya...", "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"], "answer": "Maha Pencinta" },
-        { "id": 17, "question": "Al-Hafizh artinya...", "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"], "answer": "Maha Menjaga" },
-        { "id": 18, "question": "Al-Matin artinya...", "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"], "answer": "Maha Kokoh" },
-        { "id": 19, "question": "Al-Hayy artinya...", "options": ["Maha Hidup", "Maha Kekal", "Maha Ada", "Maha Kuasa"], "answer": "Maha Hidup" },
-        { "id": 20, "question": "Al-Qayyum artinya...", "options": ["Maha Berdiri Sendiri", "Maha Kekal", "Maha Mengatur", "Maha Menolong"], "answer": "Maha Berdiri Sendiri" }
-      ]
-    },
-
-    {
-      "category": "Sahabat Nabi",
-      "questions": [
-        { "id": 1, "question": "Sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa adalah...", "options": ["Ali bin Abi Thalib", "Abu Bakar", "Umar bin Khattab", "Utsman bin Affan"], "answer": "Abu Bakar" },
-        { "id": 2, "question": "Sahabat yang dijuluki Al-Faruq adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Utsman"], "answer": "Umar" },
-        { "id": 3, "question": "Sahabat yang terkenal sangat pemalu adalah...", "options": ["Ali", "Umar", "Utsman", "Abu Bakar"], "answer": "Utsman" },
-        { "id": 4, "question": "Sepupu Nabi sekaligus menantu beliau adalah...", "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"], "answer": "Ali" },
-        { "id": 5, "question": "Bilal bin Rabah adalah seorang...", "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"], "answer": "Budak yang dimerdekakan" },
-        { "id": 6, "question": "Muadzin pertama dalam Islam adalah...", "options": ["Abu Bakar", "Bilal", "Umar", "Ali"], "answer": "Bilal" },
-        { "id": 7, "question": "Sahabat yang mendapat julukan pedang Allah adalah...", "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"], "answer": "Khalid bin Walid" },
-        { "id": 8, "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah" },
-        { "id": 9, "question": "Abu Hurairah terkenal karena...", "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"], "answer": "Banyak meriwayatkan hadits" },
-        { "id": 10, "question": "Sahabat yang menemani Nabi di gua Tsur adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Bilal"], "answer": "Abu Bakar" },
-        { "id": 11, "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"], "answer": "Umar" },
-        { "id": 12, "question": "Hamzah bin Abdul Muthalib adalah...", "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"], "answer": "Paman Nabi" },
-        { "id": 13, "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...", "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"], "answer": "Mus'ab bin Umair" },
-        { "id": 14, "question": "Sahabat yang menjadi khalifah pertama adalah...", "options": ["Umar", "Ali", "Abu Bakar", "Utsman"], "answer": "Abu Bakar" },
-        { "id": 15, "question": "Utsman bin Affan menikah dengan berapa putri Nabi?", "options": ["1", "2", "3", "4"], "answer": "2" },
-        { "id": 16, "question": "Sahabat yang dijuluki Asadullah adalah...", "options": ["Ali", "Hamzah", "Khalid", "Zubair"], "answer": "Hamzah" },
-        { "id": 17, "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...", "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"], "answer": "Panglima" },
-        { "id": 18, "question": "Sahabat perempuan pertama yang gugur syahid adalah...", "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"], "answer": "Sumayyah" },
-        { "id": 19, "question": "Abdurrahman bin Auf terkenal karena...", "options": ["Ilmu", "Kedermawanan", "Keberanian", "Kepemimpinan"], "answer": "Kedermawanan" },
-        { "id": 20, "question": "Sahabat yang dikenal sangat jujur adalah...", "options": ["Ali", "Abu Bakar", "Umar", "Utsman"], "answer": "Abu Bakar" }
-      ]
-    }
-  ]
-}
+        {
+          "id": 1,
+          "question": "Rasulullah ﷺ lahir di kota...",
+          "options": ["Madinah", "Thaif", "Makkah", "Yaman"],
+          "answer": "Makkah",
+          "explanation": "Nabi Muhammad SAW lahir di kota Makkah pada tanggal 12 Rabiul Awal Tahun Gajah."
+        },
+        {
+          "id": 2,
+          "question": "Tahun kelahiran Nabi dikenal sebagai Tahun...",
+          "options": ["Hijrah", "Badar", "Gajah", "Uhud"],
+          "answer": "Gajah",
+          "explanation": "Dinamakan Tahun Gajah karena pasukan gajah Abrahah datang menyerang Ka'bah di tahun yang sama."
+        },
+        {
+          "id": 3,
+          "question": "Nama ayah Nabi Muhammad ﷺ adalah...",
+          "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"],
+          "answer": "Abdullah",
+          "explanation": "Ayah beliau adalah Abdullah bin Abdul Muthalib, wafat saat Nabi masih dalam kandungan."
+        },
+        {
+          "id": 4,
+          "question": "Nama ibu Nabi Muhammad ﷺ adalah...",
+          "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"],
+          "answer": "Aminah",
+          "explanation": "Ibu beliau adalah Aminah binti Wahb, wafat saat Nabi berusia 6 tahun di Abwa."
+        },
+        {
+          "id": 5,
+          "question": "Nabi menerima wahyu pertama di Gua...",
+          "options": ["Hira", "Tsur", "Uhud", "Badar"],
+          "answer": "Hira",
+          "explanation": "Wahyu pertama (Surat Al-Alaq ayat 1-5) diterima di Gua Hira."
+        },
+        {
+          "id": 6,
+          "question": "Malaikat yang menyampaikan wahyu adalah...",
+          "options": ["Mikail", "Israfil", "Jibril", "Izrail"],
+          "answer": "Jibril",
+          "explanation": "Malaikat Jibril adalah penanggung jawab menyampaikan wahyu Allah kepada para Rasul."
+        },
+        {
+          "id": 7,
+          "question": "Istri pertama Nabi Muhammad ﷺ adalah...",
+          "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"],
+          "answer": "Khadijah",
+          "explanation": "Khadijah binti Khuwailid adalah istri pertama dan pertama yang beriman kepada Nabi."
+        },
+        {
+          "id": 8,
+          "question": "Hijrah Nabi terjadi dari Makkah ke...",
+          "options": ["Thaif", "Madinah", "Yaman", "Syam"],
+          "answer": "Madinah",
+          "explanation": "Peristiwa Hijrah (pindah) dari Makkah ke Yatsrib (Madinah) terjadi tahun 622 M."
+        },
+        {
+          "id": 9,
+          "question": "Perang pertama dalam Islam adalah...",
+          "options": ["Uhud", "Badar", "Khandaq", "Hunain"],
+          "answer": "Badar",
+          "explanation": "Perang Badar terjadi pada 17 Ramadhan tahun 2 H, merupakan perang besar pertama umat Islam."
+        },
+        {
+          "id": 10,
+          "question": "Nabi wafat pada usia...",
+          "options": ["60", "61", "62", "63"],
+          "answer": "63",
+          "explanation": "Nabi Muhammad SAW wafat di Madinah pada usia 63 tahun (tahun 11 H)."
+        },
+        {
+          "id": 11,
+          "question": "Masjid pertama dalam Islam adalah...",
+          "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"],
+          "answer": "Masjid Quba",
+          "explanation": "Masjid Quba adalah masjid pertama yang dibangun Nabi saat dalam perjalanan hijrah."
+        },
+        {
+          "id": 12,
+          "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...",
+          "options": ["4", "5", "6", "7"],
+          "answer": "6",
+          "explanation": "Perjanjian damai Hudaibiyah terjadi pada tahun 6 H
