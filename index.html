@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Ramadhan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .category {
+      margin-top: 30px;
+    }
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+    .options label {
+      display: block;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Quiz Ramadhan</h1>
+<div id="quiz"></div>
+
+<script>
+fetch("data/quiz-ramadhan.json")
+  .then(response => response.json())
+  .then(data => {
+    const quizContainer = document.getElementById("quiz");
+
+    data.quiz_ramadhan.forEach(category => {
+      const categoryDiv = document.createElement("div");
+      categoryDiv.className = "category";
+
+      categoryDiv.innerHTML = `<h2>${category.category}</h2>`;
+
+      category.questions.forEach(q => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question";
+
+        let optionsHTML = "";
+        q.options.forEach(option => {
+          optionsHTML += `
+            <label>
+              <input type="radio" name="q-${category.category}-${q.id}">
+              ${option}
+            </label>
+          `;
+        });
+
+        questionDiv.innerHTML = `
+          <p><strong>${q.id}. ${q.question}</strong></p>
+          <div class="options">${optionsHTML}</div>
+        `;
+
+        categoryDiv.appendChild(questionDiv);
+      });
+
+      quizContainer.appendChild(categoryDiv);
+    });
+  })
+  .catch(error => {
+    console.error("Gagal load data:", error);
+  });
+</script>
+
+</body>
+</html>
