@@ -5,52 +5,154 @@
       "questions": [
         {
           "id": 1,
-          "question": "Hukum bacaan nun mati atau tanwin bertemu huruf ba adalah...",
+          "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...",
           "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"],
           "answer": "Iqlab"
         },
         {
           "id": 2,
-          "question": "Idgham bila ghunnah terjadi jika nun mati atau tanwin bertemu huruf...",
-          "options": ["Lam dan Ra", "Ya, Nun, Mim, Wau", "Ba", "Qaf"],
-          "answer": "Ya, Nun, Mim, Wau"
+          "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...",
+          "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"],
+          "answer": "Idgham Bighunnah"
         },
         {
           "id": 3,
-          "question": "Hukum bacaan mim mati bertemu mim adalah...",
+          "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...",
+          "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"],
+          "answer": "Idgham Bila Ghunnah"
+        },
+        {
+          "id": 4,
+          "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...",
+          "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"],
+          "answer": "مِن شَرٍّ"
+        },
+        {
+          "id": 5,
+          "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...",
+          "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"],
+          "answer": "Ikhfa Haqiqi"
+        },
+        {
+          "id": 6,
+          "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...",
           "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"],
           "answer": "Idgham Mimi"
         },
         {
-          "id": 4,
+          "id": 7,
+          "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...",
+          "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
+          "answer": "Ikhfa Syafawi"
+        },
+        {
+          "id": 8,
+          "question": "Pada kata عَلَيْهِمْ وَلَا, hukum bacaan mim mati bertemu huruf wau adalah...",
+          "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
+          "answer": "Idzhar Syafawi"
+        },
+        {
+          "id": 9,
+          "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan (berhenti) adalah...",
+          "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"],
+          "answer": "Qalqalah Kubra"
+        },
+        {
+          "id": 10,
+          "question": "Pada kata يَقْطِينَ, huruf qaf termasuk bacaan qalqalah...",
+          "options": ["Kubra", "Shugra", "Wustha", "Kubra dan Shugra"],
+          "answer": "Shugra"
+        },
+        {
+          "id": 11,
+          "question": "Panjang mad pada kata نُوحِيهَا adalah...",
+          "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"],
+          "answer": "2 harakat"
+        },
+        {
+          "id": 12,
+          "question": "Hukum bacaan mad pada kata جَآءَ adalah...",
+          "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad"],
+          "answer": "Mad Wajib Muttashil"
+        },
+        {
+          "id": 13,
+          "question": "Pada kata بِمَآ أُنزِلَ, hukum bacaan madnya adalah...",
+          "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad", "Mad Thabi'i"],
+          "answer": "Mad Jaiz Munfashil"
+        },
+        {
+          "id": 14,
+          "question": "Jika kita berhenti (waqaf) pada kata الرَّحِيمِ, hukum madnya berubah menjadi...",
+          "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Aridh Lissukun", "Mad Lazim"],
+          "answer": "Mad Aridh Lissukun"
+        },
+        {
+          "id": 15,
+          "question": "Hukum bacaan pada kata دَآبَّةٍ adalah...",
+          "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad Lazim Mutsaqqal Kalimi", "Mad Aridh Lissukun"],
+          "answer": "Mad Lazim Mutsaqqal Kalimi"
+        },
+        {
+          "id": 16,
+          "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...",
+          "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"],
+          "answer": "Tafkhim (Tebal)"
+        },
+        {
+          "id": 17,
+          "question": "Huruf Ra pada kata رِجَالٌ dibaca dengan hukum...",
+          "options": ["Tafkhim", "Tarqiq", "Qalqalah", "Ghunnah"],
+          "answer": "Tarqiq"
+        },
+        {
+          "id": 18,
+          "question": "Pada kata فِرْعَوْنَ, huruf Ra dibaca...",
+          "options": ["Tarqiq", "Tafkhim", "Samar", "Jelas"],
+          "answer": "Tafkhim"
+        },
+        {
+          "id": 19,
+          "question": "Hukum bacaan Ghunnah Musyaddadah terdapat pada kata...",
+          "options": ["كَانَ", "إِنَّا", "قُلْ", "مِنْ"],
+          "answer": "إِنَّا"
+        },
+        {
+          "id": 20,
           "question": "Huruf-huruf Idzhar Halqi berjumlah...",
           "options": ["4", "5", "6", "7"],
           "answer": "6"
         },
         {
-          "id": 5,
+          "id": 21,
+          "question": "Contoh bacaan Idzhar Halqi yang benar terdapat pada kata...",
+          "options": ["مِنْ خَيْرٍ", "مِنۢ بَعْدِ", "مِن نُّورٍ", "مِن وَلِيٍّ"],
+          "answer": "مِنْ خَيْرٍ"
+        },
+        {
+          "id": 22,
           "question": "Ikhfa dibaca dengan cara...",
           "options": ["Jelas", "Dengung", "Samar disertai dengung", "Terputus"],
           "answer": "Samar disertai dengung"
         },
-
-        { "id": 6, "question": "Panjang mad thabi'i adalah...", "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"], "answer": "2 harakat" },
-        { "id": 7, "question": "Mad jaiz munfashil boleh dibaca...", "options": ["2 harakat", "2–4–5 harakat", "6 harakat saja", "1 harakat"], "answer": "2–4–5 harakat" },
-        { "id": 8, "question": "Qalqalah terjadi pada huruf...", "options": ["ا ب ت ث", "ق ط ب ج د", "ي و ن م", "ف س ش"], "answer": "ق ط ب ج د" },
-        { "id": 9, "question": "Huruf isti'la berjumlah...", "options": ["5", "6", "7", "8"], "answer": "7" },
-        { "id": 10, "question": "Idzhar Syafawi terjadi ketika mim mati bertemu...", "options": ["Mim", "Ba", "Selain Mim dan Ba", "Nun"], "answer": "Selain Mim dan Ba" },
-
-        { "id": 11, "question": "Mad wajib muttashil dibaca panjang karena...", "options": ["Bertemu hamzah dalam satu kata", "Bertemu sukun", "Bertemu mim", "Terpisah kata"], "answer": "Bertemu hamzah dalam satu kata" },
-        { "id": 12, "question": "Ghunnah artinya...", "options": ["Panjang", "Pendek", "Dengung", "Jelas"], "answer": "Dengung" },
-        { "id": 13, "question": "Idgham bila ghunnah memiliki dengung selama...", "options": ["1 harakat", "2 harakat", "3 harakat", "4 harakat"], "answer": "2 harakat" },
-        { "id": 14, "question": "Huruf ikhfa berjumlah...", "options": ["10", "12", "15", "20"], "answer": "15" },
-        { "id": 15, "question": "Mad aridh lissukun terjadi karena...", "options": ["Berhenti di akhir ayat", "Bertemu hamzah", "Tasydid", "Nun mati"], "answer": "Berhenti di akhir ayat" },
-
-        { "id": 16, "question": "Idgham bila ghunnah tanpa dengung terjadi pada huruf...", "options": ["Ya dan Wau", "Lam dan Ra", "Mim dan Nun", "Ba"], "answer": "Lam dan Ra" },
-        { "id": 17, "question": "Huruf qalqalah kubra terjadi ketika huruf qalqalah...", "options": ["Berharakat", "Mati di tengah kata", "Mati karena waqaf", "Tasydid"], "answer": "Mati karena waqaf" },
-        { "id": 18, "question": "Tafkhim artinya...", "options": ["Tipis", "Tebal", "Panjang", "Pendek"], "answer": "Tebal" },
-        { "id": 19, "question": "Tarqiq artinya...", "options": ["Tebal", "Tipis", "Dengung", "Jelas"], "answer": "Tipis" },
-        { "id": 20, "question": "Huruf Ra dibaca tafkhim jika...", "options": ["Berharakat kasrah", "Sukun setelah kasrah", "Berharakat fathah atau dhammah", "Berada di akhir kata"], "answer": "Berharakat fathah atau dhammah" }
+        {
+          "id": 23,
+          "question": "Pada kata السُّوءَ, mad wajib muttashil dibaca panjang...",
+          "options": ["2 harakat", "4-5 harakat", "6 harakat", "Bebas"],
+          "answer": "4-5 harakat"
+        },
+        {
+          "id": 24,
+          "question": "Huruf Isti'la (huruf yang dibaca tebal) berjumlah...",
+          "options": ["5", "6", "7", "8"],
+          "answer": "7"
+        },
+        {
+          "id": 25,
+          "question": "Pada kata طَائِفَةٌ, huruf Tho (ط) termasuk huruf...",
+          "options": ["Istifal", "Isti'la", "Inhiraf", "Qalqalah saja"],
+          "answer": "Isti'la"
+        }
       ]
     },
 
@@ -62,19 +164,16 @@
         { "id": 3, "question": "Nama ayah Nabi Muhammad ﷺ adalah...", "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"], "answer": "Abdullah" },
         { "id": 4, "question": "Nama ibu Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"], "answer": "Aminah" },
         { "id": 5, "question": "Nabi menerima wahyu pertama di Gua...", "options": ["Hira", "Tsur", "Uhud", "Badar"], "answer": "Hira" },
-
         { "id": 6, "question": "Malaikat yang menyampaikan wahyu adalah...", "options": ["Mikail", "Israfil", "Jibril", "Izrail"], "answer": "Jibril" },
         { "id": 7, "question": "Istri pertama Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"], "answer": "Khadijah" },
         { "id": 8, "question": "Hijrah Nabi terjadi dari Makkah ke...", "options": ["Thaif", "Madinah", "Yaman", "Syam"], "answer": "Madinah" },
         { "id": 9, "question": "Perang pertama dalam Islam adalah...", "options": ["Uhud", "Badar", "Khandaq", "Hunain"], "answer": "Badar" },
         { "id": 10, "question": "Nabi wafat pada usia...", "options": ["60", "61", "62", "63"], "answer": "63" },
-
         { "id": 11, "question": "Masjid pertama dalam Islam adalah...", "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"], "answer": "Masjid Quba" },
         { "id": 12, "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...", "options": ["4", "5", "6", "7"], "answer": "6" },
         { "id": 13, "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...", "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"], "answer": "Terpercaya" },
         { "id": 14, "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...", "options": ["Thaif", "Madinah", "Badar", "Uhud"], "answer": "Madinah" },
         { "id": 15, "question": "Shalat lima waktu diwajibkan pada peristiwa...", "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"], "answer": "Isra Mi'raj" },
-
         { "id": 16, "question": "Penaklukan Makkah disebut juga...", "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"], "answer": "Fathu Makkah" },
         { "id": 17, "question": "Paman Nabi yang paling membela beliau adalah...", "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"], "answer": "Abu Thalib" },
         { "id": 18, "question": "Nabi berdakwah secara sembunyi-sembunyi selama...", "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"], "answer": "3 tahun" },
@@ -91,19 +190,16 @@
         { "id": 3, "question": "Al-Quddus artinya...", "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"], "answer": "Maha Suci" },
         { "id": 4, "question": "As-Salam artinya...", "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"], "answer": "Maha Pemberi Keselamatan" },
         { "id": 5, "question": "Al-Khaliq artinya...", "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"], "answer": "Maha Pencipta" },
-
         { "id": 6, "question": "Ar-Razzaq artinya...", "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"], "answer": "Maha Pemberi Rezeki" },
         { "id": 7, "question": "Al-Ghaffar artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"], "answer": "Maha Pengampun" },
         { "id": 8, "question": "Al-Alim artinya...", "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"], "answer": "Maha Mengetahui" },
         { "id": 9, "question": "As-Sami artinya...", "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"], "answer": "Maha Mendengar" },
         { "id": 10, "question": "Al-Bashir artinya...", "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"], "answer": "Maha Melihat" },
-
         { "id": 11, "question": "Al-Adl artinya...", "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"], "answer": "Maha Adil" },
         { "id": 12, "question": "Al-Latif artinya...", "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"], "answer": "Maha Lembut" },
         { "id": 13, "question": "Al-Hakim artinya...", "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"], "answer": "Maha Bijaksana" },
         { "id": 14, "question": "Al-Aziz artinya...", "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"], "answer": "Maha Perkasa" },
         { "id": 15, "question": "Al-Ghafur artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"], "answer": "Maha Pengampun" },
-
         { "id": 16, "question": "Al-Wadud artinya...", "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"], "answer": "Maha Pencinta" },
         { "id": 17, "question": "Al-Hafizh artinya...", "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"], "answer": "Maha Menjaga" },
         { "id": 18, "question": "Al-Matin artinya...", "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"], "answer": "Maha Kokoh" },
@@ -120,19 +216,16 @@
         { "id": 3, "question": "Sahabat yang terkenal sangat pemalu adalah...", "options": ["Ali", "Umar", "Utsman", "Abu Bakar"], "answer": "Utsman" },
         { "id": 4, "question": "Sepupu Nabi sekaligus menantu beliau adalah...", "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"], "answer": "Ali" },
         { "id": 5, "question": "Bilal bin Rabah adalah seorang...", "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"], "answer": "Budak yang dimerdekakan" },
-
         { "id": 6, "question": "Muadzin pertama dalam Islam adalah...", "options": ["Abu Bakar", "Bilal", "Umar", "Ali"], "answer": "Bilal" },
         { "id": 7, "question": "Sahabat yang mendapat julukan pedang Allah adalah...", "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"], "answer": "Khalid bin Walid" },
         { "id": 8, "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah" },
         { "id": 9, "question": "Abu Hurairah terkenal karena...", "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"], "answer": "Banyak meriwayatkan hadits" },
         { "id": 10, "question": "Sahabat yang menemani Nabi di gua Tsur adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Bilal"], "answer": "Abu Bakar" },
-
         { "id": 11, "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"], "answer": "Umar" },
         { "id": 12, "question": "Hamzah bin Abdul Muthalib adalah...", "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"], "answer": "Paman Nabi" },
         { "id": 13, "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...", "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"], "answer": "Mus'ab bin Umair" },
         { "id": 14, "question": "Sahabat yang menjadi khalifah pertama adalah...", "options": ["Umar", "Ali", "Abu Bakar", "Utsman"], "answer": "Abu Bakar" },
         { "id": 15, "question": "Utsman bin Affan menikah dengan berapa putri Nabi?", "options": ["1", "2", "3", "4"], "answer": "2" },
-
         { "id": 16, "question": "Sahabat yang dijuluki Asadullah adalah...", "options": ["Ali", "Hamzah", "Khalid", "Zubair"], "answer": "Hamzah" },
         { "id": 17, "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...", "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"], "answer": "Panglima" },
         { "id": 18, "question": "Sahabat perempuan pertama yang gugur syahid adalah...", "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"], "answer": "Sumayyah" },
