@@ -202,10 +202,9 @@ body{
   line-height: 2; /* Spasi untuk harakat */
   margin-bottom: 18px;
   color: var(--text-dark);
-  direction: rtl; /* Untuk teks murni arab, namun campuran akan auto */
+  direction: rtl;
   text-align: right;
 }
-/* Khusus teks non-arab di dalam pertanyaan (jika ada) bisa di-override, atau biarkan default */
 
 .options{display:flex;flex-direction:column;gap:10px;}
 
@@ -403,6 +402,8 @@ body{
     </div>
     
     <div class="top-actions">
+      <!-- Tombol Refresh/Ganti Soal Baru -->
+      <button class="icon-btn" onclick="refreshQuestions()" title="Ganti Soal Baru">🔄</button>
       <button class="icon-btn" onclick="openModal('leaderboardModal')" title="Peringkat">🏆</button>
       <button class="icon-btn" onclick="openModal('shopModal')" title="Tukar Hadiah">🎁</button>
     </div>
@@ -450,7 +451,7 @@ body{
       <div style="font-size:4em;margin-bottom:15px;">🎉</div>
       <h2 style="font-size:1.8em;margin-bottom:10px;color:var(--bg-primary);">Sesi Selesai!</h2>
       <div id="resultDetails"></div>
-      <button class="btn btn-primary btn-block" onclick="startNextSession()">Lanjut Main (20 Soal Lagi)</button>
+      <button class="btn btn-primary btn-block" onclick="startNextSession()">Lanjut Main (Soal Baru)</button>
       <button class="btn btn-block" style="background:#eee;color:#333;margin-top:10px;" onclick="closeModal('resultModal')">Lihat Leaderboard</button>
     </div>
   </div>
@@ -508,6 +509,7 @@ body{
 
 <script>
 // ================== DATA JSON (EMBEDDED) ==================
+// Data ini bisa dipindahkan ke server nanti
 const quizDatabase = {
   "quiz_ramadhan": [
     {
@@ -625,7 +627,7 @@ let sessionCoins = 0;
 let sessionCorrect = 0;
 let sessionAnswered = 0;
 const QUESTIONS_PER_SESSION = 20;
-const COINS_PER_CORRECT = 50; // Nilai koin agar cepat mencapai 5000
+const COINS_PER_CORRECT = 50; 
 
 // ================== DATABASE (LocalStorage) ==================
 function getDB() {
@@ -637,13 +639,12 @@ function saveDB(db) {
   localStorage.setItem('ramadhanQuizDB', JSON.stringify(db));
 }
 
-// Init Fake Data for Leaderboard
+// Init Fake Data
 function initFakeData() {
   if (!localStorage.getItem('quizInit')) {
     const db = getDB();
     db.users["Ahmad"] = { coins: 7500, lastPlay: Date.now() };
     db.users["Siti"] = { coins: 12000, lastPlay: Date.now() };
-    db.users["Budi"] = { coins: 4500, lastPlay: Date.now() };
     saveDB(db);
     localStorage.setItem('quizInit', 'true');
   }
@@ -705,7 +706,7 @@ function loadNewSession() {
     });
   });
 
-  // Shuffle and pick 20
+  // Shuffle and pick 20 (Logic "Soal Berbeda")
   const shuffled = shuffle(allQuestions).slice(0, QUESTIONS_PER_SESSION);
   
   renderQuestions(shuffled);
@@ -744,7 +745,6 @@ function handleAnswer(radio) {
   const correct = radio.dataset.answer;
   const isCorrect = radio.value === correct;
 
-  // Disable all
   options.forEach(opt => {
     opt.classList.add('disabled');
     const input = opt.querySelector('input');
@@ -763,7 +763,6 @@ function handleAnswer(radio) {
     sessionCorrect++;
     sessionCoins += COINS_PER_CORRECT;
     
-    // Update UI
     document.getElementById('sessionCoins').textContent = `+${sessionCoins.toLocaleString('id-ID')}`;
     document.getElementById('correctCount').textContent = `${sessionCorrect}/${QUESTIONS_PER_SESSION}`;
     
@@ -774,7 +773,6 @@ function handleAnswer(radio) {
     playSound('wrong');
   }
 
-  // Check if session finished
   if (sessionAnswered === QUESTIONS_PER_SESSION) {
     document.getElementById('finishBtn').style.display = 'block';
     document.getElementById('finishBtn').scrollIntoView({behavior: 'smooth'});
@@ -782,7 +780,6 @@ function handleAnswer(radio) {
 }
 
 function finishSession() {
-  // Save to DB
   const db = getDB();
   if (!db.users[currentUser.name]) db.users[currentUser.name] = { coins: 0 };
   db.users[currentUser.name].coins += sessionCoins;
@@ -790,10 +787,8 @@ function finishSession() {
   currentUser.coins = db.users[currentUser.name].coins;
   saveDB(db);
 
-  // Update UI
   updateUI();
 
-  // Show Result Modal
   const percent = Math.round((sessionCorrect / QUESTIONS_PER_SESSION) * 100);
   const details = `
     <div style="font-size:1.2em;margin-bottom:20px;">Skor Anda: <strong>${sessionCorrect}/${QUESTIONS_PER_SESSION}</strong> (${percent}%)</div>
@@ -809,6 +804,17 @@ function startNextSession() {
   sessionCount++;
   window.scrollTo(0,0);
   loadNewSession();
+}
+
+// Fungsi Refresh Manual (Tombol Refresh di Top Bar)
+function refreshQuestions() {
+  if(sessionAnswered > 0) {
+    if(confirm('Anda yakin ingin mengganti soal? Progres sesi ini akan hilang.')) {
+      loadNewSession();
+    }
+  } else {
+    loadNewSession();
+  }
 }
 
 // ================== SYSTEM FUNCTIONS ==================
