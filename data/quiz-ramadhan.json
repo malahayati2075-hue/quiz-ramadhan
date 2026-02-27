@@ -1,3 +1,6 @@
+Berikut adalah file **JSON lengkap** yang sudah disertai **penjelasan (explanation)** untuk setiap soal. Anda bisa mengganti variabel `quizDatabase` di dalam tag `<script>` pada kode HTML sebelumnya dengan data ini.
+
+```json
 {
   "quiz_ramadhan": [
     {
@@ -265,4 +268,356 @@
           "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...",
           "options": ["4", "5", "6", "7"],
           "answer": "6",
-          "explanation": "Perjanjian damai Hudaibiyah terjadi pada tahun 6 H
+          "explanation": "Perjanjian damai Hudaibiyah terjadi pada tahun 6 H antara Muslimin dan Quraisy."
+        },
+        {
+          "id": 13,
+          "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...",
+          "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"],
+          "answer": "Terpercaya",
+          "explanation": "Al-Amin berarti 'yang terpercaya', gelar yang diberikan masyarakat Makkah karena kejujurannya."
+        },
+        {
+          "id": 14,
+          "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...",
+          "options": ["Thaif", "Madinah", "Badar", "Uhud"],
+          "answer": "Madinah",
+          "explanation": "Isra Mi'raj terjadi sekitar 1-2 tahun sebelum Hijrah ke Madinah."
+        },
+        {
+          "id": 15,
+          "question": "Shalat lima waktu diwajibkan pada peristiwa...",
+          "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"],
+          "answer": "Isra Mi'raj",
+          "explanation": "Kewajiban shalat 5 waktu ditetapkan saat Nabi Mi'raj ke Sidratul Muntaha."
+        },
+        {
+          "id": 16,
+          "question": "Penaklukan Makkah disebut juga...",
+          "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"],
+          "answer": "Fathu Makkah",
+          "explanation": "Fathu Makkah (Pembukaan Makkah) terjadi tahun 8 H tanpa pertumpahan darah besar."
+        },
+        {
+          "id": 17,
+          "question": "Paman Nabi yang paling membela beliau adalah...",
+          "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"],
+          "answer": "Abu Thalib",
+          "explanation": "Abu Thalib memelihara dan melindungi Nabi sejak kecil hingga dewasa meski ia belum masuk Islam."
+        },
+        {
+          "id": 18,
+          "question": "Nabi berdakwah secara sembunyi-sembunyi selama...",
+          "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"],
+          "answer": "3 tahun",
+          "explanation": "Dakwah tahap pertama (sembunyi) dilakukan selama 3 tahun di rumah Al-Arqam."
+        },
+        {
+          "id": 19,
+          "question": "Istri Nabi yang paling muda adalah...",
+          "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"],
+          "answer": "Aisyah",
+          "explanation": "Aisyah binti Abu Bakar menikah dengan Nabi saat usia muda dan adalah istri yang paling muda."
+        },
+        {
+          "id": 20,
+          "question": "Wafatnya Nabi Muhammad ﷺ terjadi pada bulan...",
+          "options": ["Ramadhan", "Syawal", "Rabiul Awal", "Dzulhijjah"],
+          "answer": "Rabiul Awal",
+          "explanation": "Nabi wafat pada bulan Rabiul Awal tahun 11 Hijriyah, bertepatan dengan bulan kelahirannya."
+        }
+      ]
+    },
+    {
+      "category": "Asmaul Husna",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Ar-Rahman artinya...",
+          "options": ["Maha Adil", "Maha Penyayang", "Maha Pengasih", "Maha Bijaksana"],
+          "answer": "Maha Pengasih",
+          "explanation": "Ar-Rahman berarti Maha Pengasih, kasih sayang-Nya bersifat universal untuk semua makhluk."
+        },
+        {
+          "id": 2,
+          "question": "Al-Malik artinya...",
+          "options": ["Maha Raja", "Maha Mengetahui", "Maha Kuasa", "Maha Kaya"],
+          "answer": "Maha Raja",
+          "explanation": "Al-Malik bermakna Raja yang menguasai seluruh alam semesta."
+        },
+        {
+          "id": 3,
+          "question": "Al-Quddus artinya...",
+          "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"],
+          "answer": "Maha Suci",
+          "explanation": "Al-Quddus berarti Maha Suci dari segala kekurangan dan cacat."
+        },
+        {
+          "id": 4,
+          "question": "As-Salam artinya...",
+          "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"],
+          "answer": "Maha Pemberi Keselamatan",
+          "explanation": "As-Salam berarti Yang Maha Memberi Kesejahteraan dan Keselamatan."
+        },
+        {
+          "id": 5,
+          "question": "Al-Khaliq artinya...",
+          "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"],
+          "answer": "Maha Pencipta",
+          "explanation": "Al-Khaliq artinya Yang Maha Menciptakan segala sesuatu dari ketiadaan."
+        },
+        {
+          "id": 6,
+          "question": "Ar-Razzaq artinya...",
+          "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"],
+          "answer": "Maha Pemberi Rezeki",
+          "explanation": "Ar-Razzaq artinya Yang Maha Memberi Rezeki kepada seluruh makhluk-Nya."
+        },
+        {
+          "id": 7,
+          "question": "Al-Ghaffar artinya...",
+          "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"],
+          "answer": "Maha Pengampun",
+          "explanation": "Al-Ghaffar artinya Yang Maha Mengampuni dosa-dosa hamba-Nya."
+        },
+        {
+          "id": 8,
+          "question": "Al-Alim artinya...",
+          "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"],
+          "answer": "Maha Mengetahui",
+          "explanation": "Al-Alim artinya Yang Maha Mengetahui segala rahasia dan yang lahir."
+        },
+        {
+          "id": 9,
+          "question": "As-Sami artinya...",
+          "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"],
+          "answer": "Maha Mendengar",
+          "explanation": "As-Sami artinya Yang Maha Mendengar segala suara dan permohonan."
+        },
+        {
+          "id": 10,
+          "question": "Al-Bashir artinya...",
+          "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"],
+          "answer": "Maha Melihat",
+          "explanation": "Al-Bashir artinya Yang Maha Melihat segala gerak-gerik dan niat hati."
+        },
+        {
+          "id": 11,
+          "question": "Al-Adl artinya...",
+          "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"],
+          "answer": "Maha Adil",
+          "explanation": "Al-Adl artinya Yang Maha Adil, tidak pernah berbuat zalim kepada siapapun."
+        },
+        {
+          "id": 12,
+          "question": "Al-Latif artinya...",
+          "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"],
+          "answer": "Maha Lembut",
+          "explanation": "Al-Latif artinya Yang Maha Lembut dan Halus kasih sayang-Nya."
+        },
+        {
+          "id": 13,
+          "question": "Al-Hakim artinya...",
+          "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"],
+          "answer": "Maha Bijaksana",
+          "explanation": "Al-Hakim artinya Yang Maha Bijaksana dalam menetapkan hukum."
+        },
+        {
+          "id": 14,
+          "question": "Al-Aziz artinya...",
+          "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"],
+          "answer": "Maha Perkasa",
+          "explanation": "Al-Aziz artinya Yang Maha Perkasa dan mempunyai keagungan."
+        },
+        {
+          "id": 15,
+          "question": "Al-Ghafur artinya...",
+          "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"],
+          "answer": "Maha Pengampun",
+          "explanation": "Al-Ghafur sinonim dengan Al-Ghaffar, artinya Maha Pengampun."
+        },
+        {
+          "id": 16,
+          "question": "Al-Wadud artinya...",
+          "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"],
+          "answer": "Maha Pencinta",
+          "explanation": "Al-Wadud artinya Yang Maha Mencintai hamba-Nya dan dicintai."
+        },
+        {
+          "id": 17,
+          "question": "Al-Hafizh artinya...",
+          "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"],
+          "answer": "Maha Menjaga",
+          "explanation": "Al-Hafizh artinya Yang Maha Menjaga dan Memelihara seluruh alam."
+        },
+        {
+          "id": 18,
+          "question": "Al-Matin artinya...",
+          "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"],
+          "answer": "Maha Kokoh",
+          "explanation": "Al-Matin artinya Yang Maha Kokoh dan kuat tidak tergoyahkan."
+        },
+        {
+          "id": 19,
+          "question": "Al-Hayy artinya...",
+          "options": ["Maha Hidup", "Maha Kekal", "Maha Ada", "Maha Kuasa"],
+          "answer": "Maha Hidup",
+          "explanation": "Al-Hayy artinya Yang Maha Hidup, hidup-Nya kekal dan tidak akan mati."
+        },
+        {
+          "id": 20,
+          "question": "Al-Qayyum artinya...",
+          "options": ["Maha Berdiri Sendiri", "Maha Kekal", "Maha Mengatur", "Maha Menolong"],
+          "answer": "Maha Berdiri Sendiri",
+          "explanation": "Al-Qayyum artinya Yang Maha Berdiri Sendiri (Mandiri) dan mengurus semua makhluk."
+        }
+      ]
+    },
+    {
+      "category": "Sahabat Nabi",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa adalah...",
+          "options": ["Ali bin Abi Thalib", "Abu Bakar", "Umar bin Khattab", "Utsman bin Affan"],
+          "answer": "Abu Bakar",
+          "explanation": "Abu Bakar ash-Shiddiq adalah orang dewasa pertama yang memeluk Islam tanpa ragu."
+        },
+        {
+          "id": 2,
+          "question": "Sahabat yang dijuluki Al-Faruq adalah...",
+          "options": ["Ali", "Umar", "Abu Bakar", "Utsman"],
+          "answer": "Umar",
+          "explanation": "Umar bin Khattab dijuluki Al-Faruq (Pembeda) karena Islamnya membedakan kebenaran dan kebatilan."
+        },
+        {
+          "id": 3,
+          "question": "Sahabat yang terkenal sangat pemalu adalah...",
+          "options": ["Ali", "Umar", "Utsman", "Abu Bakar"],
+          "answer": "Utsman",
+          "explanation": "Utsman bin Affan dikenal sangat pemalu (Malu), bahkan malaikat pun malu kepadanya."
+        },
+        {
+          "id": 4,
+          "question": "Sepupu Nabi sekaligus menantu beliau adalah...",
+          "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"],
+          "answer": "Ali",
+          "explanation": "Ali bin Abi Thalib adalah sepupu Nabi yang menikah dengan Fatimah az-Zahra."
+        },
+        {
+          "id": 5,
+          "question": "Bilal bin Rabah adalah seorang...",
+          "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"],
+          "answer": "Budak yang dimerdekakan",
+          "explanation": "Bilal adalah budak hitam yang disiksa karena iman, lalu dimerdekakan oleh Abu Bakar."
+        },
+        {
+          "id": 6,
+          "question": "Muadzin pertama dalam Islam adalah...",
+          "options": ["Abu Bakar", "Bilal", "Umar", "Ali"],
+          "answer": "Bilal",
+          "explanation": "Bilal bin Rabah dipilih Nabi sebagai muadzin pertama karena suaranya yang merdu."
+        },
+        {
+          "id": 7,
+          "question": "Sahabat yang mendapat julukan pedang Allah adalah...",
+          "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"],
+          "answer": "Khalid bin Walid",
+          "explanation": "Khalid bin Walid dijuluki Saifullah (Pedang Allah) karena keberaniannya di medan perang."
+        },
+        {
+          "id": 8,
+          "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...",
+          "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"],
+          "answer": "Aisyah",
+          "explanation": "Aisyah binti Abu Bakar meriwayatkan lebih dari 2.000 hadits."
+        },
+        {
+          "id": 9,
+          "question": "Abu Hurairah terkenal karena...",
+          "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"],
+          "answer": "Banyak meriwayatkan hadits",
+          "explanation": "Abu Hurairah adalah sahabat yang paling banyak meriwayatkan hadits (lebih dari 5000 hadits)."
+        },
+        {
+          "id": 10,
+          "question": "Sahabat yang menemani Nabi di gua Tsur adalah...",
+          "options": ["Ali", "Umar", "Abu Bakar", "Bilal"],
+          "answer": "Abu Bakar",
+          "explanation": "Saat hijrah, Nabi bersembunyi di Gua Tsur bersama Abu Bakar ash-Shiddiq."
+        },
+        {
+          "id": 11,
+          "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...",
+          "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"],
+          "answer": "Umar",
+          "explanation": "Keislaman Umar memberi kekuatan besar bagi umat Islam, ia berani shalat di Ka'bah."
+        },
+        {
+          "id": 12,
+          "question": "Hamzah bin Abdul Muthalib adalah...",
+          "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"],
+          "answer": "Paman Nabi",
+          "explanation": "Hamzah adalah paman Nabi yang seumuran, gugur syahid di Perang Uhud."
+        },
+        {
+          "id": 13,
+          "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...",
+          "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"],
+          "answer": "Mus'ab bin Umair",
+          "explanation": "Mus'ab bin Umair adalah duta pertama yang diutus Nabi hijrah ke Madinah untuk mengajar."
+        },
+        {
+          "id": 14,
+          "question": "Sahabat yang menjadi khalifah pertama adalah...",
+          "options": ["Umar", "Ali", "Abu Bakar", "Utsman"],
+          "answer": "Abu Bakar",
+          "explanation": "Abu Bakar ash-Shiddiq menjadi Khalifah pertama menggantikan Nabi Muhammad SAW."
+        },
+        {
+          "id": 15,
+          "question": "Utsman bin Affan menikah dengan berapa putri Nabi?",
+          "options": ["1", "2", "3", "4"],
+          "answer": "2",
+          "explanation": "Utsman menikah dengan Ruqayyah, setelah wafat menikah dengan Ummu Kultsum. Digelar Dzun-Nurain."
+        },
+        {
+          "id": 16,
+          "question": "Sahabat yang dijuluki Asadullah adalah...",
+          "options": ["Ali", "Hamzah", "Khalid", "Zubair"],
+          "answer": "Hamzah",
+          "explanation": "Hamzah bin Abdul Muthalib dijuluki Asadullah (Singa Allah) karena keberaniannya."
+        },
+        {
+          "id": 17,
+          "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...",
+          "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"],
+          "answer": "Panglima",
+          "explanation": "Zubair adalah salah satu panglima perang utama dan termasuk 10 sahabat yang dijanjikan surga."
+        },
+        {
+          "id": 18,
+          "question": "Sahabat perempuan pertama yang gugur syahid adalah...",
+          "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"],
+          "answer": "Sumayyah",
+          "explanation": "Sumayyah binti Khayyat adalah syuhada pertama dalam Islam, disiksa hingga wafat oleh Abu Jahal."
+        },
+        {
+          "id": 19,
+          "question": "Abdurrahman bin Auf terkenal karena...",
+          "options": ["Ilmu", "Kedermawanan", "Keberanian", "Kepemimpinan"],
+          "answer": "Kedermawanan",
+          "explanation": "Abdurrahman bin Auf adalah sahabat yang sangat kaya dan dermawan."
+        },
+        {
+          "id": 20,
+          "question": "Sahabat yang dikenal sangat jujur adalah...",
+          "options": ["Ali", "Abu Bakar", "Umar", "Utsman"],
+          "answer": "Abu Bakar",
+          "explanation": "Gelar 'Ash-Shiddiq' (Yang Membenarkan) diberikan karena kejujurannya membenarkan Isra Mi'raj."
+        }
+      ]
+    }
+  ]
+}
+```
