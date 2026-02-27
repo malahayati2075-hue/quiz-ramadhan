@@ -2,7 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Ramadhan -获赞系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Ramadhan - Sistem Koin</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -15,20 +17,20 @@
   --text-light:#ffffff;
   --success:#2ecc71;
   --error:#e74c3c;
-  --card-bg:rgba(255,255,255,0.95);
+  --card-bg:rgba(255,255,255,0.98);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
-  font-family:'Segoe UI',Tahoma,sans-serif;
+  font-family:'Poppins', sans-serif;
   min-height:100vh;
   color:var(--text-dark);
   position:relative;
   overflow-x:hidden;
 }
 
-/* Sky & Background (Sama seperti sebelumnya) */
+/* Background Styles */
 .sky{
   position:fixed;
   inset:0;
@@ -49,13 +51,6 @@ body{
 .cloud-1{width:200px;height:60px;top:5%;animation:cloudMove1 40s linear infinite;}
 .cloud-1::before{content:'';position:absolute;background:white;border-radius:50%;width:80px;height:80px;top:-40px;left:30px;}
 @keyframes cloudMove1{from{left:-250px;}to{left:110%;}}
-
-.kaaba-container{position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:-1;width:100%;max-width:800px;height:300px;opacity:0.15;}
-/* SVG Kaaba omitted for brevity, same as previous */
-
-/* ================== APP SHELL ================== */
-.app-shell{display:none;}
-.app-shell.active{display:block;}
 
 /* ================== LOGIN SCREEN ================== */
 .login-overlay{
@@ -80,35 +75,12 @@ body{
   animation:scaleIn 0.5s ease;
 }
 
-.login-logo{
-  font-size:3rem;
-  margin-bottom:10px;
-}
+.login-logo{font-size:3rem;margin-bottom:10px;}
+.login-title{color:var(--bg-primary);font-size:1.8em;margin-bottom:10px;}
+.login-subtitle{color:#666;margin-bottom:30px;font-size:0.95em;}
 
-.login-title{
-  color:var(--bg-primary);
-  font-size:1.8em;
-  margin-bottom:10px;
-}
-
-.login-subtitle{
-  color:#666;
-  margin-bottom:30px;
-  font-size:0.95em;
-}
-
-.input-group{
-  margin-bottom:20px;
-  text-align:left;
-}
-
-.input-group label{
-  display:block;
-  margin-bottom:8px;
-  font-weight:600;
-  color:var(--text-dark);
-}
-
+.input-group{margin-bottom:20px;text-align:left;}
+.input-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--text-dark);}
 .input-group input{
   width:100%;
   padding:14px;
@@ -117,12 +89,7 @@ body{
   font-size:1em;
   transition:all 0.3s;
 }
-
-.input-group input:focus{
-  border-color:var(--accent);
-  outline:none;
-  box-shadow:0 0 0 3px rgba(212,175,55,0.2);
-}
+.input-group input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(212,175,55,0.2);}
 
 .btn-login{
   width:100%;
@@ -135,10 +102,12 @@ body{
   cursor:pointer;
   transition:transform 0.2s;
 }
-
 .btn-login:hover{transform:translateY(-2px);}
 
-/* ================== TOP BAR ================== */
+/* ================== APP SHELL ================== */
+.app-shell{display:none;}
+.app-shell.active{display:block;}
+
 .top-bar{
   position:sticky;
   top:0;
@@ -152,188 +121,49 @@ body{
   box-shadow:0 4px 20px rgba(0,0,0,0.15);
 }
 
-.user-profile{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  color:white;
-  cursor:pointer;
-}
-
+.user-profile{display:flex;align-items:center;gap:12px;color:white;cursor:pointer;}
 .avatar{
-  width:40px;
-  height:40px;
+  width:40px;height:40px;
   background:var(--accent);
   border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  color:var(--text-dark);
-  font-size:1.2em;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:var(--text-dark);font-size:1.2em;
 }
-
 .user-info div:first-child{font-weight:600;font-size:1em;}
 .user-coins{font-size:0.9em;color:var(--accent-light);display:flex;align-items:center;gap:4px;}
 
-.top-actions{
-  display:flex;
-  gap:10px;
-}
-
+.top-actions{display:flex;gap:10px;}
 .icon-btn{
   background:rgba(255,255,255,0.15);
   border:none;
   color:white;
-  width:40px;
-  height:40px;
+  width:40px;height:40px;
   border-radius:12px;
   cursor:pointer;
   font-size:1.2em;
   transition:background 0.2s;
-  position:relative;
 }
-
 .icon-btn:hover{background:rgba(255,255,255,0.25);}
 
-/* ================== MAIN CONTENT ================== */
-.container{
-  max-width:900px;
-  margin:0 auto 40px;
-  padding:20px;
-  position:relative;
-  z-index:10;
-}
-
-/* ================== MODALS ================== */
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1500;
-  padding:20px;
-}
-
-.modal-overlay.show{display:flex;}
-
-.modal-content{
-  background:white;
-  width:100%;
-  max-width:500px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:24px;
-  animation:scaleIn 0.3s ease;
-}
-
-.modal-header{
-  padding:25px;
-  border-bottom:1px solid #eee;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.modal-header h2{color:var(--bg-primary);}
-
-.modal-close{
-  background:none;
-  border:none;
-  font-size:1.5em;
-  cursor:pointer;
-  color:#888;
-}
-
-.modal-body{padding:25px;}
-
-/* ================== LEADERBOARD ================== */
-.leaderboard-item{
-  display:flex;
-  align-items:center;
-  padding:12px;
-  background:#f9f9f9;
-  margin-bottom:10px;
-  border-radius:12px;
-  border-left:5px solid transparent;
-}
-
-.leaderboard-item.you{
-  background:rgba(212,175,55,0.15);
-  border-left-color:var(--accent);
-}
-
-.rank{
-  font-size:1.4em;
-  font-weight:800;
-  width:50px;
-  text-align:center;
-  color:#888;
-}
-
-.rank.top3{color:var(--accent);}
-
-.lb-avatar{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  background:#ddd;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  margin-right:15px;
-}
-
-.lb-details{flex:1;}
-.lb-name{font-weight:600;}
-.lb-score{font-size:0.9em;color:#666;}
-
-/* ================== SHOP ================== */
-.shop-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.shop-item{
-  background:#f5f5f5;
-  padding:20px;
-  border-radius:16px;
-  text-align:center;
-  transition:transform 0.2s;
-}
-
-.shop-item:hover{transform:translateY(-3px);}
-
-.shop-icon{font-size:2.5em;margin-bottom:10px;}
-.shop-name{font-weight:600;margin-bottom:5px;}
-.shop-price{
-  display:inline-block;
-  background:var(--accent);
-  color:white;
-  padding:5px 15px;
-  border-radius:20px;
-  font-size:0.9em;
-  font-weight:600;
-}
-
-.shop-item button{
-  margin-top:10px;
-  width:100%;
-  padding:8px;
-  border:none;
-  background:var(--bg-primary);
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-}
+.container{max-width:900px;margin:0 auto 40px;padding:20px;position:relative;z-index:10;}
 
 /* ================== QUIZ STYLES ================== */
-/* (Same CSS for questions/options as previous code) */
+.stats-bar{
+  display:flex;gap:15px;justify-content:center;margin-bottom:25px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.95);
+  padding:15px 25px;
+  border-radius:16px;
+  text-align:center;
+  min-width:100px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+}
+.stat-label{font-size:0.85em;color:#888;}
+.stat-value{font-size:1.8em;font-weight:800;}
+.stat-value.coins{color:var(--accent);}
+.stat-value.score{color:var(--success);}
+
 .question{
   background:var(--card-bg);
   margin-bottom:14px;
@@ -344,18 +174,14 @@ body{
   position:relative;
   overflow:hidden;
 }
-
 .question::before{
   content:'';
   position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
+  left:0;top:0;bottom:0;
   width:5px;
   background:var(--bg-light);
   transition:all 0.3s;
 }
-
 .question.answered-correct::before{background:var(--success);}
 .question.answered-wrong::before{background:var(--error);}
 
@@ -371,11 +197,15 @@ body{
 }
 
 .question-text{
-  font-size:1.1em;
-  line-height:1.65;
-  margin-bottom:18px;
-  color:var(--text-dark);
+  font-family: 'Amiri', 'Traditional Arabic', serif; /* Font Arab */
+  font-size: 1.3rem;
+  line-height: 2; /* Spasi untuk harakat */
+  margin-bottom: 18px;
+  color: var(--text-dark);
+  direction: rtl; /* Untuk teks murni arab, namun campuran akan auto */
+  text-align: right;
 }
+/* Khusus teks non-arab di dalam pertanyaan (jika ada) bisa di-override, atau biarkan default */
 
 .options{display:flex;flex-direction:column;gap:10px;}
 
@@ -390,23 +220,18 @@ body{
   cursor:pointer;
   transition:all 0.25s ease;
 }
-
 .option-label:hover:not(.disabled){
   border-color:var(--accent);
   background:rgba(212,175,55,0.1);
   transform:translateX(8px);
 }
-
 .option-label input{display:none;}
 
 .option-marker{
-  width:28px;
-  height:28px;
+  width:28px;height:28px;
   border:2px solid var(--bg-primary);
   border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   font-size:0.85em;
   font-weight:700;
   color:var(--bg-primary);
@@ -430,53 +255,138 @@ body{
   animation:fadeIn 0.4s ease;
   font-weight:500;
 }
-
 .answer-hint.correct-hint{background:rgba(46,204,113,0.15);border:1px solid var(--success);color:#1e8449;}
 .answer-hint.wrong-hint{background:rgba(231,76,60,0.15);border:1px solid var(--error);color:#c0392b;}
 
-@keyframes scaleIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+/* ================== MODALS ================== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1500;
+  padding:20px;
+}
+.modal-overlay.show{display:flex;}
 
-/* Utility */
+.modal-content{
+  background:white;
+  width:100%;
+  max-width:500px;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:24px;
+  animation:scaleIn 0.3s ease;
+}
+
+.modal-header{
+  padding:25px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.modal-header h2{color:var(--bg-primary);}
+.modal-close{background:none;border:none;font-size:1.5em;cursor:pointer;color:#888;}
+.modal-body{padding:25px;}
+
+/* Leaderboard */
+.leaderboard-item{
+  display:flex;
+  align-items:center;
+  padding:12px;
+  background:#f9f9f9;
+  margin-bottom:10px;
+  border-radius:12px;
+  border-left:5px solid transparent;
+}
+.leaderboard-item.you{background:rgba(212,175,55,0.15);border-left-color:var(--accent);}
+.rank{font-size:1.4em;font-weight:800;width:50px;text-align:center;color:#888;}
+.rank.top3{color:var(--accent);}
+.lb-avatar{
+  width:45px;height:45px;
+  border-radius:50%;
+  background:#ddd;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;
+  margin-right:15px;
+}
+.lb-details{flex:1;}
+.lb-name{font-weight:600;}
+.lb-score{font-size:0.9em;color:#666;}
+
+/* Shop */
+.shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;}
+.shop-item{
+  background:#f5f5f5;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  transition:transform 0.2s;
+}
+.shop-item:hover{transform:translateY(-3px);}
+.shop-icon{font-size:2.5em;margin-bottom:10px;}
+.shop-name{font-weight:600;margin-bottom:5px;}
+.shop-price{
+  display:inline-block;
+  background:var(--accent);
+  color:white;
+  padding:5px 15px;
+  border-radius:20px;
+  font-size:0.9em;
+  font-weight:600;
+}
+.shop-item button{
+  margin-top:10px;
+  width:100%;
+  padding:8px;
+  border:none;
+  background:var(--bg-primary);
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
 .btn{padding:14px 28px;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
 .btn-primary{background:linear-gradient(135deg, var(--accent), var(--accent-light));color:var(--text-dark);}
 .btn-block{width:100%;margin-top:20px;}
+
+/* Utility Animations */
+@keyframes scaleIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.loading-spinner{width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
 </style>
 </head>
-
 <body>
 
-<!-- Sky Background -->
+<!-- Background Elements -->
 <div class="sky"></div>
 <div class="sun"><div class="sun-core"></div></div>
 <div class="moon"><div class="moon-crescent"></div></div>
 <div class="clouds"><div class="cloud cloud-1"></div></div>
-<div class="kaaba-container">
-  <!-- SVG Kaaba Simplified -->
-  <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMax meet" style="width:100%;height:100%">
-    <rect x="100" y="200" width="600" height="90" fill="#1a5a3a"/>
-    <rect x="350" y="180" width="100" height="100" fill="#1a3d2e"/>
-    <text x="395" y="70" font-size="20" fill="#d4af37">☪</text>
-  </svg>
-</div>
 
 <!-- ================== LOGIN SCREEN ================== -->
 <div class="login-overlay" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">🕌</div>
     <h1 class="login-title">Quiz Ramadhan</h1>
-    <p class="login-subtitle">Masukkan nama untuk mulai bermain & meraih koin!</p>
+    <p class="login-subtitle">Kumpulkan koin & tukar dengan hadiah menarik!</p>
     
     <div class="input-group">
       <label>Nama Pengguna</label>
-      <input type="text" id="usernameInput" placeholder="Contoh: Ahmad123">
+      <input type="text" id="usernameInput" placeholder="Masukkan nama anda">
     </div>
     
     <button class="btn-login" onclick="loginUser()">MULAI BERMAIN</button>
   </div>
 </div>
 
-<!-- ================== APP SHELL (Setelah Login) ================== -->
+<!-- ================== APP SHELL ================== -->
 <div class="app-shell" id="appShell">
 
   <!-- Top Bar -->
@@ -487,7 +397,7 @@ body{
         <div id="userName">User</div>
         <div class="user-coins">
           <span>🪙</span>
-          <span id="userCoinsDisplay">0</span> Koin
+          <span id="userCoinsDisplay">0</span>
         </div>
       </div>
     </div>
@@ -498,35 +408,53 @@ body{
     </div>
   </div>
 
-  <!-- Main Quiz Container -->
+  <!-- Main Container -->
   <div class="container">
     
-    <!-- Score Display -->
-    <div style="display:flex;gap:15px;justify-content:center;margin-bottom:25px;">
-      <div style="background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;">
-        <div style="font-size:0.85em;color:#888;">Benar</div>
-        <div style="font-size:1.8em;font-weight:800;color:var(--success);" id="correctCount">0</div>
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Sesi ke-</div>
+        <div class="stat-value" id="sessionNumber">1</div>
       </div>
-      <div style="background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;">
-        <div style="font-size:0.85em;color:#888;">Koin Didapat</div>
-        <div style="font-size:1.8em;font-weight:800;color:var(--accent);" id="sessionCoins">+0</div>
+      <div class="stat-card">
+        <div class="stat-label">Skor Sesi</div>
+        <div class="stat-value score" id="correctCount">0/20</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Koin Sesi</div>
+        <div class="stat-value coins" id="sessionCoins">+0</div>
       </div>
     </div>
 
+    <!-- Quiz Container -->
     <div id="quiz">
       <div style="text-align:center;padding:40px;background:white;border-radius:20px;">
-        <div class="loading-spinner" style="width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
-        <p>Memuat soal quiz...</p>
+        <div class="loading-spinner"></div>
+        <p>Memuat soal...</p>
       </div>
     </div>
-
+    
     <div style="text-align:center;margin-top:30px;">
-      <button class="btn btn-primary" onclick="showResult()">Selesai & Klaim Koin</button>
+      <button class="btn btn-primary" id="finishBtn" onclick="finishSession()" style="display:none;">Selesai & Klaim Koin</button>
     </div>
   </div>
 </div>
 
 <!-- ================== MODALS ================== -->
+
+<!-- Result Modal -->
+<div class="modal-overlay" id="resultModal">
+  <div class="modal-content">
+    <div class="modal-body" style="text-align:center;padding:40px;">
+      <div style="font-size:4em;margin-bottom:15px;">🎉</div>
+      <h2 style="font-size:1.8em;margin-bottom:10px;color:var(--bg-primary);">Sesi Selesai!</h2>
+      <div id="resultDetails"></div>
+      <button class="btn btn-primary btn-block" onclick="startNextSession()">Lanjut Main (20 Soal Lagi)</button>
+      <button class="btn btn-block" style="background:#eee;color:#333;margin-top:10px;" onclick="closeModal('resultModal')">Lihat Leaderboard</button>
+    </div>
+  </div>
+</div>
 
 <!-- Leaderboard Modal -->
 <div class="modal-overlay" id="leaderboardModal">
@@ -535,9 +463,7 @@ body{
       <h2>🏆 Papan Peringkat</h2>
       <button class="modal-close" onclick="closeModal('leaderboardModal')">&times;</button>
     </div>
-    <div class="modal-body" id="leaderboardList">
-      <!-- Generated by JS -->
-    </div>
+    <div class="modal-body" id="leaderboardList"></div>
   </div>
 </div>
 
@@ -549,144 +475,203 @@ body{
       <button class="modal-close" onclick="closeModal('shopModal')">&times;</button>
     </div>
     <div class="modal-body">
-      <p style="text-align:center;margin-bottom:20px;">Koin Anda: <strong id="shopUserCoins">0</strong> 🪙</p>
+      <p style="text-align:center;margin-bottom:20px;font-size:1.1em;">Koin Anda: <strong id="shopUserCoins" style="color:var(--accent);font-size:1.2em;">0</strong> 🪙</p>
       <div class="shop-grid">
         <div class="shop-item">
           <div class="shop-icon">🍫</div>
           <div class="shop-name">Cokelat Premium</div>
-          <div class="shop-price">50 Koin</div>
-          <button onclick="buyItem(50, 'Cokelat Premium')">Tukar</button>
+          <div class="shop-price">5.000 Koin</div>
+          <button onclick="buyItem(5000, 'Cokelat Premium')">Tukar</button>
         </div>
         <div class="shop-item">
           <div class="shop-icon">📖</div>
           <div class="shop-name">Buku Tajwid</div>
-          <div class="shop-price">100 Koin</div>
-          <button onclick="buyItem(100, 'Buku Tajwid')">Tukar</button>
+          <div class="shop-price">10.000 Koin</div>
+          <button onclick="buyItem(10000, 'Buku Tajwid')">Tukar</button>
         </div>
         <div class="shop-item">
           <div class="shop-icon">🎫</div>
           <div class="shop-name">Tiket Wisata</div>
-          <div class="shop-price">500 Koin</div>
-          <button onclick="buyItem(500, 'Tiket Wisata')">Tukar</button>
+          <div class="shop-price">25.000 Koin</div>
+          <button onclick="buyItem(25000, 'Tiket Wisata')">Tukar</button>
         </div>
         <div class="shop-item">
           <div class="shop-icon">💎</div>
-          <div class="shop-name">Vip Badge</div>
-          <div class="shop-price">1000 Koin</div>
-          <button onclick="buyItem(1000, 'VIP Badge')">Tukar</button>
+          <div class="shop-name">VIP Badge</div>
+          <div class="shop-price">50.000 Koin</div>
+          <button onclick="buyItem(50000, 'VIP Badge')">Tukar</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Result Modal -->
-<div class="modal-overlay" id="resultModal">
-  <div class="modal-content">
-    <div class="modal-body" style="text-align:center;padding:40px;">
-      <h2 style="font-size:2em;margin-bottom:10px;">Sesi Selesai!</h2>
-      <div id="resultDetails"></div>
-      <button class="btn btn-primary btn-block" onclick="closeModal('resultModal')">Kembali</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ================== DATABASE SIMULASI ==================
-// Di aplikasi asli, bagian ini adalah API call ke Server
+// ================== DATA JSON (EMBEDDED) ==================
+const quizDatabase = {
+  "quiz_ramadhan": [
+    {
+      "category": "Tajwid",
+      "questions": [
+        { "id": 1, "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"], "answer": "Iqlab" },
+        { "id": 2, "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"], "answer": "Idgham Bighunnah" },
+        { "id": 3, "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"], "answer": "Idgham Bila Ghunnah" },
+        { "id": 4, "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...", "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"], "answer": "مِن شَرٍّ" },
+        { "id": 5, "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"], "answer": "Ikhfa Haqiqi" },
+        { "id": 6, "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...", "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"], "answer": "Idgham Mimi" },
+        { "id": 7, "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...", "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"], "answer": "Ikhfa Syafawi" },
+        { "id": 8, "question": "Pada kata عَلَيْهِمْ وَلَا, hukum bacaan mim mati bertemu huruf wau adalah...", "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"], "answer": "Idzhar Syafawi" },
+        { "id": 9, "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan (berhenti) adalah...", "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"], "answer": "Qalqalah Kubra" },
+        { "id": 10, "question": "Pada kata يَقْطِينَ, huruf qaf termasuk bacaan qalqalah...", "options": ["Kubra", "Shugra", "Wustha", "Kubra dan Shugra"], "answer": "Shugra" },
+        { "id": 11, "question": "Panjang mad pada kata نُوحِيهَا adalah...", "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"], "answer": "2 harakat" },
+        { "id": 12, "question": "Hukum bacaan mad pada kata جَآءَ adalah...", "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad"], "answer": "Mad Wajib Muttashil" },
+        { "id": 13, "question": "Pada kata بِمَآ أُنزِلَ, hukum bacaan madnya adalah...", "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad", "Mad Thabi'i"], "answer": "Mad Jaiz Munfashil" },
+        { "id": 14, "question": "Jika kita berhenti (waqaf) pada kata الرَّحِيمِ, hukum madnya berubah menjadi...", "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Aridh Lissukun", "Mad Lazim"], "answer": "Mad Aridh Lissukun" },
+        { "id": 15, "question": "Hukum bacaan pada kata دَآبَّةٍ adalah...", "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad Lazim Mutsaqqal Kalimi", "Mad Aridh Lissukun"], "answer": "Mad Lazim Mutsaqqal Kalimi" },
+        { "id": 16, "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...", "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"], "answer": "Tafkhim (Tebal)" },
+        { "id": 17, "question": "Huruf Ra pada kata رِجَالٌ dibaca dengan hukum...", "options": ["Tafkhim", "Tarqiq", "Qalqalah", "Ghunnah"], "answer": "Tarqiq" },
+        { "id": 18, "question": "Pada kata فِرْعَوْنَ, huruf Ra dibaca...", "options": ["Tarqiq", "Tafkhim", "Samar", "Jelas"], "answer": "Tarqiq" },
+        { "id": 19, "question": "Hukum bacaan Ghunnah Musyaddadah terdapat pada kata...", "options": ["كَانَ", "إِنَّا", "قُلْ", "مِنْ"], "answer": "إِنَّا" },
+        { "id": 20, "question": "Huruf-huruf Idzhar Halqi berjumlah...", "options": ["4", "5", "6", "7"], "answer": "6" },
+        { "id": 21, "question": "Contoh bacaan Idzhar Halqi yang benar terdapat pada kata...", "options": ["مِنْ خَيْرٍ", "مِنۢ بَعْدِ", "مِن نُّورٍ", "مِن وَلِيٍّ"], "answer": "مِنْ خَيْرٍ" },
+        { "id": 22, "question": "Ikhfa dibaca dengan cara...", "options": ["Jelas", "Dengung", "Samar disertai dengung", "Terputus"], "answer": "Samar disertai dengung" },
+        { "id": 23, "question": "Pada kata السُّوءَ, mad wajib muttashil dibaca panjang...", "options": ["2 harakat", "4-5 harakat", "6 harakat", "Bebas"], "answer": "4-5 harakat" },
+        { "id": 24, "question": "Huruf Isti'la (huruf yang dibaca tebal) berjumlah...", "options": ["5", "6", "7", "8"], "answer": "7" },
+        { "id": 25, "question": "Pada kata طَائِفَةٌ, huruf Tho (ط) termasuk huruf...", "options": ["Istifal", "Isti'la", "Inhiraf", "Qalqalah saja"], "answer": "Isti'la" }
+      ]
+    },
+    {
+      "category": "Sirah Nabawi",
+      "questions": [
+        { "id": 1, "question": "Rasulullah ﷺ lahir di kota...", "options": ["Madinah", "Thaif", "Makkah", "Yaman"], "answer": "Makkah" },
+        { "id": 2, "question": "Tahun kelahiran Nabi dikenal sebagai Tahun...", "options": ["Hijrah", "Badar", "Gajah", "Uhud"], "answer": "Gajah" },
+        { "id": 3, "question": "Nama ayah Nabi Muhammad ﷺ adalah...", "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"], "answer": "Abdullah" },
+        { "id": 4, "question": "Nama ibu Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"], "answer": "Aminah" },
+        { "id": 5, "question": "Nabi menerima wahyu pertama di Gua...", "options": ["Hira", "Tsur", "Uhud", "Badar"], "answer": "Hira" },
+        { "id": 6, "question": "Malaikat yang menyampaikan wahyu adalah...", "options": ["Mikail", "Israfil", "Jibril", "Izrail"], "answer": "Jibril" },
+        { "id": 7, "question": "Istri pertama Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"], "answer": "Khadijah" },
+        { "id": 8, "question": "Hijrah Nabi terjadi dari Makkah ke...", "options": ["Thaif", "Madinah", "Yaman", "Syam"], "answer": "Madinah" },
+        { "id": 9, "question": "Perang pertama dalam Islam adalah...", "options": ["Uhud", "Badar", "Khandaq", "Hunain"], "answer": "Badar" },
+        { "id": 10, "question": "Nabi wafat pada usia...", "options": ["60", "61", "62", "63"], "answer": "63" },
+        { "id": 11, "question": "Masjid pertama dalam Islam adalah...", "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"], "answer": "Masjid Quba" },
+        { "id": 12, "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...", "options": ["4", "5", "6", "7"], "answer": "6" },
+        { "id": 13, "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...", "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"], "answer": "Terpercaya" },
+        { "id": 14, "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...", "options": ["Thaif", "Madinah", "Badar", "Uhud"], "answer": "Madinah" },
+        { "id": 15, "question": "Shalat lima waktu diwajibkan pada peristiwa...", "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"], "answer": "Isra Mi'raj" },
+        { "id": 16, "question": "Penaklukan Makkah disebut juga...", "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"], "answer": "Fathu Makkah" },
+        { "id": 17, "question": "Paman Nabi yang paling membela beliau adalah...", "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"], "answer": "Abu Thalib" },
+        { "id": 18, "question": "Nabi berdakwah secara sembunyi-sembunyi selama...", "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"], "answer": "3 tahun" },
+        { "id": 19, "question": "Istri Nabi yang paling muda adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah" },
+        { "id": 20, "question": "Wafatnya Nabi Muhammad ﷺ terjadi pada bulan...", "options": ["Ramadhan", "Syawal", "Rabiul Awal", "Dzulhijjah"], "answer": "Rabiul Awal" }
+      ]
+    },
+    {
+      "category": "Asmaul Husna",
+      "questions": [
+        { "id": 1, "question": "Ar-Rahman artinya...", "options": ["Maha Adil", "Maha Penyayang", "Maha Pengasih", "Maha Bijaksana"], "answer": "Maha Pengasih" },
+        { "id": 2, "question": "Al-Malik artinya...", "options": ["Maha Raja", "Maha Mengetahui", "Maha Kuasa", "Maha Kaya"], "answer": "Maha Raja" },
+        { "id": 3, "question": "Al-Quddus artinya...", "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"], "answer": "Maha Suci" },
+        { "id": 4, "question": "As-Salam artinya...", "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"], "answer": "Maha Pemberi Keselamatan" },
+        { "id": 5, "question": "Al-Khaliq artinya...", "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"], "answer": "Maha Pencipta" },
+        { "id": 6, "question": "Ar-Razzaq artinya...", "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"], "answer": "Maha Pemberi Rezeki" },
+        { "id": 7, "question": "Al-Ghaffar artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"], "answer": "Maha Pengampun" },
+        { "id": 8, "question": "Al-Alim artinya...", "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"], "answer": "Maha Mengetahui" },
+        { "id": 9, "question": "As-Sami artinya...", "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"], "answer": "Maha Mendengar" },
+        { "id": 10, "question": "Al-Bashir artinya...", "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"], "answer": "Maha Melihat" },
+        { "id": 11, "question": "Al-Adl artinya...", "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"], "answer": "Maha Adil" },
+        { "id": 12, "question": "Al-Latif artinya...", "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"], "answer": "Maha Lembut" },
+        { "id": 13, "question": "Al-Hakim artinya...", "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"], "answer": "Maha Bijaksana" },
+        { "id": 14, "question": "Al-Aziz artinya...", "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"], "answer": "Maha Perkasa" },
+        { "id": 15, "question": "Al-Ghafur artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"], "answer": "Maha Pengampun" },
+        { "id": 16, "question": "Al-Wadud artinya...", "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"], "answer": "Maha Pencinta" },
+        { "id": 17, "question": "Al-Hafizh artinya...", "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"], "answer": "Maha Menjaga" },
+        { "id": 18, "question": "Al-Matin artinya...", "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"], "answer": "Maha Kokoh" },
+        { "id": 19, "question": "Al-Hayy artinya...", "options": ["Maha Hidup", "Maha Kekal", "Maha Ada", "Maha Kuasa"], "answer": "Maha Hidup" },
+        { "id": 20, "question": "Al-Qayyum artinya...", "options": ["Maha Berdiri Sendiri", "Maha Kekal", "Maha Mengatur", "Maha Menolong"], "answer": "Maha Berdiri Sendiri" }
+      ]
+    },
+    {
+      "category": "Sahabat Nabi",
+      "questions": [
+        { "id": 1, "question": "Sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa adalah...", "options": ["Ali bin Abi Thalib", "Abu Bakar", "Umar bin Khattab", "Utsman bin Affan"], "answer": "Abu Bakar" },
+        { "id": 2, "question": "Sahabat yang dijuluki Al-Faruq adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Utsman"], "answer": "Umar" },
+        { "id": 3, "question": "Sahabat yang terkenal sangat pemalu adalah...", "options": ["Ali", "Umar", "Utsman", "Abu Bakar"], "answer": "Utsman" },
+        { "id": 4, "question": "Sepupu Nabi sekaligus menantu beliau adalah...", "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"], "answer": "Ali" },
+        { "id": 5, "question": "Bilal bin Rabah adalah seorang...", "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"], "answer": "Budak yang dimerdekakan" },
+        { "id": 6, "question": "Muadzin pertama dalam Islam adalah...", "options": ["Abu Bakar", "Bilal", "Umar", "Ali"], "answer": "Bilal" },
+        { "id": 7, "question": "Sahabat yang mendapat julukan pedang Allah adalah...", "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"], "answer": "Khalid bin Walid" },
+        { "id": 8, "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah" },
+        { "id": 9, "question": "Abu Hurairah terkenal karena...", "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"], "answer": "Banyak meriwayatkan hadits" },
+        { "id": 10, "question": "Sahabat yang menemani Nabi di gua Tsur adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Bilal"], "answer": "Abu Bakar" },
+        { "id": 11, "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"], "answer": "Umar" },
+        { "id": 12, "question": "Hamzah bin Abdul Muthalib adalah...", "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"], "answer": "Paman Nabi" },
+        { "id": 13, "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...", "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"], "answer": "Mus'ab bin Umair" },
+        { "id": 14, "question": "Sahabat yang menjadi khalifah pertama adalah...", "options": ["Umar", "Ali", "Abu Bakar", "Utsman"], "answer": "Abu Bakar" },
+        { "id": 15, "question": "Utsman bin Affan menikah dengan berapa putri Nabi?", "options": ["1", "2", "3", "4"], "answer": "2" },
+        { "id": 16, "question": "Sahabat yang dijuluki Asadullah adalah...", "options": ["Ali", "Hamzah", "Khalid", "Zubair"], "answer": "Hamzah" },
+        { "id": 17, "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...", "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"], "answer": "Panglima" },
+        { "id": 18, "question": "Sahabat perempuan pertama yang gugur syahid adalah...", "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"], "answer": "Sumayyah" },
+        { "id": 19, "question": "Abdurrahman bin Auf terkenal karena...", "options": ["Ilmu", "Kedermawanan", "Keberanian", "Kepemimpinan"], "answer": "Kedermawanan" },
+        { "id": 20, "question": "Sahabat yang dikenal sangat jujur adalah...", "options": ["Ali", "Abu Bakar", "Umar", "Utsman"], "answer": "Abu Bakar" }
+      ]
+    }
+  ]
+};
+
+// ================== APP STATE ==================
+let currentUser = null;
+let sessionCount = 1;
+let sessionCoins = 0; 
+let sessionCorrect = 0;
+let sessionAnswered = 0;
+const QUESTIONS_PER_SESSION = 20;
+const COINS_PER_CORRECT = 50; // Nilai koin agar cepat mencapai 5000
+
+// ================== DATABASE (LocalStorage) ==================
 function getDB() {
   const db = localStorage.getItem('ramadhanQuizDB');
-  return db ? JSON.parse(db) : { users: {} };
+  return db ? JSON.parse(db) : { users: {}, history: [] };
 }
 
 function saveDB(db) {
   localStorage.setItem('ramadhanQuizDB', JSON.stringify(db));
 }
 
-// Inisialisasi data "Online" palsu untuk simulasi ranking
-function initFakeOnlineData() {
-  if (!localStorage.getItem('fakeOnlineDataInit')) {
+// Init Fake Data for Leaderboard
+function initFakeData() {
+  if (!localStorage.getItem('quizInit')) {
     const db = getDB();
-    // Tambahkan bot pemain lain
-    db.users["Ahmad_Bot"] = { coins: 850, lastPlay: Date.now() };
-    db.users["Siti_Ramadhan"] = { coins: 1200, lastPlay: Date.now() };
-    db.users["Umar_Gaming"] = { coins: 300, lastPlay: Date.now() };
-    db.users["Zahra_Quran"] = { coins: 950, lastPlay: Date.now() };
+    db.users["Ahmad"] = { coins: 7500, lastPlay: Date.now() };
+    db.users["Siti"] = { coins: 12000, lastPlay: Date.now() };
+    db.users["Budi"] = { coins: 4500, lastPlay: Date.now() };
     saveDB(db);
-    localStorage.setItem('fakeOnlineDataInit', 'true');
+    localStorage.setItem('quizInit', 'true');
   }
 }
-initFakeOnlineData();
+initFakeData();
 
-// ================== AUTH STATE ==================
-let currentUser = null;
-let sessionCoins = 0; // Koin yang dikumpulkan di sesi ini
-let totalCorrect = 0;
-let totalWrong = 0;
-let totalQuestions = 0;
-let answeredQuestions = 0;
-let categoryStats = {};
-
-// ================== LOGIN LOGIC ==================
+// ================== AUTH & FLOW ==================
 function loginUser() {
-  const nameInput = document.getElementById('usernameInput').value.trim();
-  if (!nameInput) return alert('Masukkan nama dulu!');
+  const name = document.getElementById('usernameInput').value.trim();
+  if (!name) return alert('Masukkan nama!');
 
   const db = getDB();
+  if (!db.users[name]) db.users[name] = { coins: 0, lastPlay: Date.now() };
   
-  // Cek atau buat user
-  if (!db.users[nameInput]) {
-    db.users[nameInput] = { coins: 0, lastPlay: Date.now() };
-    saveDB(db);
-  }
-  
-  currentUser = {
-    name: nameInput,
-    coins: db.users[nameInput].coins
-  };
+  currentUser = { name: name, coins: db.users[name].coins };
+  saveDB(db);
 
-  // Update UI
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appShell').classList.add('active');
+  updateUI();
+  loadNewSession();
+}
+
+function updateUI() {
   document.getElementById('userName').textContent = currentUser.name;
   document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-  updateCoinDisplay();
-  
-  loadQuiz();
-}
-
-function updateCoinDisplay() {
-  document.getElementById('userCoinsDisplay').textContent = currentUser.coins;
-  document.getElementById('shopUserCoins').textContent = currentUser.coins;
-}
-
-// ================== VOICE & SOUND ==================
-function speak(text) {
-  if ('speechSynthesis' in window) {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'id-ID';
-    speechSynthesis.speak(u);
-  }
-}
-
-function playSound(type) {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  
-  if (type === 'correct') {
-    osc.frequency.value = 600;
-    gain.gain.value = 0.1;
-    osc.start();
-    osc.stop(ctx.currentTime + 0.1);
-  } else {
-    osc.frequency.value = 200;
-    gain.gain.value = 0.1;
-    osc.start();
-    osc.stop(ctx.currentTime + 0.2);
-  }
+  document.getElementById('userCoinsDisplay').textContent = currentUser.coins.toLocaleString('id-ID');
+  document.getElementById('shopUserCoins').textContent = currentUser.coins.toLocaleString('id-ID');
 }
 
 // ================== QUIZ LOGIC ==================
@@ -699,127 +684,164 @@ function shuffle(arr) {
   return s;
 }
 
+function loadNewSession() {
+  sessionCoins = 0;
+  sessionCorrect = 0;
+  sessionAnswered = 0;
+  
+  document.getElementById('sessionNumber').textContent = sessionCount;
+  document.getElementById('sessionCoins').textContent = "+0";
+  document.getElementById('correctCount').textContent = "0/20";
+  document.getElementById('finishBtn').style.display = 'none';
+
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = '<div class="loading-spinner"></div><p style="text-align:center">Mengacak soal...</p>';
+
+  // Flatten all questions
+  let allQuestions = [];
+  quizDatabase.quiz_ramadhan.forEach(cat => {
+    cat.questions.forEach(q => {
+      allQuestions.push({ ...q, category: cat.category });
+    });
+  });
+
+  // Shuffle and pick 20
+  const shuffled = shuffle(allQuestions).slice(0, QUESTIONS_PER_SESSION);
+  
+  renderQuestions(shuffled);
+}
+
+function renderQuestions(questions) {
+  const quizContainer = document.getElementById('quiz');
+  quizContainer.innerHTML = '';
+
+  questions.forEach((q, i) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'question';
+    
+    let opts = '';
+    shuffle([...q.options]).forEach((o, oi) => {
+      opts += `
+        <label class="option-label">
+          <input type="radio" name="q${i}" value="${o}" data-answer="${q.answer}" onchange="handleAnswer(this)">
+          <span class="option-marker">${'ABCDE'[oi]}</span>
+          <span>${o}</span>
+        </label>`;
+    });
+    
+    qDiv.innerHTML = `
+      <span class="question-number">${q.category}</span>
+      <p class="question-text">${q.question}</p>
+      <div class="options">${opts}</div>`;
+    
+    quizContainer.appendChild(qDiv);
+  });
+}
+
 function handleAnswer(radio) {
   const qDiv = radio.closest('.question');
   const options = qDiv.querySelectorAll('.option-label');
   const correct = radio.dataset.answer;
   const isCorrect = radio.value === correct;
 
+  // Disable all
   options.forEach(opt => {
     opt.classList.add('disabled');
-    opt.querySelector('input').disabled = true;
-    if (opt.querySelector('input').value === correct) opt.classList.add('correct');
+    const input = opt.querySelector('input');
+    input.disabled = true;
+    if (input.value === correct) opt.classList.add('correct');
   });
 
   const selected = radio.closest('.option-label');
   selected.classList.add('selected');
   
+  sessionAnswered++;
+
   if (isCorrect) {
     selected.classList.add('correct');
     qDiv.classList.add('answered-correct');
-    totalCorrect++;
-    sessionCoins++; // Tambah koin
-    document.getElementById('sessionCoins').textContent = `+${sessionCoins}`;
+    sessionCorrect++;
+    sessionCoins += COINS_PER_CORRECT;
+    
+    // Update UI
+    document.getElementById('sessionCoins').textContent = `+${sessionCoins.toLocaleString('id-ID')}`;
+    document.getElementById('correctCount').textContent = `${sessionCorrect}/${QUESTIONS_PER_SESSION}`;
+    
     playSound('correct');
-    speak('Benar!');
   } else {
     selected.classList.add('wrong');
     qDiv.classList.add('answered-wrong');
-    totalWrong++;
     playSound('wrong');
-    speak('Salah!');
   }
 
-  document.getElementById('correctCount').textContent = totalCorrect;
-  
-  // Add hint
-  const hint = document.createElement('div');
-  hint.className = `answer-hint ${isCorrect ? 'correct-hint' : 'wrong-hint'}`;
-  hint.innerHTML = isCorrect ? 'Benar! +1 Koin' : `Salah. Jawaban: ${correct}`;
-  qDiv.appendChild(hint);
+  // Check if session finished
+  if (sessionAnswered === QUESTIONS_PER_SESSION) {
+    document.getElementById('finishBtn').style.display = 'block';
+    document.getElementById('finishBtn').scrollIntoView({behavior: 'smooth'});
+  }
 }
 
-function loadQuiz() {
-  fetch('data/quiz-ramadhan.json')
-  .then(res => res.json())
-  .then(data => {
-    const quiz = document.getElementById('quiz');
-    quiz.innerHTML = '';
-    
-    // Hanya ambil 1 kategori dulu untuk demo, atau semua
-    const allCategories = data.quiz_ramadhan;
-    
-    allCategories.forEach((cat, ci) => {
-      const questions = shuffle([...cat.questions]).slice(0, 5); // 5 soal per kategori
-      totalQuestions += questions.length;
-      
-      const cDiv = document.createElement('div');
-      cDiv.style.marginBottom = '30px';
-      cDiv.innerHTML = `<h3 style="color:white;margin-bottom:15px;">${cat.category}</h3>`;
-      
-      questions.forEach((q, i) => {
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question';
-        
-        let opts = '';
-        shuffle([...q.options]).forEach((o, oi) => {
-          opts += `
-            <label class="option-label">
-              <input type="radio" name="q${ci}${i}" value="${o}" data-answer="${q.answer}" onchange="handleAnswer(this)">
-              <span class="option-marker">${'ABCDE'[oi]}</span>
-              <span>${o}</span>
-            </label>`;
-        });
-        
-        qDiv.innerHTML = `
-          <span class="question-number">Soal ${i+1}</span>
-          <p class="question-text">${q.question}</p>
-          <div class="options">${opts}</div>`;
-        
-        cDiv.appendChild(qDiv);
-      });
-      quiz.appendChild(cDiv);
-    });
-  });
-}
-
-// ================== RESULT & SAVE ==================
-function showResult() {
-  // Hitung total
-  const percent = Math.round((totalCorrect / totalQuestions) * 100);
-  
+function finishSession() {
   // Save to DB
   const db = getDB();
   if (!db.users[currentUser.name]) db.users[currentUser.name] = { coins: 0 };
-  db.users[currentUser.name].coins += sessionCoins; // Tambahkan koin sesi ini ke total
+  db.users[currentUser.name].coins += sessionCoins;
   db.users[currentUser.name].lastPlay = Date.now();
-  currentUser.coins = db.users[currentUser.name].coins; // Update local state
+  currentUser.coins = db.users[currentUser.name].coins;
   saveDB(db);
-  
-  updateCoinDisplay();
 
-  // Show Modal
+  // Update UI
+  updateUI();
+
+  // Show Result Modal
+  const percent = Math.round((sessionCorrect / QUESTIONS_PER_SESSION) * 100);
   const details = `
-    <div style="font-size:3em;color:var(--accent);">${sessionCoins} 🪙</div>
-    <p>Koin berhasil ditambahkan ke akun Anda!</p>
-    <p style="margin-top:20px;color:#888;">Total Koin: <strong>${currentUser.coins}</strong></p>
+    <div style="font-size:1.2em;margin-bottom:20px;">Skor Anda: <strong>${sessionCorrect}/${QUESTIONS_PER_SESSION}</strong> (${percent}%)</div>
+    <div style="font-size:3em;color:var(--accent);margin-bottom:10px;">+${sessionCoins.toLocaleString('id-ID')} 🪙</div>
+    <p style="color:#666;">Total Koin Anda: <strong>${currentUser.coins.toLocaleString('id-ID')}</strong></p>
   `;
   document.getElementById('resultDetails').innerHTML = details;
   openModal('resultModal');
-  
-  // Refresh Leaderboard
-  generateLeaderboard();
 }
 
-// ================== LEADERBOARD ==================
+function startNextSession() {
+  closeModal('resultModal');
+  sessionCount++;
+  window.scrollTo(0,0);
+  loadNewSession();
+}
+
+// ================== SYSTEM FUNCTIONS ==================
+function playSound(type) {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  if (type === 'correct') {
+    osc.frequency.value = 600; gain.gain.value = 0.1;
+    osc.start(); osc.stop(ctx.currentTime + 0.1);
+  } else {
+    osc.frequency.value = 200; gain.gain.value = 0.1;
+    osc.start(); osc.stop(ctx.currentTime + 0.2);
+  }
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  if(id === 'leaderboardModal') generateLeaderboard();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// Leaderboard
 function generateLeaderboard() {
   const db = getDB();
   const list = document.getElementById('leaderboardList');
-  
-  // Sort users by coins
   const sorted = Object.keys(db.users).map(name => ({
-    name,
-    coins: db.users[name].coins
+    name, coins: db.users[name].coins
   })).sort((a, b) => b.coins - a.coins);
 
   let html = '';
@@ -833,7 +855,7 @@ function generateLeaderboard() {
         </div>
         <div class="lb-details">
           <div class="lb-name">${isYou ? u.name + ' (Anda)' : u.name}</div>
-          <div class="lb-score">${u.coins} Koin</div>
+          <div class="lb-score">${u.coins.toLocaleString('id-ID')} Koin</div>
         </div>
       </div>
     `;
@@ -841,32 +863,23 @@ function generateLeaderboard() {
   list.innerHTML = html;
 }
 
-// ================== SHOP LOGIC ==================
+// Shop
 function buyItem(cost, itemName) {
   if (currentUser.coins < cost) {
-    alert('Koin tidak cukup! Main lagi yuk.');
+    alert(`Koin tidak cukup! Anda membutuhkan ${cost.toLocaleString('id-ID')} koin.`);
     return;
   }
   
-  if(confirm(`Tukar ${cost} koin dengan ${itemName}?`)) {
+  if(confirm(`Tukar ${cost.toLocaleString('id-ID')} koin dengan ${itemName}?`)) {
     const db = getDB();
     db.users[currentUser.name].coins -= cost;
     currentUser.coins -= cost;
     saveDB(db);
-    updateCoinDisplay();
-    alert('Selamat! Anda mendapatkan ' + itemName);
+    updateUI();
+    alert(`Selamat! Anda berhasil menukarkan koin dengan ${itemName}.`);
   }
 }
 
-// ================== MODAL CONTROLS ==================
-function openModal(id) {
-  document.getElementById(id).classList.add('show');
-  if(id === 'leaderboardModal') generateLeaderboard();
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
 </script>
 </body>
 </html>
