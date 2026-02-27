@@ -2,177 +2,344 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Ramadhan</title>
+<title>Quiz Ramadhan -获赞系统</title>
 
 <style>
 :root{
-  --bg-dark:#0a1f1a;
-  --bg-card:#122a24;
+  --bg-primary:#2d8659;
+  --bg-secondary:#1e6b47;
+  --bg-light:#4ba376;
   --accent:#d4af37;
-  --accent-glow:#f0c850;
+  --accent-light:#f0d77a;
+  --text-dark:#1a3d2e;
+  --text-light:#ffffff;
   --success:#2ecc71;
   --error:#e74c3c;
-  --text:#e8e4d9;
-  --muted:#8a9a8e;
-  --border:#1e3d35;
+  --card-bg:rgba(255,255,255,0.95);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
   font-family:'Segoe UI',Tahoma,sans-serif;
-  background:var(--bg-dark);
   min-height:100vh;
-  color:var(--text);
+  color:var(--text-dark);
   position:relative;
   overflow-x:hidden;
 }
 
-/* Animated background */
-.bg-pattern{
+/* Sky & Background (Sama seperti sebelumnya) */
+.sky{
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(212,175,55,0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(46,204,113,0.06) 0%, transparent 40%),
-    linear-gradient(180deg, #0a1f1a 0%, #0d2820 50%, #0a1f1a 100%);
-  z-index:-2;
+  background:linear-gradient(180deg, #87ceeb 0%, #98d4ee 15%, #b8e4f7 30%, #d4f0fa 45%, #2d8659 55%, #246b47 70%, #1e5a3a 100%);
+  z-index:-3;
 }
 
-.floating-shapes{
+.sun{position:fixed;top:8%;right:12%;width:80px;height:80px;z-index:-1;}
+.sun-core{width:100%;height:100%;background:radial-gradient(circle, #fff7e0 0%, #ffd93d 40%, #ff9500 100%);border-radius:50%;box-shadow:0 0 60px rgba(255,217,61,0.8);animation:sunPulse 4s ease-in-out infinite;}
+@keyframes sunPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+
+.moon{position:fixed;top:12%;left:10%;width:60px;height:60px;z-index:-1;animation:moonFloat 8s ease-in-out infinite;}
+.moon-crescent{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg, #fef9e7 0%, #f4d03f 100%);box-shadow:inset -15px -5px 0 0 #2d8659, 0 0 30px rgba(244,208,63,0.5);}
+@keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
+
+.clouds{position:fixed;top:0;left:0;right:0;height:50%;z-index:-2;overflow:hidden;pointer-events:none;}
+.cloud{position:absolute;background:white;border-radius:100px;opacity:0.9;}
+.cloud-1{width:200px;height:60px;top:5%;animation:cloudMove1 40s linear infinite;}
+.cloud-1::before{content:'';position:absolute;background:white;border-radius:50%;width:80px;height:80px;top:-40px;left:30px;}
+@keyframes cloudMove1{from{left:-250px;}to{left:110%;}}
+
+.kaaba-container{position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:-1;width:100%;max-width:800px;height:300px;opacity:0.15;}
+/* SVG Kaaba omitted for brevity, same as previous */
+
+/* ================== APP SHELL ================== */
+.app-shell{display:none;}
+.app-shell.active{display:block;}
+
+/* ================== LOGIN SCREEN ================== */
+.login-overlay{
   position:fixed;
   inset:0;
-  z-index:-1;
-  pointer-events:none;
-  overflow:hidden;
+  background:rgba(30,90,58,0.98);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+  padding:20px;
 }
 
-.shape{
-  position:absolute;
-  border-radius:50%;
-  background:linear-gradient(135deg, rgba(212,175,55,0.15), transparent);
-  animation:float 20s infinite ease-in-out;
-}
-
-.shape:nth-child(1){width:300px;height:300px;top:10%;left:-5%;animation-delay:0s;}
-.shape:nth-child(2){width:200px;height:200px;top:60%;right:-3%;animation-delay:-5s;}
-.shape:nth-child(3){width:150px;height:150px;bottom:20%;left:30%;animation-delay:-10s;}
-
-@keyframes float{
-  0%,100%{transform:translateY(0) rotate(0deg);opacity:0.3;}
-  50%{transform:translateY(-30px) rotate(180deg);opacity:0.6;}
-}
-
-header{
+.login-card{
+  background:white;
+  padding:40px;
+  border-radius:24px;
+  width:100%;
+  max-width:400px;
   text-align:center;
-  padding:50px 20px 30px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  animation:scaleIn 0.5s ease;
+}
+
+.login-logo{
+  font-size:3rem;
+  margin-bottom:10px;
+}
+
+.login-title{
+  color:var(--bg-primary);
+  font-size:1.8em;
+  margin-bottom:10px;
+}
+
+.login-subtitle{
+  color:#666;
+  margin-bottom:30px;
+  font-size:0.95em;
+}
+
+.input-group{
+  margin-bottom:20px;
+  text-align:left;
+}
+
+.input-group label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:600;
+  color:var(--text-dark);
+}
+
+.input-group input{
+  width:100%;
+  padding:14px;
+  border:2px solid #eee;
+  border-radius:12px;
+  font-size:1em;
+  transition:all 0.3s;
+}
+
+.input-group input:focus{
+  border-color:var(--accent);
+  outline:none;
+  box-shadow:0 0 0 3px rgba(212,175,55,0.2);
+}
+
+.btn-login{
+  width:100%;
+  padding:16px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-light));
+  border:none;
+  border-radius:12px;
+  font-size:1.1em;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform 0.2s;
+}
+
+.btn-login:hover{transform:translateY(-2px);}
+
+/* ================== TOP BAR ================== */
+.top-bar{
+  position:sticky;
+  top:0;
+  background:rgba(45,134,89,0.95);
+  backdrop-filter:blur(10px);
+  padding:12px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:100;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+
+.user-profile{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:white;
+  cursor:pointer;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  background:var(--accent);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:var(--text-dark);
+  font-size:1.2em;
+}
+
+.user-info div:first-child{font-weight:600;font-size:1em;}
+.user-coins{font-size:0.9em;color:var(--accent-light);display:flex;align-items:center;gap:4px;}
+
+.top-actions{
+  display:flex;
+  gap:10px;
+}
+
+.icon-btn{
+  background:rgba(255,255,255,0.15);
+  border:none;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:1.2em;
+  transition:background 0.2s;
   position:relative;
 }
 
-header h1{
-  font-size:clamp(2rem,5vw,3rem);
-  font-weight:800;
-  background:linear-gradient(135deg, var(--accent), var(--accent-glow), var(--accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  margin-bottom:10px;
-  letter-spacing:2px;
-}
+.icon-btn:hover{background:rgba(255,255,255,0.25);}
 
-header p{
-  color:var(--muted);
-  font-size:1.1em;
-}
-
-/* Score Display */
-.score-display{
-  position:sticky;
-  top:0;
-  background:linear-gradient(180deg, var(--bg-dark) 60%, transparent);
-  padding:20px;
-  z-index:100;
-  display:flex;
-  justify-content:center;
-  gap:40px;
-  flex-wrap:wrap;
-}
-
-.score-item{
-  text-align:center;
-  padding:15px 25px;
-  background:var(--bg-card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  min-width:120px;
-  transition:transform 0.3s, box-shadow 0.3s;
-}
-
-.score-item:hover{
-  transform:translateY(-3px);
-  box-shadow:0 8px 25px rgba(212,175,55,0.15);
-}
-
-.score-label{
-  font-size:0.85em;
-  color:var(--muted);
-  margin-bottom:5px;
-}
-
-.score-value{
-  font-size:1.8em;
-  font-weight:700;
-  color:var(--accent);
-}
-
-.score-value.correct-count{color:var(--success);}
-.score-value.wrong-count{color:var(--error);}
-
+/* ================== MAIN CONTENT ================== */
 .container{
   max-width:900px;
   margin:0 auto 40px;
-  padding:0 20px;
+  padding:20px;
+  position:relative;
+  z-index:10;
 }
 
-.category{
-  margin-bottom:40px;
-  animation:slideIn 0.6s ease forwards;
-  opacity:0;
+/* ================== MODALS ================== */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1500;
+  padding:20px;
 }
 
-@keyframes slideIn{
-  from{opacity:0;transform:translateY(30px);}
-  to{opacity:1;transform:translateY(0);}
+.modal-overlay.show{display:flex;}
+
+.modal-content{
+  background:white;
+  width:100%;
+  max-width:500px;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:24px;
+  animation:scaleIn 0.3s ease;
 }
 
-.category-header{
-  background:linear-gradient(135deg, var(--bg-card), rgba(212,175,55,0.1));
-  padding:18px 24px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  margin-bottom:20px;
+.modal-header{
+  padding:25px;
+  border-bottom:1px solid #eee;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-.category-header h2{
-  font-size:1.3em;
-  color:var(--accent);
+.modal-header h2{color:var(--bg-primary);}
+
+.modal-close{
+  background:none;
+  border:none;
+  font-size:1.5em;
+  cursor:pointer;
+  color:#888;
+}
+
+.modal-body{padding:25px;}
+
+/* ================== LEADERBOARD ================== */
+.leaderboard-item{
+  display:flex;
+  align-items:center;
+  padding:12px;
+  background:#f9f9f9;
+  margin-bottom:10px;
+  border-radius:12px;
+  border-left:5px solid transparent;
+}
+
+.leaderboard-item.you{
+  background:rgba(212,175,55,0.15);
+  border-left-color:var(--accent);
+}
+
+.rank{
+  font-size:1.4em;
+  font-weight:800;
+  width:50px;
+  text-align:center;
+  color:#888;
+}
+
+.rank.top3{color:var(--accent);}
+
+.lb-avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#ddd;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  margin-right:15px;
+}
+
+.lb-details{flex:1;}
+.lb-name{font-weight:600;}
+.lb-score{font-size:0.9em;color:#666;}
+
+/* ================== SHOP ================== */
+.shop-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.shop-item{
+  background:#f5f5f5;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  transition:transform 0.2s;
+}
+
+.shop-item:hover{transform:translateY(-3px);}
+
+.shop-icon{font-size:2.5em;margin-bottom:10px;}
+.shop-name{font-weight:600;margin-bottom:5px;}
+.shop-price{
+  display:inline-block;
+  background:var(--accent);
+  color:white;
+  padding:5px 15px;
+  border-radius:20px;
+  font-size:0.9em;
   font-weight:600;
 }
 
-.category-progress{
-  font-size:0.9em;
-  color:var(--muted);
+.shop-item button{
+  margin-top:10px;
+  width:100%;
+  padding:8px;
+  border:none;
+  background:var(--bg-primary);
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
 }
 
+/* ================== QUIZ STYLES ================== */
+/* (Same CSS for questions/options as previous code) */
 .question{
-  background:var(--bg-card);
-  margin-bottom:15px;
-  padding:24px;
+  background:var(--card-bg);
+  margin-bottom:14px;
+  padding:22px;
   border-radius:16px;
-  border:1px solid var(--border);
+  box-shadow:0 6px 25px rgba(0,0,0,0.08);
   transition:all 0.3s ease;
   position:relative;
   overflow:hidden;
@@ -184,9 +351,9 @@ header p{
   left:0;
   top:0;
   bottom:0;
-  width:4px;
-  background:var(--border);
-  transition:background 0.3s;
+  width:5px;
+  background:var(--bg-light);
+  transition:all 0.3s;
 }
 
 .question.answered-correct::before{background:var(--success);}
@@ -194,667 +361,511 @@ header p{
 
 .question-number{
   display:inline-block;
-  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
-  color:var(--bg-dark);
-  padding:4px 12px;
-  border-radius:20px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-light));
+  color:var(--text-dark);
+  padding:5px 14px;
+  border-radius:25px;
   font-size:0.85em;
   font-weight:700;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .question-text{
   font-size:1.1em;
-  line-height:1.6;
-  margin-bottom:20px;
-  color:var(--text);
+  line-height:1.65;
+  margin-bottom:18px;
+  color:var(--text-dark);
 }
 
-.options{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+.options{display:flex;flex-direction:column;gap:10px;}
 
 .option-label{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   padding:14px 18px;
-  background:rgba(255,255,255,0.03);
-  border:2px solid var(--border);
-  border-radius:12px;
+  background:rgba(45,134,89,0.05);
+  border:2px solid rgba(45,134,89,0.15);
+  border-radius:14px;
   cursor:pointer;
   transition:all 0.25s ease;
-  position:relative;
 }
 
 .option-label:hover:not(.disabled){
   border-color:var(--accent);
-  background:rgba(212,175,55,0.08);
-  transform:translateX(5px);
+  background:rgba(212,175,55,0.1);
+  transform:translateX(8px);
 }
 
-.option-label input{
-  display:none;
-}
+.option-label input{display:none;}
 
 .option-marker{
-  width:24px;
-  height:24px;
-  border:2px solid var(--muted);
+  width:28px;
+  height:28px;
+  border:2px solid var(--bg-primary);
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:0.8em;
+  font-size:0.85em;
   font-weight:700;
-  color:var(--muted);
+  color:var(--bg-primary);
   transition:all 0.25s;
   flex-shrink:0;
 }
 
-.option-label:hover:not(.disabled) .option-marker{
-  border-color:var(--accent);
-  color:var(--accent);
-}
-
-.option-label.selected{
-  border-color:var(--accent);
-  background:rgba(212,175,55,0.12);
-}
-
-.option-label.selected .option-marker{
-  background:var(--accent);
-  border-color:var(--accent);
-  color:var(--bg-dark);
-}
-
-.option-label.correct{
-  border-color:var(--success);
-  background:rgba(46,204,113,0.15);
-}
-
-.option-label.correct .option-marker{
-  background:var(--success);
-  border-color:var(--success);
-  color:white;
-}
-
-.option-label.wrong{
-  border-color:var(--error);
-  background:rgba(231,76,60,0.15);
-}
-
-.option-label.wrong .option-marker{
-  background:var(--error);
-  border-color:var(--error);
-  color:white;
-}
-
-.option-label.disabled{
-  cursor:default;
-  opacity:0.7;
-}
+.option-label.selected{border-color:var(--accent);background:rgba(212,175,55,0.15);}
+.option-label.selected .option-marker{background:var(--accent);border-color:var(--accent);color:white;}
+.option-label.correct{border-color:var(--success);background:rgba(46,204,113,0.2);}
+.option-label.correct .option-marker{background:var(--success);border-color:var(--success);color:white;}
+.option-label.wrong{border-color:var(--error);background:rgba(231,76,60,0.2);}
+.option-label.wrong .option-marker{background:var(--error);border-color:var(--error);color:white;}
+.option-label.disabled{cursor:default;opacity:0.65;}
 
 .answer-hint{
-  margin-top:15px;
+  margin-top:14px;
   padding:12px 16px;
-  border-radius:10px;
-  font-size:0.95em;
-  display:none;
-  animation:fadeIn 0.4s ease;
-}
-
-.answer-hint.correct-hint{
-  background:rgba(46,204,113,0.15);
-  border:1px solid var(--success);
-  color:var(--success);
-}
-
-.answer-hint.wrong-hint{
-  background:rgba(231,76,60,0.15);
-  border:1px solid var(--error);
-  color:var(--error);
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(-10px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-.buttons-container{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-  margin:30px auto;
-  max-width:600px;
-  padding:0 20px;
-}
-
-.btn{
-  padding:16px 32px;
-  font-size:1em;
-  font-weight:700;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-  transition:all 0.3s ease;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.btn-primary{
-  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
-  color:var(--bg-dark);
-}
-
-.btn-primary:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 30px rgba(212,175,55,0.4);
-}
-
-.btn-secondary{
-  background:transparent;
-  color:var(--accent);
-  border:2px solid var(--accent);
-}
-
-.btn-secondary:hover{
-  background:rgba(212,175,55,0.1);
-  transform:translateY(-3px);
-}
-
-/* Result Modal */
-.result-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(10,31,26,0.95);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
-  padding:20px;
-  animation:fadeIn 0.5s ease;
-}
-
-.result-overlay.show{display:flex;}
-
-.result-card{
-  background:var(--bg-card);
-  border:2px solid var(--accent);
-  border-radius:24px;
-  padding:40px;
-  max-width:500px;
-  width:100%;
-  text-align:center;
-  animation:scaleIn 0.5s ease;
-}
-
-@keyframes scaleIn{
-  from{opacity:0;transform:scale(0.8);}
-  to{opacity:1;transform:scale(1);}
-}
-
-.result-grade{
-  font-size:5rem;
-  font-weight:900;
-  margin-bottom:10px;
-  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-
-.result-title{
-  font-size:1.5em;
-  margin-bottom:20px;
-  color:var(--text);
-}
-
-.result-score{
-  font-size:3em;
-  font-weight:800;
-  color:var(--accent);
-  margin-bottom:20px;
-}
-
-.result-details{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-  margin:25px 0;
-  text-align:left;
-}
-
-.result-item{
-  background:rgba(255,255,255,0.03);
-  padding:15px;
   border-radius:12px;
-  border:1px solid var(--border);
+  font-size:0.95em;
+  animation:fadeIn 0.4s ease;
+  font-weight:500;
 }
 
-.result-item-label{
-  font-size:0.85em;
-  color:var(--muted);
-  margin-bottom:5px;
-}
+.answer-hint.correct-hint{background:rgba(46,204,113,0.15);border:1px solid var(--success);color:#1e8449;}
+.answer-hint.wrong-hint{background:rgba(231,76,60,0.15);border:1px solid var(--error);color:#c0392b;}
 
-.result-item-value{
-  font-size:1.3em;
-  font-weight:700;
-}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
 
-.result-item-value.correct{color:var(--success);}
-.result-item-value.wrong{color:var(--error);}
-
-.result-categories{
-  margin-top:25px;
-  padding-top:25px;
-  border-top:1px solid var(--border);
-  text-align:left;
-}
-
-.category-stat{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-
-.category-stat:last-child{border-bottom:none;}
-
-footer{
-  text-align:center;
-  padding:30px;
-  color:var(--muted);
-  font-size:0.9em;
-}
-
-/* Loading */
-.loading{
-  text-align:center;
-  padding:60px;
-  color:var(--muted);
-}
-
-.loading-spinner{
-  width:50px;
-  height:50px;
-  border:3px solid var(--border);
-  border-top-color:var(--accent);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto 20px;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg);}
-}
-
-/* Responsive */
-@media(max-width:600px){
-  .score-display{gap:15px;}
-  .score-item{min-width:100px;padding:12px 18px;}
-  .result-details{grid-template-columns:1fr;}
-  .buttons-container{flex-direction:column;align-items:center;}
-  .btn{width:100%;max-width:280px;}
-}
-
-/* Reduced motion */
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:0.01ms!important;
-    transition-duration:0.01ms!important;
-  }
-}
+/* Utility */
+.btn{padding:14px 28px;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-primary{background:linear-gradient(135deg, var(--accent), var(--accent-light));color:var(--text-dark);}
+.btn-block{width:100%;margin-top:20px;}
 </style>
 </head>
 
 <body>
-<div class="bg-pattern"></div>
-<div class="floating-shapes">
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
+
+<!-- Sky Background -->
+<div class="sky"></div>
+<div class="sun"><div class="sun-core"></div></div>
+<div class="moon"><div class="moon-crescent"></div></div>
+<div class="clouds"><div class="cloud cloud-1"></div></div>
+<div class="kaaba-container">
+  <!-- SVG Kaaba Simplified -->
+  <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMax meet" style="width:100%;height:100%">
+    <rect x="100" y="200" width="600" height="90" fill="#1a5a3a"/>
+    <rect x="350" y="180" width="100" height="100" fill="#1a3d2e"/>
+    <text x="395" y="70" font-size="20" fill="#d4af37">☪</text>
+  </svg>
 </div>
 
-<header>
-  <h1>Quiz Ramadhan</h1>
-  <p>Tajwid | Sirah Nabawi | Asmaul Husna | Sahabat Nabi</p>
-</header>
-
-<div class="score-display">
-  <div class="score-item">
-    <div class="score-label">Benar</div>
-    <div class="score-value correct-count" id="correctCount">0</div>
-  </div>
-  <div class="score-item">
-    <div class="score-label">Salah</div>
-    <div class="score-value wrong-count" id="wrongCount">0</div>
-  </div>
-  <div class="score-item">
-    <div class="score-label">Skor</div>
-    <div class="score-value" id="currentScore">0</div>
-  </div>
-</div>
-
-<div class="container" id="quiz">
-  <div class="loading">
-    <div class="loading-spinner"></div>
-    <p>Memuat soal quiz...</p>
-  </div>
-</div>
-
-<div class="buttons-container">
-  <button class="btn btn-primary" id="finishBtn" onclick="showResult()">Lihat Hasil Akhir</button>
-  <button class="btn btn-secondary" onclick="location.reload()">Ulangi Quiz</button>
-</div>
-
-<div class="result-overlay" id="resultOverlay">
-  <div class="result-card">
-    <div class="result-grade" id="resultGrade">A</div>
-    <div class="result-title" id="resultTitle">Luar Biasa!</div>
-    <div class="result-score" id="resultScore">100/100</div>
+<!-- ================== LOGIN SCREEN ================== -->
+<div class="login-overlay" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">🕌</div>
+    <h1 class="login-title">Quiz Ramadhan</h1>
+    <p class="login-subtitle">Masukkan nama untuk mulai bermain & meraih koin!</p>
     
-    <div class="result-details">
-      <div class="result-item">
-        <div class="result-item-label">Jawaban Benar</div>
-        <div class="result-item-value correct" id="finalCorrect">0</div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Jawaban Salah</div>
-        <div class="result-item-value wrong" id="finalWrong">0</div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Persentase</div>
-        <div class="result-item-value" id="finalPercent">0%</div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Total Soal</div>
-        <div class="result-item-value" id="finalTotal">0</div>
+    <div class="input-group">
+      <label>Nama Pengguna</label>
+      <input type="text" id="usernameInput" placeholder="Contoh: Ahmad123">
+    </div>
+    
+    <button class="btn-login" onclick="loginUser()">MULAI BERMAIN</button>
+  </div>
+</div>
+
+<!-- ================== APP SHELL (Setelah Login) ================== -->
+<div class="app-shell" id="appShell">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="user-profile" onclick="openModal('profileModal')">
+      <div class="avatar" id="userAvatar">A</div>
+      <div class="user-info">
+        <div id="userName">User</div>
+        <div class="user-coins">
+          <span>🪙</span>
+          <span id="userCoinsDisplay">0</span> Koin
+        </div>
       </div>
     </div>
     
-    <div class="result-categories" id="categoryStats"></div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="openModal('leaderboardModal')" title="Peringkat">🏆</button>
+      <button class="icon-btn" onclick="openModal('shopModal')" title="Tukar Hadiah">🎁</button>
+    </div>
+  </div>
+
+  <!-- Main Quiz Container -->
+  <div class="container">
     
-    <button class="btn btn-primary" style="margin-top:25px;width:100%;" onclick="closeResult()">Tutup</button>
+    <!-- Score Display -->
+    <div style="display:flex;gap:15px;justify-content:center;margin-bottom:25px;">
+      <div style="background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;">
+        <div style="font-size:0.85em;color:#888;">Benar</div>
+        <div style="font-size:1.8em;font-weight:800;color:var(--success);" id="correctCount">0</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;">
+        <div style="font-size:0.85em;color:#888;">Koin Didapat</div>
+        <div style="font-size:1.8em;font-weight:800;color:var(--accent);" id="sessionCoins">+0</div>
+      </div>
+    </div>
+
+    <div id="quiz">
+      <div style="text-align:center;padding:40px;background:white;border-radius:20px;">
+        <div class="loading-spinner" style="width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
+        <p>Memuat soal quiz...</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:30px;">
+      <button class="btn btn-primary" onclick="showResult()">Selesai & Klaim Koin</button>
+    </div>
   </div>
 </div>
 
-<footer>
-  Ramadhan Mubarak - Belajar Qur'an dan Sunnah
-</footer>
+<!-- ================== MODALS ================== -->
+
+<!-- Leaderboard Modal -->
+<div class="modal-overlay" id="leaderboardModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🏆 Papan Peringkat</h2>
+      <button class="modal-close" onclick="closeModal('leaderboardModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="leaderboardList">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Shop Modal -->
+<div class="modal-overlay" id="shopModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🎁 Tukar Hadiah</h2>
+      <button class="modal-close" onclick="closeModal('shopModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="text-align:center;margin-bottom:20px;">Koin Anda: <strong id="shopUserCoins">0</strong> 🪙</p>
+      <div class="shop-grid">
+        <div class="shop-item">
+          <div class="shop-icon">🍫</div>
+          <div class="shop-name">Cokelat Premium</div>
+          <div class="shop-price">50 Koin</div>
+          <button onclick="buyItem(50, 'Cokelat Premium')">Tukar</button>
+        </div>
+        <div class="shop-item">
+          <div class="shop-icon">📖</div>
+          <div class="shop-name">Buku Tajwid</div>
+          <div class="shop-price">100 Koin</div>
+          <button onclick="buyItem(100, 'Buku Tajwid')">Tukar</button>
+        </div>
+        <div class="shop-item">
+          <div class="shop-icon">🎫</div>
+          <div class="shop-name">Tiket Wisata</div>
+          <div class="shop-price">500 Koin</div>
+          <button onclick="buyItem(500, 'Tiket Wisata')">Tukar</button>
+        </div>
+        <div class="shop-item">
+          <div class="shop-icon">💎</div>
+          <div class="shop-name">Vip Badge</div>
+          <div class="shop-price">1000 Koin</div>
+          <button onclick="buyItem(1000, 'VIP Badge')">Tukar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Result Modal -->
+<div class="modal-overlay" id="resultModal">
+  <div class="modal-content">
+    <div class="modal-body" style="text-align:center;padding:40px;">
+      <h2 style="font-size:2em;margin-bottom:10px;">Sesi Selesai!</h2>
+      <div id="resultDetails"></div>
+      <button class="btn btn-primary btn-block" onclick="closeModal('resultModal')">Kembali</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ================== STATE ==================
+// ================== DATABASE SIMULASI ==================
+// Di aplikasi asli, bagian ini adalah API call ke Server
+function getDB() {
+  const db = localStorage.getItem('ramadhanQuizDB');
+  return db ? JSON.parse(db) : { users: {} };
+}
+
+function saveDB(db) {
+  localStorage.setItem('ramadhanQuizDB', JSON.stringify(db));
+}
+
+// Inisialisasi data "Online" palsu untuk simulasi ranking
+function initFakeOnlineData() {
+  if (!localStorage.getItem('fakeOnlineDataInit')) {
+    const db = getDB();
+    // Tambahkan bot pemain lain
+    db.users["Ahmad_Bot"] = { coins: 850, lastPlay: Date.now() };
+    db.users["Siti_Ramadhan"] = { coins: 1200, lastPlay: Date.now() };
+    db.users["Umar_Gaming"] = { coins: 300, lastPlay: Date.now() };
+    db.users["Zahra_Quran"] = { coins: 950, lastPlay: Date.now() };
+    saveDB(db);
+    localStorage.setItem('fakeOnlineDataInit', 'true');
+  }
+}
+initFakeOnlineData();
+
+// ================== AUTH STATE ==================
+let currentUser = null;
+let sessionCoins = 0; // Koin yang dikumpulkan di sesi ini
 let totalCorrect = 0;
 let totalWrong = 0;
 let totalQuestions = 0;
 let answeredQuestions = 0;
 let categoryStats = {};
 
-// ================== VOICE FEEDBACK ==================
+// ================== LOGIN LOGIC ==================
+function loginUser() {
+  const nameInput = document.getElementById('usernameInput').value.trim();
+  if (!nameInput) return alert('Masukkan nama dulu!');
+
+  const db = getDB();
+  
+  // Cek atau buat user
+  if (!db.users[nameInput]) {
+    db.users[nameInput] = { coins: 0, lastPlay: Date.now() };
+    saveDB(db);
+  }
+  
+  currentUser = {
+    name: nameInput,
+    coins: db.users[nameInput].coins
+  };
+
+  // Update UI
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appShell').classList.add('active');
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  updateCoinDisplay();
+  
+  loadQuiz();
+}
+
+function updateCoinDisplay() {
+  document.getElementById('userCoinsDisplay').textContent = currentUser.coins;
+  document.getElementById('shopUserCoins').textContent = currentUser.coins;
+}
+
+// ================== VOICE & SOUND ==================
 function speak(text) {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'id-ID';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.1;
-    utterance.volume = 1.0;
-    
-    const voices = window.speechSynthesis.getVoices();
-    const idVoice = voices.find(v => v.lang.includes('id'));
-    if (idVoice) utterance.voice = idVoice;
-    
-    window.speechSynthesis.speak(utterance);
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID';
+    speechSynthesis.speak(u);
   }
 }
 
-// ================== SOUND EFFECT ==================
 function playSound(type) {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
   
   if (type === 'correct') {
-    // Happy ascending tones
-    [523.25, 659.25, 783.99].forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = freq;
-      osc.type = 'sine';
-      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.1);
-      gain.gain.exponentialDecayTo = 0.01;
-      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.1);
-      gain.gain.exponentialDecayTo = 0.01;
-      osc.start(ctx.currentTime + i * 0.1);
-      osc.stop(ctx.currentTime + i * 0.1 + 0.15);
-    });
-  } else {
-    // Descending tone for wrong
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 200;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.frequency.value = 600;
+    gain.gain.value = 0.1;
     osc.start();
-    osc.stop(ctx.currentTime + 0.3);
-  }
-}
-
-// ================== SHUFFLE ==================
-function shuffle(arr) {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-// ================== UPDATE SCORE ==================
-function updateScore(isCorrect) {
-  if (isCorrect) {
-    totalCorrect++;
-    document.getElementById('correctCount').textContent = totalCorrect;
+    osc.stop(ctx.currentTime + 0.1);
   } else {
-    totalWrong++;
-    document.getElementById('wrongCount').textContent = totalWrong;
+    osc.frequency.value = 200;
+    gain.gain.value = 0.1;
+    osc.start();
+    osc.stop(ctx.currentTime + 0.2);
   }
-  
-  const score = totalCorrect * 10;
-  document.getElementById('currentScore').textContent = score;
-  
-  // Animate score item
-  const scoreItems = document.querySelectorAll('.score-item');
-  scoreItems.forEach(item => {
-    item.style.transform = 'scale(1.1)';
-    setTimeout(() => item.style.transform = '', 200);
-  });
 }
 
-// ================== HANDLE ANSWER ==================
+// ================== QUIZ LOGIC ==================
+function shuffle(arr) {
+  const s = [...arr];
+  for (let i = s.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [s[i], s[j]] = [s[j], s[i]];
+  }
+  return s;
+}
+
 function handleAnswer(radio) {
-  const questionDiv = radio.closest('.question');
-  const options = questionDiv.querySelectorAll('.option-label');
-  const correctAnswer = radio.dataset.answer;
-  const category = radio.dataset.category;
-  const isCorrect = radio.value === correctAnswer;
-  
-  // Disable all options
+  const qDiv = radio.closest('.question');
+  const options = qDiv.querySelectorAll('.option-label');
+  const correct = radio.dataset.answer;
+  const isCorrect = radio.value === correct;
+
   options.forEach(opt => {
     opt.classList.add('disabled');
-    const optRadio = opt.querySelector('input');
-    optRadio.disabled = true;
-    
-    // Show correct answer
-    if (optRadio.value === correctAnswer) {
-      opt.classList.add('correct');
-    }
+    opt.querySelector('input').disabled = true;
+    if (opt.querySelector('input').value === correct) opt.classList.add('correct');
   });
-  
-  // Mark selected answer
-  const selectedLabel = radio.closest('.option-label');
-  selectedLabel.classList.add('selected');
+
+  const selected = radio.closest('.option-label');
+  selected.classList.add('selected');
   
   if (isCorrect) {
-    selectedLabel.classList.add('correct');
-    questionDiv.classList.add('answered-correct');
+    selected.classList.add('correct');
+    qDiv.classList.add('answered-correct');
+    totalCorrect++;
+    sessionCoins++; // Tambah koin
+    document.getElementById('sessionCoins').textContent = `+${sessionCoins}`;
+    playSound('correct');
+    speak('Benar!');
   } else {
-    selectedLabel.classList.add('wrong');
-    questionDiv.classList.add('answered-wrong');
+    selected.classList.add('wrong');
+    qDiv.classList.add('answered-wrong');
+    totalWrong++;
+    playSound('wrong');
+    speak('Salah!');
   }
+
+  document.getElementById('correctCount').textContent = totalCorrect;
   
-  // Show hint
-  const hintDiv = document.createElement('div');
-  hintDiv.className = `answer-hint ${isCorrect ? 'correct-hint' : 'wrong-hint'}`;
-  hintDiv.innerHTML = isCorrect 
-    ? 'Benar! Semangat lanjutkan!' 
-    : `Salah. Jawaban yang benar: <strong>${correctAnswer}</strong>`;
-  hintDiv.style.display = 'block';
-  questionDiv.appendChild(hintDiv);
-  
-  // Update stats
-  answeredQuestions++;
-  if (category && categoryStats[category]) {
-    categoryStats[category].answered++;
-    if (isCorrect) categoryStats[category].correct++;
-  }
-  
-  // Play sound and voice
-  playSound(isCorrect ? 'correct' : 'wrong');
-  speak(isCorrect ? 'Benar!' : 'Salah!');
-  
-  // Update score display
-  updateScore(isCorrect);
+  // Add hint
+  const hint = document.createElement('div');
+  hint.className = `answer-hint ${isCorrect ? 'correct-hint' : 'wrong-hint'}`;
+  hint.innerHTML = isCorrect ? 'Benar! +1 Koin' : `Salah. Jawaban: ${correct}`;
+  qDiv.appendChild(hint);
 }
 
-// ================== LOAD QUIZ ==================
-fetch('data/quiz-ramadhan.json')
+function loadQuiz() {
+  fetch('data/quiz-ramadhan.json')
   .then(res => res.json())
   .then(data => {
     const quiz = document.getElementById('quiz');
     quiz.innerHTML = '';
     
-    data.quiz_ramadhan.forEach((cat, catIndex) => {
-      categoryStats[cat.category] = { total: 0, correct: 0, answered: 0 };
-      
-      const questions = shuffle([...cat.questions]).slice(0, 20);
-      categoryStats[cat.category].total = questions.length;
+    // Hanya ambil 1 kategori dulu untuk demo, atau semua
+    const allCategories = data.quiz_ramadhan;
+    
+    allCategories.forEach((cat, ci) => {
+      const questions = shuffle([...cat.questions]).slice(0, 5); // 5 soal per kategori
       totalQuestions += questions.length;
       
-      const catDiv = document.createElement('div');
-      catDiv.className = 'category';
-      catDiv.style.animationDelay = `${catIndex * 0.15}s`;
-      
-      catDiv.innerHTML = `
-        <div class="category-header">
-          <h2>${cat.category}</h2>
-          <span class="category-progress">${questions.length} Soal</span>
-        </div>
-      `;
+      const cDiv = document.createElement('div');
+      cDiv.style.marginBottom = '30px';
+      cDiv.innerHTML = `<h3 style="color:white;margin-bottom:15px;">${cat.category}</h3>`;
       
       questions.forEach((q, i) => {
         const qDiv = document.createElement('div');
         qDiv.className = 'question';
         
-        const letters = 'ABCDE';
         let opts = '';
-        shuffle([...q.options]).forEach((opt, optIndex) => {
+        shuffle([...q.options]).forEach((o, oi) => {
           opts += `
             <label class="option-label">
-              <input type="radio"
-                name="${cat.category}-${i}"
-                value="${opt}"
-                data-answer="${q.answer}"
-                data-category="${cat.category}"
-                onchange="handleAnswer(this)">
-              <span class="option-marker">${letters[optIndex]}</span>
-              <span class="option-text">${opt}</span>
-            </label>
-          `;
+              <input type="radio" name="q${ci}${i}" value="${o}" data-answer="${q.answer}" onchange="handleAnswer(this)">
+              <span class="option-marker">${'ABCDE'[oi]}</span>
+              <span>${o}</span>
+            </label>`;
         });
         
         qDiv.innerHTML = `
-          <span class="question-number">Soal ${i + 1}</span>
+          <span class="question-number">Soal ${i+1}</span>
           <p class="question-text">${q.question}</p>
-          <div class="options">${opts}</div>
-        `;
+          <div class="options">${opts}</div>`;
         
-        catDiv.appendChild(qDiv);
+        cDiv.appendChild(qDiv);
       });
-      
-      quiz.appendChild(catDiv);
+      quiz.appendChild(cDiv);
     });
-    
-    // Load voices
-    if ('speechSynthesis' in window) {
-      speechSynthesis.getVoices();
-      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-    }
-  })
-  .catch(err => {
-    document.getElementById('quiz').innerHTML = `
-      <div class="loading">
-        <p>Gagal memuat soal. Pastikan file quiz-ramadhan.json tersedia.</p>
+  });
+}
+
+// ================== RESULT & SAVE ==================
+function showResult() {
+  // Hitung total
+  const percent = Math.round((totalCorrect / totalQuestions) * 100);
+  
+  // Save to DB
+  const db = getDB();
+  if (!db.users[currentUser.name]) db.users[currentUser.name] = { coins: 0 };
+  db.users[currentUser.name].coins += sessionCoins; // Tambahkan koin sesi ini ke total
+  db.users[currentUser.name].lastPlay = Date.now();
+  currentUser.coins = db.users[currentUser.name].coins; // Update local state
+  saveDB(db);
+  
+  updateCoinDisplay();
+
+  // Show Modal
+  const details = `
+    <div style="font-size:3em;color:var(--accent);">${sessionCoins} 🪙</div>
+    <p>Koin berhasil ditambahkan ke akun Anda!</p>
+    <p style="margin-top:20px;color:#888;">Total Koin: <strong>${currentUser.coins}</strong></p>
+  `;
+  document.getElementById('resultDetails').innerHTML = details;
+  openModal('resultModal');
+  
+  // Refresh Leaderboard
+  generateLeaderboard();
+}
+
+// ================== LEADERBOARD ==================
+function generateLeaderboard() {
+  const db = getDB();
+  const list = document.getElementById('leaderboardList');
+  
+  // Sort users by coins
+  const sorted = Object.keys(db.users).map(name => ({
+    name,
+    coins: db.users[name].coins
+  })).sort((a, b) => b.coins - a.coins);
+
+  let html = '';
+  sorted.forEach((u, i) => {
+    const isYou = u.name === currentUser.name;
+    html += `
+      <div class="leaderboard-item ${isYou ? 'you' : ''}">
+        <div class="rank ${i < 3 ? 'top3' : ''}">#${i + 1}</div>
+        <div class="lb-avatar" style="background:${isYou ? 'var(--accent)' : '#eee'};color:${isYou ? 'white' : '#333'}">
+          ${u.name.charAt(0)}
+        </div>
+        <div class="lb-details">
+          <div class="lb-name">${isYou ? u.name + ' (Anda)' : u.name}</div>
+          <div class="lb-score">${u.coins} Koin</div>
+        </div>
       </div>
     `;
   });
+  list.innerHTML = html;
+}
 
-// ================== SHOW RESULT ==================
-function showResult() {
-  if (answeredQuestions < totalQuestions) {
-    const remaining = totalQuestions - answeredQuestions;
-    speak(`Masih ada ${remaining} soal yang belum dijawab!`);
-    alert(`Masih ada ${remaining} soal yang belum dijawab!`);
+// ================== SHOP LOGIC ==================
+function buyItem(cost, itemName) {
+  if (currentUser.coins < cost) {
+    alert('Koin tidak cukup! Main lagi yuk.');
     return;
   }
   
-  const percentage = Math.round((totalCorrect / totalQuestions) * 100);
-  let grade, title;
-  
-  if (percentage >= 90) { grade = 'A'; title = 'Luar Biasa! MasyaAllah!'; }
-  else if (percentage >= 80) { grade = 'B'; title = 'Bagus Sekali!'; }
-  else if (percentage >= 70) { grade = 'C'; title = 'Cukup Baik!'; }
-  else if (percentage >= 60) { grade = 'D'; title = 'Perlu Belajar Lagi'; }
-  else { grade = 'E'; title = 'Jangan Menyerah!'; }
-  
-  document.getElementById('resultGrade').textContent = grade;
-  document.getElementById('resultTitle').textContent = title;
-  document.getElementById('resultScore').textContent = `${totalCorrect * 10} Poin`;
-  document.getElementById('finalCorrect').textContent = totalCorrect;
-  document.getElementById('finalWrong').textContent = totalWrong;
-  document.getElementById('finalPercent').textContent = `${percentage}%`;
-  document.getElementById('finalTotal').textContent = totalQuestions;
-  
-  // Category stats
-  let catHTML = '<h4 style="margin-bottom:15px;color:var(--accent);">Statistik Per Kategori</h4>';
-  for (const cat in categoryStats) {
-    const stat = categoryStats[cat];
-    const catPercent = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
-    catHTML += `
-      <div class="category-stat">
-        <span>${cat}</span>
-        <span>${stat.correct}/${stat.total} (${catPercent}%)</span>
-      </div>
-    `;
+  if(confirm(`Tukar ${cost} koin dengan ${itemName}?`)) {
+    const db = getDB();
+    db.users[currentUser.name].coins -= cost;
+    currentUser.coins -= cost;
+    saveDB(db);
+    updateCoinDisplay();
+    alert('Selamat! Anda mendapatkan ' + itemName);
   }
-  document.getElementById('categoryStats').innerHTML = catHTML;
-  
-  document.getElementById('resultOverlay').classList.add('show');
-  
-  // Voice result
-  speak(`${title} Skor kamu ${percentage} persen.`);
 }
 
-function closeResult() {
-  document.getElementById('resultOverlay').classList.remove('show');
+// ================== MODAL CONTROLS ==================
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  if(id === 'leaderboardModal') generateLeaderboard();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
 }
 </script>
 </body>
