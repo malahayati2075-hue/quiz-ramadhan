@@ -1,77 +1,257 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Quiz Ramadhan</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    .category {
-      margin-top: 30px;
-    }
-    .question {
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-    }
-    .options label {
-      display: block;
-      margin: 5px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Quiz Ramadhan</title>
+
+<style>
+:root{
+  --green:#1b5e20;
+  --yellow:#fbc02d;
+  --orange:#f57c00;
+  --bg:#f1f8e9;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#0b3d2e,var(--green));
+}
+
+header{
+  background:linear-gradient(90deg,var(--green),var(--orange));
+  color:white;
+  padding:40px 20px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:2.7em;
+}
+
+header p{
+  margin-top:10px;
+  opacity:.9;
+}
+
+.container{
+  max-width:900px;
+  margin:-30px auto 40px;
+  background:var(--bg);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 15px 30px rgba(0,0,0,.25);
+}
+
+.category{
+  margin-bottom:35px;
+}
+
+.category h2{
+  background:linear-gradient(90deg,var(--yellow),var(--orange));
+  padding:12px;
+  border-radius:12px;
+  color:#4e342e;
+}
+
+.question{
+  background:white;
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+  animation:fade .5s ease;
+}
+
+.options label{
+  display:block;
+  padding:8px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.options label:hover{
+  background:#fff8e1;
+}
+
+.correct{
+  background:#c8e6c9!important;
+  border:2px solid #2e7d32;
+}
+
+.wrong{
+  background:#ffcdd2!important;
+  border:2px solid #c62828;
+}
+
+button{
+  background:linear-gradient(90deg,var(--green),var(--yellow));
+  border:none;
+  padding:14px 28px;
+  font-size:1.1em;
+  border-radius:30px;
+  cursor:pointer;
+  display:block;
+  margin:30px auto 10px;
+  font-weight:bold;
+}
+
+#scoreBox{
+  text-align:center;
+  font-size:1.4em;
+  margin-top:20px;
+  display:none;
+}
+
+footer{
+  text-align:center;
+  color:white;
+  padding:20px;
+  opacity:.8;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
 </head>
+
 <body>
 
-<h1>Quiz Ramadhan</h1>
-<div id="quiz"></div>
+<header>
+  <h1>🌙 Quiz Ramadhan</h1>
+  <p>Tajwid • Sirah Nabawi • Asmaul Husna • Sahabat Nabi</p>
+</header>
+
+<div class="container" id="quiz"></div>
+
+<button onclick="submitQuiz()">Selesai & Lihat Hasil</button>
+<button onclick="location.reload()">🔁 Ulangi Quiz</button>
+
+<div id="scoreBox"></div>
+
+<footer>
+  🕌 Ramadhan Mubarak • Belajar Qur’an & Sunnah
+</footer>
 
 <script>
+// ================== AUDIO ==================
+function playSound(type){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.value=type==="correct"?700:220;
+  gain.gain.value=0.2;
+  osc.start();
+  setTimeout(()=>osc.stop(),200);
+}
+
+// ================== SHUFFLE ==================
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+let resultByCategory={};
+
+// ================== LOAD QUIZ ==================
 fetch("data/quiz-ramadhan.json")
-  .then(response => response.json())
-  .then(data => {
-    const quizContainer = document.getElementById("quiz");
+.then(res=>res.json())
+.then(data=>{
+  const quiz=document.getElementById("quiz");
 
-    data.quiz_ramadhan.forEach(category => {
-      const categoryDiv = document.createElement("div");
-      categoryDiv.className = "category";
+  data.quiz_ramadhan.forEach(cat=>{
+    resultByCategory[cat.category]={score:0,total:0};
 
-      categoryDiv.innerHTML = `<h2>${category.category}</h2>`;
+    const questions=shuffle([...cat.questions]).slice(0,20);
 
-      category.questions.forEach(q => {
-        const questionDiv = document.createElement("div");
-        questionDiv.className = "question";
+    const catDiv=document.createElement("div");
+    catDiv.className="category";
+    catDiv.innerHTML=`<h2>🕌 ${cat.category} (20 Soal)</h2>`;
 
-        let optionsHTML = "";
-        q.options.forEach(option => {
-          optionsHTML += `
-            <label>
-              <input type="radio" name="q-${category.category}-${q.id}">
-              ${option}
-            </label>
-          `;
-        });
+    questions.forEach((q,i)=>{
+      const qDiv=document.createElement("div");
+      qDiv.className="question";
 
-        questionDiv.innerHTML = `
-          <p><strong>${q.id}. ${q.question}</strong></p>
-          <div class="options">${optionsHTML}</div>
+      let opts="";
+      q.options.forEach(opt=>{
+        opts+=`
+          <label>
+            <input type="radio"
+              name="${cat.category}-${i}"
+              value="${opt}"
+              data-answer="${q.answer}"
+              data-category="${cat.category}">
+            ${opt}
+          </label>
         `;
-
-        categoryDiv.appendChild(questionDiv);
       });
 
-      quizContainer.appendChild(categoryDiv);
+      qDiv.innerHTML=`
+        <p><strong>${i+1}. ${q.question}</strong></p>
+        <div class="options">${opts}</div>
+      `;
+
+      catDiv.appendChild(qDiv);
     });
-  })
-  .catch(error => {
-    console.error("Gagal load data:", error);
+
+    quiz.appendChild(catDiv);
   });
+});
+
+// ================== SUBMIT ==================
+function submitQuiz(){
+  document.querySelectorAll("input").forEach(i=>i.disabled=true);
+
+  document.querySelectorAll("input:checked").forEach(r=>{
+    const cat=r.dataset.category;
+    resultByCategory[cat].total++;
+
+    if(r.value===r.dataset.answer){
+      resultByCategory[cat].score++;
+      r.parentElement.classList.add("correct");
+      playSound("correct");
+    }else{
+      r.parentElement.classList.add("wrong");
+      playSound("wrong");
+    }
+  });
+
+  let totalScore=0,totalSoal=0,detail="";
+
+  for(const cat in resultByCategory){
+    const s=resultByCategory[cat].score;
+    const t=resultByCategory[cat].total;
+    totalScore+=s;
+    totalSoal+=t;
+
+    detail+=`
+      <p>📚 <strong>${cat}</strong><br>
+      Skor: ${s} / ${t}</p>
+    `;
+  }
+
+  const scoreBox=document.getElementById("scoreBox");
+  scoreBox.style.display="block";
+  scoreBox.innerHTML=`
+    🕋 <strong>HASIL AKHIR</strong><br><br>
+    ${detail}
+    <hr>
+    🌙 <strong>Total Skor</strong><br>
+    ${totalScore} / ${totalSoal}<br><br>
+    ${totalScore>=totalSoal*0.75?"🌟 MasyaAllah!":"📖 Terus belajar ya!"}
+  `;
+}
 </script>
 
 </body>
