@@ -6,253 +6,856 @@
 
 <style>
 :root{
-  --green:#1b5e20;
-  --yellow:#fbc02d;
-  --orange:#f57c00;
-  --bg:#f1f8e9;
+  --bg-dark:#0a1f1a;
+  --bg-card:#122a24;
+  --accent:#d4af37;
+  --accent-glow:#f0c850;
+  --success:#2ecc71;
+  --error:#e74c3c;
+  --text:#e8e4d9;
+  --muted:#8a9a8e;
+  --border:#1e3d35;
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
-  margin:0;
-  font-family:"Segoe UI",sans-serif;
-  background:linear-gradient(180deg,#0b3d2e,var(--green));
+  font-family:'Segoe UI',Tahoma,sans-serif;
+  background:var(--bg-dark);
+  min-height:100vh;
+  color:var(--text);
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Animated background */
+.bg-pattern{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(212,175,55,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(46,204,113,0.06) 0%, transparent 40%),
+    linear-gradient(180deg, #0a1f1a 0%, #0d2820 50%, #0a1f1a 100%);
+  z-index:-2;
+}
+
+.floating-shapes{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.shape{
+  position:absolute;
+  border-radius:50%;
+  background:linear-gradient(135deg, rgba(212,175,55,0.15), transparent);
+  animation:float 20s infinite ease-in-out;
+}
+
+.shape:nth-child(1){width:300px;height:300px;top:10%;left:-5%;animation-delay:0s;}
+.shape:nth-child(2){width:200px;height:200px;top:60%;right:-3%;animation-delay:-5s;}
+.shape:nth-child(3){width:150px;height:150px;bottom:20%;left:30%;animation-delay:-10s;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg);opacity:0.3;}
+  50%{transform:translateY(-30px) rotate(180deg);opacity:0.6;}
 }
 
 header{
-  background:linear-gradient(90deg,var(--green),var(--orange));
-  color:white;
-  padding:40px 20px;
   text-align:center;
+  padding:50px 20px 30px;
+  position:relative;
 }
 
 header h1{
-  margin:0;
-  font-size:2.7em;
+  font-size:clamp(2rem,5vw,3rem);
+  font-weight:800;
+  background:linear-gradient(135deg, var(--accent), var(--accent-glow), var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:10px;
+  letter-spacing:2px;
 }
 
 header p{
-  margin-top:10px;
-  opacity:.9;
+  color:var(--muted);
+  font-size:1.1em;
 }
+
+/* Score Display */
+.score-display{
+  position:sticky;
+  top:0;
+  background:linear-gradient(180deg, var(--bg-dark) 60%, transparent);
+  padding:20px;
+  z-index:100;
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  flex-wrap:wrap;
+}
+
+.score-item{
+  text-align:center;
+  padding:15px 25px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  min-width:120px;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+
+.score-item:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(212,175,55,0.15);
+}
+
+.score-label{
+  font-size:0.85em;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.score-value{
+  font-size:1.8em;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.score-value.correct-count{color:var(--success);}
+.score-value.wrong-count{color:var(--error);}
 
 .container{
   max-width:900px;
-  margin:-30px auto 40px;
-  background:var(--bg);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 15px 30px rgba(0,0,0,.25);
+  margin:0 auto 40px;
+  padding:0 20px;
 }
 
 .category{
-  margin-bottom:35px;
+  margin-bottom:40px;
+  animation:slideIn 0.6s ease forwards;
+  opacity:0;
 }
 
-.category h2{
-  background:linear-gradient(90deg,var(--yellow),var(--orange));
-  padding:12px;
-  border-radius:12px;
-  color:#4e342e;
+@keyframes slideIn{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.category-header{
+  background:linear-gradient(135deg, var(--bg-card), rgba(212,175,55,0.1));
+  padding:18px 24px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.category-header h2{
+  font-size:1.3em;
+  color:var(--accent);
+  font-weight:600;
+}
+
+.category-progress{
+  font-size:0.9em;
+  color:var(--muted);
 }
 
 .question{
-  background:white;
-  margin-top:15px;
-  padding:15px;
-  border-radius:12px;
-  animation:fade .5s ease;
+  background:var(--bg-card);
+  margin-bottom:15px;
+  padding:24px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
 }
 
-.options label{
-  display:block;
-  padding:8px 12px;
-  margin:6px 0;
-  border-radius:8px;
-  cursor:pointer;
-  transition:.25s;
+.question::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--border);
+  transition:background 0.3s;
 }
 
-.options label:hover{
-  background:#fff8e1;
+.question.answered-correct::before{background:var(--success);}
+.question.answered-wrong::before{background:var(--error);}
+
+.question-number{
+  display:inline-block;
+  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
+  color:var(--bg-dark);
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:0.85em;
+  font-weight:700;
+  margin-bottom:12px;
 }
 
-.correct{
-  background:#c8e6c9!important;
-  border:2px solid #2e7d32;
-}
-
-.wrong{
-  background:#ffcdd2!important;
-  border:2px solid #c62828;
-}
-
-button{
-  background:linear-gradient(90deg,var(--green),var(--yellow));
-  border:none;
-  padding:14px 28px;
+.question-text{
   font-size:1.1em;
-  border-radius:30px;
-  cursor:pointer;
-  display:block;
-  margin:30px auto 10px;
-  font-weight:bold;
+  line-height:1.6;
+  margin-bottom:20px;
+  color:var(--text);
 }
 
-#scoreBox{
-  text-align:center;
-  font-size:1.4em;
-  margin-top:20px;
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.option-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 18px;
+  background:rgba(255,255,255,0.03);
+  border:2px solid var(--border);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all 0.25s ease;
+  position:relative;
+}
+
+.option-label:hover:not(.disabled){
+  border-color:var(--accent);
+  background:rgba(212,175,55,0.08);
+  transform:translateX(5px);
+}
+
+.option-label input{
   display:none;
 }
 
-footer{
-  text-align:center;
-  color:white;
-  padding:20px;
-  opacity:.8;
+.option-marker{
+  width:24px;
+  height:24px;
+  border:2px solid var(--muted);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.8em;
+  font-weight:700;
+  color:var(--muted);
+  transition:all 0.25s;
+  flex-shrink:0;
 }
 
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
+.option-label:hover:not(.disabled) .option-marker{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+.option-label.selected{
+  border-color:var(--accent);
+  background:rgba(212,175,55,0.12);
+}
+
+.option-label.selected .option-marker{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:var(--bg-dark);
+}
+
+.option-label.correct{
+  border-color:var(--success);
+  background:rgba(46,204,113,0.15);
+}
+
+.option-label.correct .option-marker{
+  background:var(--success);
+  border-color:var(--success);
+  color:white;
+}
+
+.option-label.wrong{
+  border-color:var(--error);
+  background:rgba(231,76,60,0.15);
+}
+
+.option-label.wrong .option-marker{
+  background:var(--error);
+  border-color:var(--error);
+  color:white;
+}
+
+.option-label.disabled{
+  cursor:default;
+  opacity:0.7;
+}
+
+.answer-hint{
+  margin-top:15px;
+  padding:12px 16px;
+  border-radius:10px;
+  font-size:0.95em;
+  display:none;
+  animation:fadeIn 0.4s ease;
+}
+
+.answer-hint.correct-hint{
+  background:rgba(46,204,113,0.15);
+  border:1px solid var(--success);
+  color:var(--success);
+}
+
+.answer-hint.wrong-hint{
+  background:rgba(231,76,60,0.15);
+  border:1px solid var(--error);
+  color:var(--error);
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.buttons-container{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  margin:30px auto;
+  max-width:600px;
+  padding:0 20px;
+}
+
+.btn{
+  padding:16px 32px;
+  font-size:1em;
+  font-weight:700;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
+  color:var(--bg-dark);
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(212,175,55,0.4);
+}
+
+.btn-secondary{
+  background:transparent;
+  color:var(--accent);
+  border:2px solid var(--accent);
+}
+
+.btn-secondary:hover{
+  background:rgba(212,175,55,0.1);
+  transform:translateY(-3px);
+}
+
+/* Result Modal */
+.result-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,31,26,0.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:20px;
+  animation:fadeIn 0.5s ease;
+}
+
+.result-overlay.show{display:flex;}
+
+.result-card{
+  background:var(--bg-card);
+  border:2px solid var(--accent);
+  border-radius:24px;
+  padding:40px;
+  max-width:500px;
+  width:100%;
+  text-align:center;
+  animation:scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn{
+  from{opacity:0;transform:scale(0.8);}
+  to{opacity:1;transform:scale(1);}
+}
+
+.result-grade{
+  font-size:5rem;
+  font-weight:900;
+  margin-bottom:10px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-glow));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.result-title{
+  font-size:1.5em;
+  margin-bottom:20px;
+  color:var(--text);
+}
+
+.result-score{
+  font-size:3em;
+  font-weight:800;
+  color:var(--accent);
+  margin-bottom:20px;
+}
+
+.result-details{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin:25px 0;
+  text-align:left;
+}
+
+.result-item{
+  background:rgba(255,255,255,0.03);
+  padding:15px;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+
+.result-item-label{
+  font-size:0.85em;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.result-item-value{
+  font-size:1.3em;
+  font-weight:700;
+}
+
+.result-item-value.correct{color:var(--success);}
+.result-item-value.wrong{color:var(--error);}
+
+.result-categories{
+  margin-top:25px;
+  padding-top:25px;
+  border-top:1px solid var(--border);
+  text-align:left;
+}
+
+.category-stat{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.category-stat:last-child{border-bottom:none;}
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+  font-size:0.9em;
+}
+
+/* Loading */
+.loading{
+  text-align:center;
+  padding:60px;
+  color:var(--muted);
+}
+
+.loading-spinner{
+  width:50px;
+  height:50px;
+  border:3px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 20px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+/* Responsive */
+@media(max-width:600px){
+  .score-display{gap:15px;}
+  .score-item{min-width:100px;padding:12px 18px;}
+  .result-details{grid-template-columns:1fr;}
+  .buttons-container{flex-direction:column;align-items:center;}
+  .btn{width:100%;max-width:280px;}
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms!important;
+    transition-duration:0.01ms!important;
+  }
 }
 </style>
 </head>
 
 <body>
+<div class="bg-pattern"></div>
+<div class="floating-shapes">
+  <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
 
 <header>
-  <h1>🌙 Quiz Ramadhan</h1>
-  <p>Tajwid • Sirah Nabawi • Asmaul Husna • Sahabat Nabi</p>
+  <h1>Quiz Ramadhan</h1>
+  <p>Tajwid | Sirah Nabawi | Asmaul Husna | Sahabat Nabi</p>
 </header>
 
-<div class="container" id="quiz"></div>
+<div class="score-display">
+  <div class="score-item">
+    <div class="score-label">Benar</div>
+    <div class="score-value correct-count" id="correctCount">0</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Salah</div>
+    <div class="score-value wrong-count" id="wrongCount">0</div>
+  </div>
+  <div class="score-item">
+    <div class="score-label">Skor</div>
+    <div class="score-value" id="currentScore">0</div>
+  </div>
+</div>
 
-<button onclick="submitQuiz()">Selesai & Lihat Hasil</button>
-<button onclick="location.reload()">🔁 Ulangi Quiz</button>
+<div class="container" id="quiz">
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    <p>Memuat soal quiz...</p>
+  </div>
+</div>
 
-<div id="scoreBox"></div>
+<div class="buttons-container">
+  <button class="btn btn-primary" id="finishBtn" onclick="showResult()">Lihat Hasil Akhir</button>
+  <button class="btn btn-secondary" onclick="location.reload()">Ulangi Quiz</button>
+</div>
+
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card">
+    <div class="result-grade" id="resultGrade">A</div>
+    <div class="result-title" id="resultTitle">Luar Biasa!</div>
+    <div class="result-score" id="resultScore">100/100</div>
+    
+    <div class="result-details">
+      <div class="result-item">
+        <div class="result-item-label">Jawaban Benar</div>
+        <div class="result-item-value correct" id="finalCorrect">0</div>
+      </div>
+      <div class="result-item">
+        <div class="result-item-label">Jawaban Salah</div>
+        <div class="result-item-value wrong" id="finalWrong">0</div>
+      </div>
+      <div class="result-item">
+        <div class="result-item-label">Persentase</div>
+        <div class="result-item-value" id="finalPercent">0%</div>
+      </div>
+      <div class="result-item">
+        <div class="result-item-label">Total Soal</div>
+        <div class="result-item-value" id="finalTotal">0</div>
+      </div>
+    </div>
+    
+    <div class="result-categories" id="categoryStats"></div>
+    
+    <button class="btn btn-primary" style="margin-top:25px;width:100%;" onclick="closeResult()">Tutup</button>
+  </div>
+</div>
 
 <footer>
-  🕌 Ramadhan Mubarak • Belajar Qur’an & Sunnah
+  Ramadhan Mubarak - Belajar Qur'an dan Sunnah
 </footer>
 
 <script>
-// ================== AUDIO ==================
-function playSound(type){
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.frequency.value=type==="correct"?700:220;
-  gain.gain.value=0.2;
-  osc.start();
-  setTimeout(()=>osc.stop(),200);
+// ================== STATE ==================
+let totalCorrect = 0;
+let totalWrong = 0;
+let totalQuestions = 0;
+let answeredQuestions = 0;
+let categoryStats = {};
+
+// ================== VOICE FEEDBACK ==================
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'id-ID';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.1;
+    utterance.volume = 1.0;
+    
+    const voices = window.speechSynthesis.getVoices();
+    const idVoice = voices.find(v => v.lang.includes('id'));
+    if (idVoice) utterance.voice = idVoice;
+    
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+// ================== SOUND EFFECT ==================
+function playSound(type) {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  if (type === 'correct') {
+    // Happy ascending tones
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.1);
+      gain.gain.exponentialDecayTo = 0.01;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.1);
+      gain.gain.exponentialDecayTo = 0.01;
+      osc.start(ctx.currentTime + i * 0.1);
+      osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+    });
+  } else {
+    // Descending tone for wrong
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 200;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
+  }
 }
 
 // ================== SHUFFLE ==================
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
+function shuffle(arr) {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return arr;
+  return shuffled;
 }
 
-let resultByCategory={};
-
-// ================== LOAD QUIZ ==================
-fetch("data/quiz-ramadhan.json")
-.then(res=>res.json())
-.then(data=>{
-  const quiz=document.getElementById("quiz");
-
-  data.quiz_ramadhan.forEach(cat=>{
-    resultByCategory[cat.category]={score:0,total:0};
-
-    const questions=shuffle([...cat.questions]).slice(0,20);
-
-    const catDiv=document.createElement("div");
-    catDiv.className="category";
-    catDiv.innerHTML=`<h2>🕌 ${cat.category} (20 Soal)</h2>`;
-
-    questions.forEach((q,i)=>{
-      const qDiv=document.createElement("div");
-      qDiv.className="question";
-
-      let opts="";
-      q.options.forEach(opt=>{
-        opts+=`
-          <label>
-            <input type="radio"
-              name="${cat.category}-${i}"
-              value="${opt}"
-              data-answer="${q.answer}"
-              data-category="${cat.category}">
-            ${opt}
-          </label>
-        `;
-      });
-
-      qDiv.innerHTML=`
-        <p><strong>${i+1}. ${q.question}</strong></p>
-        <div class="options">${opts}</div>
-      `;
-
-      catDiv.appendChild(qDiv);
-    });
-
-    quiz.appendChild(catDiv);
+// ================== UPDATE SCORE ==================
+function updateScore(isCorrect) {
+  if (isCorrect) {
+    totalCorrect++;
+    document.getElementById('correctCount').textContent = totalCorrect;
+  } else {
+    totalWrong++;
+    document.getElementById('wrongCount').textContent = totalWrong;
+  }
+  
+  const score = totalCorrect * 10;
+  document.getElementById('currentScore').textContent = score;
+  
+  // Animate score item
+  const scoreItems = document.querySelectorAll('.score-item');
+  scoreItems.forEach(item => {
+    item.style.transform = 'scale(1.1)';
+    setTimeout(() => item.style.transform = '', 200);
   });
-});
+}
 
-// ================== SUBMIT ==================
-function submitQuiz(){
-  document.querySelectorAll("input").forEach(i=>i.disabled=true);
-
-  document.querySelectorAll("input:checked").forEach(r=>{
-    const cat=r.dataset.category;
-    resultByCategory[cat].total++;
-
-    if(r.value===r.dataset.answer){
-      resultByCategory[cat].score++;
-      r.parentElement.classList.add("correct");
-      playSound("correct");
-    }else{
-      r.parentElement.classList.add("wrong");
-      playSound("wrong");
+// ================== HANDLE ANSWER ==================
+function handleAnswer(radio) {
+  const questionDiv = radio.closest('.question');
+  const options = questionDiv.querySelectorAll('.option-label');
+  const correctAnswer = radio.dataset.answer;
+  const category = radio.dataset.category;
+  const isCorrect = radio.value === correctAnswer;
+  
+  // Disable all options
+  options.forEach(opt => {
+    opt.classList.add('disabled');
+    const optRadio = opt.querySelector('input');
+    optRadio.disabled = true;
+    
+    // Show correct answer
+    if (optRadio.value === correctAnswer) {
+      opt.classList.add('correct');
     }
   });
+  
+  // Mark selected answer
+  const selectedLabel = radio.closest('.option-label');
+  selectedLabel.classList.add('selected');
+  
+  if (isCorrect) {
+    selectedLabel.classList.add('correct');
+    questionDiv.classList.add('answered-correct');
+  } else {
+    selectedLabel.classList.add('wrong');
+    questionDiv.classList.add('answered-wrong');
+  }
+  
+  // Show hint
+  const hintDiv = document.createElement('div');
+  hintDiv.className = `answer-hint ${isCorrect ? 'correct-hint' : 'wrong-hint'}`;
+  hintDiv.innerHTML = isCorrect 
+    ? 'Benar! Semangat lanjutkan!' 
+    : `Salah. Jawaban yang benar: <strong>${correctAnswer}</strong>`;
+  hintDiv.style.display = 'block';
+  questionDiv.appendChild(hintDiv);
+  
+  // Update stats
+  answeredQuestions++;
+  if (category && categoryStats[category]) {
+    categoryStats[category].answered++;
+    if (isCorrect) categoryStats[category].correct++;
+  }
+  
+  // Play sound and voice
+  playSound(isCorrect ? 'correct' : 'wrong');
+  speak(isCorrect ? 'Benar!' : 'Salah!');
+  
+  // Update score display
+  updateScore(isCorrect);
+}
 
-  let totalScore=0,totalSoal=0,detail="";
+// ================== LOAD QUIZ ==================
+fetch('data/quiz-ramadhan.json')
+  .then(res => res.json())
+  .then(data => {
+    const quiz = document.getElementById('quiz');
+    quiz.innerHTML = '';
+    
+    data.quiz_ramadhan.forEach((cat, catIndex) => {
+      categoryStats[cat.category] = { total: 0, correct: 0, answered: 0 };
+      
+      const questions = shuffle([...cat.questions]).slice(0, 20);
+      categoryStats[cat.category].total = questions.length;
+      totalQuestions += questions.length;
+      
+      const catDiv = document.createElement('div');
+      catDiv.className = 'category';
+      catDiv.style.animationDelay = `${catIndex * 0.15}s`;
+      
+      catDiv.innerHTML = `
+        <div class="category-header">
+          <h2>${cat.category}</h2>
+          <span class="category-progress">${questions.length} Soal</span>
+        </div>
+      `;
+      
+      questions.forEach((q, i) => {
+        const qDiv = document.createElement('div');
+        qDiv.className = 'question';
+        
+        const letters = 'ABCDE';
+        let opts = '';
+        shuffle([...q.options]).forEach((opt, optIndex) => {
+          opts += `
+            <label class="option-label">
+              <input type="radio"
+                name="${cat.category}-${i}"
+                value="${opt}"
+                data-answer="${q.answer}"
+                data-category="${cat.category}"
+                onchange="handleAnswer(this)">
+              <span class="option-marker">${letters[optIndex]}</span>
+              <span class="option-text">${opt}</span>
+            </label>
+          `;
+        });
+        
+        qDiv.innerHTML = `
+          <span class="question-number">Soal ${i + 1}</span>
+          <p class="question-text">${q.question}</p>
+          <div class="options">${opts}</div>
+        `;
+        
+        catDiv.appendChild(qDiv);
+      });
+      
+      quiz.appendChild(catDiv);
+    });
+    
+    // Load voices
+    if ('speechSynthesis' in window) {
+      speechSynthesis.getVoices();
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    }
+  })
+  .catch(err => {
+    document.getElementById('quiz').innerHTML = `
+      <div class="loading">
+        <p>Gagal memuat soal. Pastikan file quiz-ramadhan.json tersedia.</p>
+      </div>
+    `;
+  });
 
-  for(const cat in resultByCategory){
-    const s=resultByCategory[cat].score;
-    const t=resultByCategory[cat].total;
-    totalScore+=s;
-    totalSoal+=t;
-
-    detail+=`
-      <p>📚 <strong>${cat}</strong><br>
-      Skor: ${s} / ${t}</p>
+// ================== SHOW RESULT ==================
+function showResult() {
+  if (answeredQuestions < totalQuestions) {
+    const remaining = totalQuestions - answeredQuestions;
+    speak(`Masih ada ${remaining} soal yang belum dijawab!`);
+    alert(`Masih ada ${remaining} soal yang belum dijawab!`);
+    return;
+  }
+  
+  const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+  let grade, title;
+  
+  if (percentage >= 90) { grade = 'A'; title = 'Luar Biasa! MasyaAllah!'; }
+  else if (percentage >= 80) { grade = 'B'; title = 'Bagus Sekali!'; }
+  else if (percentage >= 70) { grade = 'C'; title = 'Cukup Baik!'; }
+  else if (percentage >= 60) { grade = 'D'; title = 'Perlu Belajar Lagi'; }
+  else { grade = 'E'; title = 'Jangan Menyerah!'; }
+  
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultScore').textContent = `${totalCorrect * 10} Poin`;
+  document.getElementById('finalCorrect').textContent = totalCorrect;
+  document.getElementById('finalWrong').textContent = totalWrong;
+  document.getElementById('finalPercent').textContent = `${percentage}%`;
+  document.getElementById('finalTotal').textContent = totalQuestions;
+  
+  // Category stats
+  let catHTML = '<h4 style="margin-bottom:15px;color:var(--accent);">Statistik Per Kategori</h4>';
+  for (const cat in categoryStats) {
+    const stat = categoryStats[cat];
+    const catPercent = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
+    catHTML += `
+      <div class="category-stat">
+        <span>${cat}</span>
+        <span>${stat.correct}/${stat.total} (${catPercent}%)</span>
+      </div>
     `;
   }
+  document.getElementById('categoryStats').innerHTML = catHTML;
+  
+  document.getElementById('resultOverlay').classList.add('show');
+  
+  // Voice result
+  speak(`${title} Skor kamu ${percentage} persen.`);
+}
 
-  const scoreBox=document.getElementById("scoreBox");
-  scoreBox.style.display="block";
-  scoreBox.innerHTML=`
-    🕋 <strong>HASIL AKHIR</strong><br><br>
-    ${detail}
-    <hr>
-    🌙 <strong>Total Skor</strong><br>
-    ${totalScore} / ${totalSoal}<br><br>
-    ${totalScore>=totalSoal*0.75?"🌟 MasyaAllah!":"📖 Terus belajar ya!"}
-  `;
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
 }
 </script>
-
 </body>
 </html>
