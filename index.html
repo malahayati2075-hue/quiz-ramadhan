@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Ramadhan - Mode Online</title>
+<title>Quiz Ramadhan - Pusat Permainan</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
@@ -31,665 +31,580 @@ body{
   overflow-x:hidden;
 }
 
-/* Background Styles */
+/* Background */
 .sky{position:fixed;inset:0;background:linear-gradient(180deg, #87ceeb 0%, #98d4ee 15%, #b8e4f7 30%, #d4f0fa 45%, #2d8659 55%, #246b47 70%, #1e5a3a 100%);z-index:-3;}
 .sun{position:fixed;top:8%;right:12%;width:80px;height:80px;z-index:-1;}
 .sun-core{width:100%;height:100%;background:radial-gradient(circle, #fff7e0 0%, #ffd93d 40%, #ff9500 100%);border-radius:50%;box-shadow:0 0 60px rgba(255,217,61,0.8);animation:sunPulse 4s ease-in-out infinite;}
 @keyframes sunPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
-
 .moon{position:fixed;top:12%;left:10%;width:60px;height:60px;z-index:-1;animation:moonFloat 8s ease-in-out infinite;}
 .moon-crescent{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg, #fef9e7 0%, #f4d03f 100%);box-shadow:inset -15px -5px 0 0 #2d8659, 0 0 30px rgba(244,208,63,0.5);}
 @keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
 
-.clouds{position:fixed;top:0;left:0;right:0;height:50%;z-index:-2;overflow:hidden;pointer-events:none;}
-.cloud{position:absolute;background:white;border-radius:100px;opacity:0.9;}
-.cloud-1{width:200px;height:60px;top:5%;animation:cloudMove1 40s linear infinite;}
-.cloud-1::before{content:'';position:absolute;background:white;border-radius:50%;width:80px;height:80px;top:-40px;left:30px;}
-@keyframes cloudMove1{from{left:-250px;}to{left:110%;}}
+/* Layout Containers */
+.screen{display:none; min-height:100vh; position:relative;}
+.screen.active{display:block;}
 
 /* ================== LOGIN SCREEN ================== */
-.login-overlay{position:fixed;inset:0;background:rgba(30,90,58,0.98);display:flex;align-items:center;justify-content:center;z-index:2000;padding:20px;}
+#loginScreen{display:flex;align-items:center;justify-content:center;background:rgba(30,90,58,0.95);}
 .login-card{background:white;padding:40px;border-radius:24px;width:100%;max-width:400px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:scaleIn 0.5s ease;}
 .login-logo{font-size:3rem;margin-bottom:10px;}
 .login-title{color:var(--bg-primary);font-size:1.8em;margin-bottom:10px;}
-.login-subtitle{color:#666;margin-bottom:30px;font-size:0.95em;}
 .input-group{margin-bottom:20px;text-align:left;}
-.input-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--text-dark);}
-.input-group input{width:100%;padding:14px;border:2px solid #eee;border-radius:12px;font-size:1em;transition:all 0.3s;}
-.input-group input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(212,175,55,0.2);}
-.btn-login{width:100%;padding:16px;background:linear-gradient(135deg, var(--accent), var(--accent-light));border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;transition:transform 0.2s;margin-bottom:10px;}
-.btn-login:hover{transform:translateY(-2px);}
-.btn-secondary{width:100%;padding:14px;background:#fff;border:2px solid var(--bg-primary);color:var(--bg-primary);border-radius:12px;font-size:1em;font-weight:700;cursor:pointer;}
+.input-group label{display:block;margin-bottom:8px;font-weight:600;}
+.input-group input{width:100%;padding:14px;border:2px solid #eee;border-radius:12px;font-size:1em;}
+.btn-main{width:100%;padding:16px;background:linear-gradient(135deg, var(--accent), var(--accent-light));border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;transition:transform 0.2s;}
+.btn-main:hover{transform:translateY(-2px);}
 
-/* ================== APP SHELL ================== */
-.app-shell{display:none;}
-.app-shell.active{display:block;}
+/* ================== MAIN MENU (LOBBY) ================== */
+#menuScreen{padding-top:80px; padding-bottom:40px;}
+.top-bar{position:fixed;top:0;left:0;right:0;background:rgba(45,134,89,0.95);backdrop-filter:blur(10px);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+.user-profile{display:flex;align-items:center;gap:12px;color:white;}
+.avatar{width:45px;height:45px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-dark);font-size:1.2em;border:2px solid rgba(255,255,255,0.3);}
+.user-info div:first-child{font-weight:600;}
+.user-coins{font-size:0.9em;color:var(--accent-light);}
 
-.top-bar{position:sticky;top:0;background:rgba(45,134,89,0.95);backdrop-filter:blur(10px);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
-.user-profile{display:flex;align-items:center;gap:12px;color:white;cursor:pointer;}
-.avatar{width:40px;height:40px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-dark);font-size:1.2em;}
-.user-info div:first-child{font-weight:600;font-size:1em;}
-.user-coins{font-size:0.9em;color:var(--accent-light);display:flex;align-items:center;gap:4px;}
-.top-actions{display:flex;gap:10px;}
-.icon-btn{background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:1.2em;transition:background 0.2s;}
-.icon-btn:hover{background:rgba(255,255,255,0.25);}
+.menu-container{max-width:800px;margin:0 auto;padding:20px;}
+.menu-title{text-align:center;color:white;margin-bottom:30px;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.menu-title h1{font-size:2em;margin-bottom:5px;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;}
 
-.container{max-width:900px;margin:0 auto 40px;padding:20px;position:relative;z-index:10;}
+/* Menu Cards */
+.menu-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1);transition:transform 0.3s, box-shadow 0.3s;cursor:pointer;position:relative;}
+.menu-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+.card-header{height:140px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden;}
+.card-header.solo{background:linear-gradient(135deg, #43cea2 0%, #185a9d 100%);}
+.card-header.private{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);}
+.card-header.random{background:linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);}
+.card-body{padding:20px;text-align:center;}
+.card-title{font-size:1.3em;font-weight:700;margin-bottom:8px;color:var(--text-dark);}
+.card-desc{font-size:0.9em;color:#666;line-height:1.5;}
+.card-badge{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.9);padding:5px 12px;border-radius:20px;font-size:0.8em;font-weight:700;color:#333;}
 
-/* ================== QUIZ STYLES ================== */
+/* ================== GAME AREA ================== */
+#gameScreen{padding-top:80px; padding-bottom:40px;}
+.container{max-width:900px;margin:0 auto;padding:20px;position:relative;z-index:10;}
 .stats-bar{display:flex;gap:15px;justify-content:center;margin-bottom:25px;flex-wrap:wrap;}
 .stat-card{background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;box-shadow:0 4px 15px rgba(0,0,0,0.05);flex:1;}
 .stat-label{font-size:0.85em;color:#888;}
 .stat-value{font-size:1.8em;font-weight:800;}
-.stat-value.coins{color:var(--accent);}
-.stat-value.score{color:var(--success);}
 
-.question{background:var(--card-bg);margin-bottom:14px;padding:22px;border-radius:16px;box-shadow:0 6px 25px rgba(0,0,0,0.08);transition:all 0.3s ease;position:relative;overflow:hidden;}
-.question::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--bg-light);transition:all 0.3s;}
-.question.answered-correct::before{background:var(--success);}
-.question.answered-wrong::before{background:var(--error);}
-
-.question-number{display:inline-block;background:linear-gradient(135deg, var(--accent), var(--accent-light));color:var(--text-dark);padding:5px 14px;border-radius:25px;font-size:0.85em;font-weight:700;margin-bottom:14px;}
-
-.question-text{font-family: 'Amiri', 'Traditional Arabic', serif;font-size: 1.3rem;line-height: 2;margin-bottom: 18px;color: var(--text-dark);direction: rtl;text-align: right;}
-
+/* Quiz Elements */
+.question{background:var(--card-bg);margin-bottom:14px;padding:22px;border-radius:16px;box-shadow:0 6px 25px rgba(0,0,0,0.08);position:relative;overflow:hidden;}
+.question-text{font-family: 'Amiri', serif;font-size: 1.3rem;line-height: 2;margin-bottom: 18px;color: var(--text-dark);direction: rtl;text-align: right;}
 .options{display:flex;flex-direction:column;gap:10px;}
-
 .option-label{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(45,134,89,0.05);border:2px solid rgba(45,134,89,0.15);border-radius:14px;cursor:pointer;transition:all 0.25s ease;}
-.option-label:hover:not(.disabled){border-color:var(--accent);background:rgba(212,175,55,0.1);transform:translateX(8px);}
 .option-label input{display:none;}
-
-.option-marker{width:28px;height:28px;border:2px solid var(--bg-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;font-weight:700;color:var(--bg-primary);transition:all 0.25s;flex-shrink:0;}
-
-.option-label.selected{border-color:var(--accent);background:rgba(212,175,55,0.15);}
-.option-label.selected .option-marker{background:var(--accent);border-color:var(--accent);color:white;}
+.option-marker{width:28px;height:28px;border:2px solid var(--bg-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;font-weight:700;flex-shrink:0;}
 .option-label.correct{border-color:var(--success);background:rgba(46,204,113,0.2);}
-.option-label.correct .option-marker{background:var(--success);border-color:var(--success);color:white;}
 .option-label.wrong{border-color:var(--error);background:rgba(231,76,60,0.2);}
-.option-label.wrong .option-marker{background:var(--error);border-color:var(--error);color:white;}
-.option-label.disabled{cursor:default;opacity:0.65;}
+.answer-hint{margin-top:14px;padding:12px;border-radius:12px;font-size:0.9em;}
 
-.answer-hint{
-  margin-top:14px;
-  padding:12px 16px;
-  border-radius:12px;
-  font-size:0.95em;
-  animation:fadeIn 0.4s ease;
-  font-weight:500;
-  text-align: left;
-  line-height: 1.5;
-}
-.answer-hint.correct-hint{background:rgba(46,204,113,0.15);border:1px solid var(--success);color:#1e8449;}
-.answer-hint.wrong-hint{background:rgba(231,76,60,0.15);border:1px solid var(--error);color:#c0392b;}
-
-/* ================== MODALS ================== */
+/* Modals */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1500;padding:20px;}
 .modal-overlay.show{display:flex;}
-.modal-content{background:white;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;border-radius:24px;animation:scaleIn 0.3s ease;}
-.modal-header{padding:25px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;}
-.modal-header h2{color:var(--bg-primary);}
-.modal-close{background:none;border:none;font-size:1.5em;cursor:pointer;color:#888;}
+.modal-content{background:white;width:100%;max-width:500px;border-radius:24px;animation:scaleIn 0.3s ease;overflow:hidden;}
+.modal-header{padding:20px;background:var(--bg-primary);color:white;display:flex;justify-content:space-between;align-items:center;}
 .modal-body{padding:25px;}
+.btn{padding:12px 24px;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
+.btn-primary{background:var(--accent);color:var(--text-dark);}
+.btn-secondary{background:#eee;color:#333;}
+.input-code{width:100%;padding:15px;border:2px solid #eee;border-radius:12px;font-size:1.2em;text-align:center;letter-spacing:4px;font-weight:700;margin:10px 0;}
 
-/* Lobby Styles */
-.lobby-list{margin-top:20px;max-height:200px;overflow-y:auto;border:1px solid #eee;border-radius:12px;}
-.lobby-player{display:flex;justify-content:space-between;padding:12px 15px;border-bottom:1px solid #eee;}
-.lobby-player:last-child{border-bottom:none;}
-.lobby-player.ready{background:rgba(46,204,113,0.1);}
-.player-status{font-size:0.8em;padding:4px 8px;border-radius:20px;font-weight:600;}
-.player-status.host{background:var(--accent);color:white;}
-.player-status.member{background:#eee;color:#666;}
-
-.code-display{font-size:2.5em;font-weight:800;color:var(--bg-primary);letter-spacing:4px;background:#f0f0f0;padding:15px;border-radius:12px;margin:10px 0;font-family:monospace;}
-
-.btn{padding:14px 28px;border:none;border-radius:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
-.btn-primary{background:linear-gradient(135deg, var(--accent), var(--accent-light));color:var(--text-dark);}
-.btn-block{width:100%;margin-top:20px;}
-
+/* Animations */
 @keyframes scaleIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
-.loading-spinner{width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
+.spinner{width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* Toast Notification */
-#toast {
-  visibility: hidden;
-  min-width: 250px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 12px;
-  padding: 16px;
-  position: fixed;
-  z-index: 3000;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  font-size: 0.95em;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-#toast.show {
-  visibility: visible;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-@keyframes fadein {from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;}}
-@keyframes fadeout {from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;}}
-
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:50px;display:none;z-index:2000;}
+.toast.show{display:block;animation:fadein 0.5s;}
 </style>
 </head>
 <body>
 
-<!-- Background Elements -->
+<!-- Background -->
 <div class="sky"></div>
 <div class="sun"><div class="sun-core"></div></div>
 <div class="moon"><div class="moon-crescent"></div></div>
-<div class="clouds"><div class="cloud cloud-1"></div></div>
 
-<!-- ================== LOGIN SCREEN ================== -->
-<div class="login-overlay" id="loginScreen">
+<!-- 1. LOGIN SCREEN -->
+<div class="screen active" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">🕌</div>
     <h1 class="login-title">Quiz Ramadhan</h1>
-    <p class="login-subtitle">Mode Kompetisi Online</p>
     <div class="input-group">
-      <label>Nama Pengguna</label>
-      <input type="text" id="usernameInput" placeholder="Masukkan nama anda">
+      <label>Siapa namamu?</label>
+      <input type="text" id="usernameInput" placeholder="Masukkan nama">
     </div>
-    
-    <button class="btn-login" onclick="showModeSelection()">LANJUTKAN</button>
-    
-    <div id="modeSelection" style="display:none; margin-top:20px; border-top:1px solid #eee; padding-top:20px;">
-      <button class="btn-login" style="background:var(--bg-primary); color:white;" onclick="createRoom()">Buat Ruang Baru (Host)</button>
-      <p style="margin:10px 0; color:#999;">atau</p>
-      <div class="input-group">
-        <input type="text" id="joinCodeInput" placeholder="Masukkan Kode Ruang">
+    <button class="btn-main" onclick="enterLobby()">MASUK</button>
+  </div>
+</div>
+
+<!-- 2. MAIN MENU (LOBBY) -->
+<div class="screen" id="menuScreen">
+  <div class="top-bar">
+    <div class="user-profile">
+      <div class="avatar" id="menuAvatar">A</div>
+      <div class="user-info">
+        <div id="menuName">User</div>
+        <div class="user-coins">🪙 <span id="menuCoins">0</span></div>
       </div>
-      <button class="btn-secondary" onclick="joinRoom()">Gabung Ruang</button>
+    </div>
+    <button class="icon-btn" onclick="showToast('Fitur hadiah coming soon!')">🎁</button>
+  </div>
+
+  <div class="menu-container">
+    <div class="menu-title">
+      <h1>Pilih Mode Permainan</h1>
+      <p>Main seru, kumpulkan koin!</p>
+    </div>
+
+    <div class="menu-grid">
+      <!-- KARTU 1: SOLO -->
+      <div class="menu-card" onclick="startSoloMode()">
+        <div class="card-header solo">🚀</div>
+        <div class="card-body">
+          <div class="card-title">Mode Solo</div>
+          <div class="card-desc">Main sendiri, belajar sambil kumpulkan koin santai.</div>
+        </div>
+      </div>
+
+      <!-- KARTU 2: RUANG PRIVAT -->
+      <div class="menu-card" onclick="openPrivateMode()">
+        <div class="card-header private">🔐</div>
+        <div class="card-body">
+          <div class="card-title">Ruang Teman</div>
+          <div class="card-desc">Buat ruang khusus & share kode ke teman for competiisi.</div>
+        </div>
+      </div>
+
+      <!-- KARTU 3: RANDOM MATCH -->
+      <div class="menu-card" onclick="startRandomMatch()">
+        <div class="card-header random">🌍</div>
+        <div class="card-body">
+          <div class="card-title">Lawan Random</div>
+          <div class="card-desc">Cari lawan acak dari seluruh dunia secara instan.</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ================== APP SHELL ================== -->
-<div class="app-shell" id="appShell">
+<!-- 3. GAME SCREEN -->
+<div class="screen" id="gameScreen">
   <div class="top-bar">
-    <div class="user-profile">
-      <div class="avatar" id="userAvatar">A</div>
+    <div class="user-profile" onclick="backToMenu()">
+      <div class="avatar" style="font-size:1.5em;">←</div>
       <div class="user-info">
-        <div id="userName">User</div>
-        <div class="user-coins"><span>🪙</span><span id="userCoinsDisplay">0</span></div>
+        <div id="gameStatus">Mode: Solo</div>
+        <div style="font-size:0.8em; opacity:0.8;">Tap untuk kembali</div>
       </div>
     </div>
-    <div class="top-actions">
-      <button class="icon-btn" onclick="openModal('leaderboardModal')" title="Peringkat">🏆</button>
-    </div>
+    <div style="color:white; font-weight:700; font-size:1.1em;" id="timerDisplay"></div>
   </div>
 
   <div class="container">
-    
-    <!-- Status Jaringan -->
-    <div id="networkStatus" style="background:white; padding:10px; border-radius:10px; margin-bottom:15px; text-align:center; font-weight:600; display:none;">
-      Terhubung ke Ruang: <span id="roomIdDisplay"></span>
-    </div>
-
     <div class="stats-bar">
-      <div class="stat-card">
-        <div class="stat-label">Status</div>
-        <div class="stat-value score" id="gameStatus" style="font-size:1.2em;">Menunggu Host</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Skor Anda</div>
-        <div class="stat-value score" id="correctCount">0/20</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Koin</div>
-        <div class="stat-value coins" id="sessionCoins">0</div>
-      </div>
-    </div>
-
-    <div id="quiz">
-      <div style="text-align:center;padding:40px;background:white;border-radius:20px;">
-        <div class="loading-spinner"></div>
-        <p>Menunggu Host memulai permainan...</p>
-      </div>
+      <div class="stat-card"><div class="stat-label">Skor</div><div class="stat-value score" id="scoreDisplay">0</div></div>
+      <div class="stat-card"><div class="stat-label">Lawan</div><div class="stat-value coins" id="opponentDisplay">-</div></div>
     </div>
     
+    <div id="quizArea"></div>
   </div>
 </div>
 
-<!-- ================== LOBBY MODAL (For Host) ================== -->
+<!-- MODAL: PRIVATE ROOM -->
+<div class="modal-overlay" id="privateModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🔐 Ruang Teman</h3>
+      <span style="cursor:pointer" onclick="closeModal('privateModal')">&times;</span>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <p>Buat ruang baru atau gabung ke ruang teman.</p>
+      
+      <button class="btn btn-primary" onclick="createPrivateRoom()">Buat Ruang Baru</button>
+      
+      <div style="margin:20px 0; border-bottom:1px solid #eee;"></div>
+
+      <input type="text" id="inputRoomCode" class="input-code" placeholder="KODE RUANG" maxlength="4">
+      <button class="btn btn-secondary" onclick="joinPrivateRoom()">Gabung Ruang</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: WAITING LOBBY -->
 <div class="modal-overlay" id="lobbyModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <h2>Lobby Ruang</h2>
-      <button class="modal-close" onclick="copyCode()">&copy;</button>
+    <div class="modal-header" style="background:#333;">
+      <h3>Menunggu Pemain...</h3>
     </div>
-    <div class="modal-body" style="text-align:center;">
-      <p>Bagikan kode ini ke teman:</p>
-      <div class="code-display" id="lobbyCodeDisplay">------</div>
-      <p style="font-size:0.9em; color:#888; margin-bottom:20px;">Tunggu teman bergabung, lalu mulai permainan.</p>
-      
-      <h3 style="margin-bottom:10px;">Peserta (<span id="playerCount">1</span>)</h3>
-      <div class="lobby-list" id="lobbyPlayerList">
-        <!-- Player list generated here -->
-      </div>
-
-      <button class="btn btn-primary btn-block" id="startGameBtn" onclick="startMultiplayerGame()">Mulai Permainan</button>
+    <div class="modal-body" style="text-align:center">
+      <div class="spinner"></div>
+      <p style="margin:20px 0 10px;">Kode Ruang Anda:</p>
+      <h1 style="font-size:2.5em; letter-spacing:5px; color:var(--bg-primary)" id="displayRoomCode">XXXX</h1>
+      <p style="font-size:0.9em; color:#666;">Bagikan kode ini ke teman.</p>
+      <p style="margin-top:20px;">Pemain Terhubung: <span id="playerCount">1</span></p>
+      <button class="btn btn-primary" id="btnStartGame" style="display:none; margin-top:20px;" onclick="startGame()">Mulai Sekarang</button>
     </div>
   </div>
 </div>
 
-<!-- ================== LEADERBOARD MODAL ================== -->
-<div class="modal-overlay" id="leaderboardModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>🏆 Papan Peringkat Live</h2>
-      <button class="modal-close" onclick="closeModal('leaderboardModal')">&times;</button>
-    </div>
-    <div class="modal-body" id="leaderboardList">
-      <!-- Leaderboard generated here -->
-    </div>
-  </div>
-</div>
-
-<div id="toast">Kode Ruang berhasil disalin!</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ================== DATA JSON ==================
-const quizDatabase = {
-  "quiz_ramadhan": [
-    {
-      "category": "Tajwid",
-      "questions": [
-        { "id": 1, "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"], "answer": "Iqlab", "explanation": "Huruf Nun Mati bertemu Huruf Ba (ب) hukumnya Iqlab." },
-        { "id": 2, "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"], "answer": "Idgham Bighunnah", "explanation": "Huruf Nun Mati bertemu huruf Nun, hukumnya Idgham Bighunnah." },
-        { "id": 3, "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"], "answer": "Idgham Bila Ghunnah", "explanation": "Huruf Nun Mati bertemu huruf Ra (ر), hukumnya Idgham Bila Ghunnah." },
-        { "id": 4, "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...", "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"], "answer": "مِن شَرٍّ", "explanation": "Huruf Nun Mati bertemu huruf Syin (س) termasuk Ikhfa Haqiqi." },
-        { "id": 5, "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"], "answer": "Ikhfa Haqiqi", "explanation": "Huruf Nun Mati bertemu huruf Jim (ج) termasuk salah satu dari 15 huruf Ikhfa Haqiqi." },
-        { "id": 6, "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...", "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"], "answer": "Idgham Mimi", "explanation": "Mim Mati bertemu Mim, hukumnya Idgham Mimi." },
-        { "id": 7, "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...", "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"], "answer": "Ikhfa Syafawi", "explanation": "Mim Mati bertemu Huruf Ba (ب), hukumnya Ikhfa Syafawi." },
-        { "id": 8, "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan adalah...", "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"], "answer": "Qalqalah Kubra", "explanation": "Karena huruf Qalqalah mati karena Waqaf." },
-        { "id": 9, "question": "Panjang mad pada kata نُوحِيهَا adalah...", "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"], "answer": "2 harakat", "explanation": "Ini adalah Mad Thabi'i (Wajib), panjangnya 2 harakat." },
-        { "id": 10, "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...", "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"], "answer": "Tafkhim (Tebal)", "explanation": "Huruf Ra berharakat Fathah, maka dibaca Tafkhim." }
-      ]
-    }
-  ]
-};
+// ================== DATA & STATE ==================
+const quizData = [
+  { q: "مِنۢ بَعْدِ - Hukum bacaan Nun Mati bertemu Ba adalah...", opts: ["Idzhar", "Iqlab", "Ikhfa", "Idgham"], ans: "Iqlab", exp: "Karena Nun mati bertemu Ba, hukumnya Iqlab." },
+  { q: "Hukum bacaan pada kata مِن نُّورٍ adalah...", opts: ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Ikhfa"], ans: "Idgham Bighunnah", exp: "Karena Nun mati bertemu Nun, dimasukkan dan didengungkan." },
+  { q: "Rasulullah SAW lahir di kota...", opts: ["Madinah", "Makkah", "Thaif", "Yaman"], ans: "Makkah", exp: "Nabi lahir di Makkah pada Tahun Gajah." },
+  { q: "Nama ayah Nabi Muhammad adalah...", opts: ["Abdullah", "Abdul Muthalib", "Abu Thalib", "Hamzah"], ans: "Abdullah", exp: "Ayah beliau adalah Abdullah bin Abdul Muthalib." },
+  { q: "Ar-Rahman artinya...", opts: ["Maha Kuasa", "Maha Pengasih", "Maha Mengetahui", "Maha Esa"], ans: "Maha Pengasih", exp: "Ar-Rahman berarti Maha Pengasih di dunia." },
+  { q: "Sahabat yang pertama masuk Islam dari orang dewasa...", opts: ["Ali bin Abi Thalib", "Umar bin Khattab", "Abu Bakar", "Utsman"], ans: "Abu Bakar", exp: "Abu Bakar adalah orang dewasa pertama yang masuk Islam." }
+];
 
-// ================== APP STATE ==================
-let currentUser = { name: '', coins: 0 };
-let sessionCorrect = 0;
-let sessionAnswered = 0;
-let sessionCoins = 0; // Local session coins for display
-
-// Multiplayer State
+let currentUser = { name: "User", coins: 0 };
+let myScore = 0;
+let opponentScore = 0;
+let currentQuestions = [];
+let qIndex = 0;
 let peer = null;
-let conn = null; // Connection object for Guest
-let connections = []; // Array of connections for Host
+let conn = null;
+let connections = [];
 let isHost = false;
 let roomCode = null;
-let players = {}; // Store player data {id: {name, score}}
-let currentQuestions = [];
-const QUESTIONS_PER_SESSION = 10; // Reduced for multiplayer speed
-const COINS_PER_CORRECT = 50;
+let gameMode = "solo"; // solo, private, random
 
-// ================== INITIALIZATION ==================
-function showModeSelection() {
+// ================== NAVIGATION ==================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function enterLobby() {
   const name = document.getElementById('usernameInput').value.trim();
-  if (!name) return alert('Masukkan nama!');
+  if (!name) return alert("Masukkan nama dulu!");
   currentUser.name = name;
-  document.getElementById('modeSelection').style.display = 'block';
+  document.getElementById('menuName').textContent = name;
+  document.getElementById('menuAvatar').textContent = name.charAt(0);
+  document.getElementById('menuCoins').textContent = currentUser.coins;
+  showScreen('menuScreen');
 }
 
-function copyCode() {
-  navigator.clipboard.writeText(roomCode);
-  showToast("Kode Ruang berhasil disalin!");
-}
-
-function showToast(message) {
-  const x = document.getElementById("toast");
-  x.textContent = message;
-  x.className = "show";
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-}
-
-// ================== PEERJS LOGIC ==================
-
-// 1. Create Room (Host)
-function createRoom() {
-  if (!currentUser.name) return;
-
-  // Generate simple random 4 char code
-  roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
-  
-  // Create Peer with ID based on room code
-  peer = new Peer('ramadhan-' + roomCode);
-
-  peer.on('open', (id) => {
-    console.log('Room created with ID: ' + id);
-    
-    // Add self to players
-    players[peer.id] = { name: currentUser.name, score: 0, id: peer.id };
-    isHost = true;
-
-    // UI Changes
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appShell').classList.add('active');
-    document.getElementById('networkStatus').style.display = 'block';
-    document.getElementById('roomIdDisplay').textContent = roomCode;
-    
-    updateUI();
-    updateLobbyUI();
-    openModal('lobbyModal');
-    document.getElementById('lobbyCodeDisplay').textContent = roomCode;
-  });
-
-  peer.on('connection', (connection) => {
-    console.log('New player connected: ' + connection.peer);
-    connections.push(connection);
-    
-    connection.on('open', () => {
-      // Request new player to send their name
-      connection.send({ type: 'request-info' });
-    });
-
-    connection.on('data', (data) => {
-      handleData(data, connection);
-    });
-
-    connection.on('close', () => {
-      connections = connections.filter(c => c.peer !== connection.peer);
-      delete players[connection.peer];
-      broadcastPlayers();
-      updateLobbyUI();
-    });
-  });
-}
-
-// 2. Join Room (Guest)
-function joinRoom() {
-  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
-  if (!code) return alert('Masukkan kode ruang!');
-
-  // Guest doesn't need a specific ID, random is fine
-  peer = new Peer();
-
-  peer.on('open', (id) => {
-    console.log('My Peer ID: ' + id);
-    
-    // Connect to Host
-    conn = peer.connect('ramadhan-' + code);
-
-    conn.on('open', () => {
-      console.log('Connected to host!');
-      
-      // Send name to host
-      conn.send({ type: 'join-info', name: currentUser.name, id: id });
-      
-      // UI Changes
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('appShell').classList.add('active');
-      document.getElementById('networkStatus').style.display = 'block';
-      document.getElementById('roomIdDisplay').textContent = code;
-      
-      // Disable quiz container until game starts
-      document.getElementById('quiz').innerHTML = '<div style="text-align:center;padding:40px;background:white;border-radius:20px;"><div class="loading-spinner"></div><p>Menunggu Host memulai...</p></div>';
-    });
-
-    conn.on('data', (data) => {
-      handleData(data, conn);
-    });
-
-    conn.on('error', (err) => {
-      alert('Gagal terhubung. Pastikan kode benar.');
-      console.error(err);
-    });
-  });
-}
-
-// 3. Handle Data Exchange
-function handleData(data, connection) {
-  // --- Messages received by HOST ---
-  if (isHost) {
-    if (data.type === 'join-info') {
-      players[data.id] = { name: data.name, score: 0, id: data.id };
-      broadcastPlayers(); // Update everyone's list
-      updateLobbyUI(); // Update host's local lobby
-    }
-    if (data.type === 'answer-update') {
-      // Host updates score for player
-      if (players[data.id]) {
-        players[data.id].score = data.score;
-      }
-      // Broadcast new scores to everyone
-      broadcastPlayers();
-    }
-  }
-  
-  // --- Messages received by GUEST ---
-  else {
-    if (data.type === 'request-info') {
-      // Host asked for my name
-      conn.send({ type: 'join-info', name: currentUser.name, id: peer.id });
-    }
-    if (data.type === 'player-list') {
-      players = data.players;
-      renderLeaderboard();
-    }
-    if (data.type === 'start-game') {
-      currentQuestions = data.questions;
-      closeModal('lobbyModal'); // Just in case
-      startGameLocal();
-    }
-  }
-}
-
-// Broadcast helper for Host
-function broadcastPlayers() {
-  const msg = { type: 'player-list', players: players };
-  connections.forEach(c => c.send(msg));
-  renderLeaderboard(); // Host updates own board
-}
-
-function broadcastStart() {
-  const msg = { type: 'start-game', questions: currentQuestions };
-  connections.forEach(c => c.send(msg));
-  startGameLocal();
+function backToMenu() {
+  if (conn) conn.close();
+  if (peer) peer.destroy();
+  peer = null; conn = null;
+  showScreen('menuScreen');
 }
 
 // ================== GAME LOGIC ==================
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
-function shuffle(arr) {
-  const s = [...arr];
-  for (let i = s.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [s[i], s[j]] = [s[j], s[i]];
-  }
-  return s;
+function loadQuestions() {
+  currentQuestions = shuffle(quizData).slice(0, 5); // Ambil 5 soal acak
+  qIndex = 0;
+  myScore = 0;
+  opponentScore = 0;
+  renderQuestion();
+  updateGameUI();
 }
 
-function updateLobbyUI() {
-  let html = '';
-  const playerKeys = Object.keys(players);
+function renderQuestion() {
+  if (qIndex >= currentQuestions.length) {
+    endGame();
+    return;
+  }
+  const data = currentQuestions[qIndex];
+  const area = document.getElementById('quizArea');
   
-  playerKeys.forEach(key => {
-    const p = players[key];
-    const isMe = (isHost && key === peer.id) || (!isHost && key === peer.id);
-    const statusClass = isHost && key === peer.id ? 'host' : 'member';
-    const statusText = isHost && key === peer.id ? 'Host' : 'Peserta';
-    
-    html += `
-      <div class="lobby-player ${isMe ? 'ready' : ''}">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="avatar" style="width:30px; height:30px; font-size:0.9em;">${p.name.charAt(0)}</div>
-          <strong>${p.name} ${isMe ? '(Anda)' : ''}</strong>
-        </div>
-        <span class="player-status ${statusClass}">${statusText}</span>
+  let html = `
+    <div class="question">
+      <div style="margin-bottom:10px; font-weight:700; color:var(--bg-primary)">Soal ${qIndex + 1}</div>
+      <p class="question-text">${data.q}</p>
+      <div class="options">
+        ${shuffle(data.opts).map((o, i) => `
+          <label class="option-label" onclick="selectAnswer(this, '${o}', '${data.ans}')">
+            <input type="radio" name="opt">
+            <span class="option-marker">${'ABCDE'[i]}</span>
+            <span>${o}</span>
+          </label>
+        `).join('')}
       </div>
-    `;
-  });
-
-  document.getElementById('lobbyPlayerList').innerHTML = html;
-  document.getElementById('playerCount').textContent = playerKeys.length;
-  renderLeaderboard();
+    </div>`;
+  area.innerHTML = html;
 }
 
-function startMultiplayerGame() {
-  if (!isHost) return;
-
-  // Prepare Questions
-  let allQuestions = [];
-  quizDatabase.quiz_ramadhan.forEach(cat => {
-    cat.questions.forEach(q => {
-      allQuestions.push({ ...q, category: cat.category });
-    });
-  });
-  currentQuestions = shuffle(allQuestions).slice(0, QUESTIONS_PER_SESSION);
-
-  // Broadcast and Start
-  broadcastStart();
-  closeModal('lobbyModal');
-}
-
-function startGameLocal() {
-  sessionCorrect = 0;
-  sessionAnswered = 0;
-  sessionCoins = 0;
-  players[peer.id].score = 0; // Reset self score
-
-  document.getElementById('gameStatus').textContent = "Sedang Bermain";
-  document.getElementById('correctCount').textContent = "0/" + QUESTIONS_PER_SESSION;
-  document.getElementById('sessionCoins').textContent = "0";
+function selectAnswer(el, selected, correct) {
+  if (el.parentElement.querySelector('.disabled')) return; // Prevent double answer
   
-  renderQuestions(currentQuestions);
-}
-
-function renderQuestions(questions) {
-  const quizContainer = document.getElementById('quiz');
-  quizContainer.innerHTML = '';
-
-  questions.forEach((q, i) => {
-    const qDiv = document.createElement('div');
-    qDiv.className = 'question';
-    const safeExplanation = (q.explanation || 'Tidak ada penjelasan.').replace(/"/g, '&quot;');
-    
-    let opts = '';
-    shuffle([...q.options]).forEach((o, oi) => {
-      opts += `
-        <label class="option-label">
-          <input type="radio" name="q${i}" value="${o}" data-answer="${q.answer}" onchange="handleAnswer(this)">
-          <span class="option-marker">${'ABCDE'[oi]}</span>
-          <span>${o}</span>
-        </label>`;
-    });
-    
-    qDiv.innerHTML = `
-      <span class="question-number">${q.category}</span>
-      <p class="question-text">${q.question}</p>
-      <div class="options" data-explanation="${safeExplanation}">${opts}</div>`;
-    
-    quizContainer.appendChild(qDiv);
-  });
-}
-
-function handleAnswer(radio) {
-  const qDiv = radio.closest('.question');
-  const options = qDiv.querySelectorAll('.option-label');
-  const correct = radio.dataset.answer;
-  const isCorrect = radio.value === correct;
-  const explanationText = qDiv.querySelector('.options').dataset.explanation;
-
-  options.forEach(opt => {
-    opt.classList.add('disabled');
-    const input = opt.querySelector('input');
-    input.disabled = true;
-    if (input.value === correct) opt.classList.add('correct');
-  });
-
-  const selected = radio.closest('.option-label');
-  selected.classList.add('selected');
+  const parent = el.closest('.question');
+  const labels = parent.querySelectorAll('.option-label');
   
-  sessionAnswered++;
-
-  if (isCorrect) {
-    selected.classList.add('correct');
-    qDiv.classList.add('answered-correct');
-    sessionCorrect++;
-    sessionCoins += COINS_PER_CORRECT;
-    
-    document.getElementById('sessionCoins').textContent = sessionCoins.toLocaleString('id-ID');
-    document.getElementById('correctCount').textContent = `${sessionCorrect}/${QUESTIONS_PER_SESSION}`;
-    playSound('correct');
+  labels.forEach(l => {
+    l.classList.add('disabled');
+    if (l.querySelector('span:last-child').textContent === correct) {
+      l.classList.add('correct');
+    }
+  });
+  
+  if (selected === correct) {
+    el.classList.add('correct');
+    myScore += 20;
+    playSound(1);
+    showHint(parent, true, currentQuestions[qIndex].exp);
   } else {
-    selected.classList.add('wrong');
-    qDiv.classList.add('answered-wrong');
-    playSound('wrong');
+    el.classList.add('wrong');
+    playSound(0);
+    showHint(parent, false, currentQuestions[qIndex].exp);
   }
 
-  // Update Network Score
+  // Kirim skor ke lawan jika online
+  if (gameMode !== 'solo' && conn) {
+    conn.send({ type: 'score', score: myScore });
+  }
+  if (gameMode !== 'solo' && isHost) {
+    connections.forEach(c => c.send({ type: 'score', score: myScore }));
+  }
+
+  updateGameUI();
+  
+  // Next question delay
+  setTimeout(() => {
+    qIndex++;
+    renderQuestion();
+  }, 2000);
+}
+
+function showHint(parent, isCorrect, text) {
+  const div = document.createElement('div');
+  div.className = 'answer-hint';
+  div.style.border = `1px solid ${isCorrect ? 'var(--success)' : 'var(--error)'}`;
+  div.style.background = isCorrect ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)';
+  div.innerHTML = `<strong>${isCorrect ? 'Benar!' : 'Salah!'}</strong><br>${text}`;
+  parent.appendChild(div);
+}
+
+function updateGameUI() {
+  document.getElementById('scoreDisplay').textContent = myScore;
+  document.getElementById('opponentDisplay').textContent = opponentScore;
+  document.getElementById('gameStatus').textContent = `Mode: ${gameMode.charAt(0).toUpperCase() + gameMode.slice(1)}`;
+}
+
+function endGame() {
+  let result = "Imbang!";
+  if (myScore > opponentScore) result = "Kamu Menang! 🎉";
+  if (myScore < opponentScore) result = "Kamu Kalah 😢";
+  
+  currentUser.coins += myScore;
+  document.getElementById('menuCoins').textContent = currentUser.coins;
+
+  document.getElementById('quizArea').innerHTML = `
+    <div style="text-align:center; padding:40px; background:white; border-radius:20px;">
+      <h2 style="color:var(--bg-primary)">${result}</h2>
+      <div style="font-size:2em; margin:20px 0;">Skor Kamu: ${myScore}</div>
+      <div style="color:#888; margin-bottom:20px">Skor Lawan: ${opponentScore}</div>
+      <p>🪙 Kamu mendapat ${myScore} koin!</p>
+      <button class="btn btn-primary" onclick="backToMenu()" style="max-width:200px; margin:20px auto 0;">Kembali ke Menu</button>
+    </div>
+  `;
+}
+
+// ================== MODE 1: SOLO ==================
+function startSoloMode() {
+  gameMode = "solo";
+  showScreen('gameScreen');
+  document.getElementById('opponentDisplay').parentElement.style.display = 'none'; // Hide opponent
+  loadQuestions();
+}
+
+// ================== MODE 2: PRIVATE ROOM ==================
+function openPrivateMode() {
+  document.getElementById('privateModal').classList.add('show');
+}
+
+function createPrivateRoom() {
+  closeModal('privateModal');
+  initNetworking(true);
+}
+
+function joinPrivateRoom() {
+  const code = document.getElementById('inputRoomCode').value.trim().toUpperCase();
+  if (!code) return alert("Masukkan kode!");
+  closeModal('privateModal');
+  initNetworking(false, code);
+}
+
+// ================== MODE 3: RANDOM MATCH ==================
+function startRandomMatch() {
+  // Logic: Menggunakan ID global yang berganti setiap 10 detik.
+  // Siapa yang join di rentang waktu yang sama akan ketemu.
+  const timeSlot = Math.floor(Date.now() / 10000); // Berganti tiap 10 detik
+  const randomRoomId = "RND-" + timeSlot;
+  
+  gameMode = "random";
+  showScreen('gameScreen');
+  document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Mencari lawan...</p></div>`;
+  
+  // Coba jadi Guest dulu, kalau gagal jadi Host
+  const tempPeer = new Peer();
+  
+  tempPeer.on('open', () => {
+    const c = tempPeer.connect(randomRoomId);
+    
+    c.on('open', () => {
+      // Sukses jadi Guest
+      peer = tempPeer;
+      conn = c;
+      isHost = false;
+      setupConnection();
+      showToast("Lawan ditemukan!");
+      loadQuestions();
+    });
+
+    c.on('error', () => {
+      // Gagal connect, jadi Host
+      tempPeer.destroy(); // Hapus peer sementara
+      createRandomRoom(randomRoomId);
+    });
+    
+    // Timeout jika tidak found dalam 3 detik
+    setTimeout(() => {
+      if(!c.open) {
+        c.close();
+        tempPeer.destroy();
+        createRandomRoom(randomRoomId);
+      }
+    }, 3000);
+  });
+}
+
+function createRandomRoom(id) {
+  peer = new Peer(id);
+  isHost = true;
+  
+  peer.on('connection', (connection) => {
+    conn = connection;
+    setupConnection();
+    showToast("Lawan ditemukan!");
+    loadQuestions();
+  });
+  
+  // Timeout jika 10 detik ga ada lawan
+  setTimeout(() => {
+    if(!conn) {
+      showToast("Tidak ada lawan. Main solo dulu ya.");
+      loadQuestions();
+    }
+  }, 10000);
+}
+
+// ================== NETWORKING CORE ==================
+function initNetworking(isCreating, code = null) {
+  gameMode = "private";
+  
+  if (isCreating) {
+    roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+    peer = new Peer('RM-' + roomCode);
+    isHost = true;
+    
+    peer.on('open', (id) => {
+      showScreen('gameScreen');
+      document.getElementById('displayRoomCode').textContent = roomCode;
+      document.getElementById('lobbyModal').classList.add('show');
+      document.getElementById('btnStartGame').style.display = 'block';
+    });
+    
+    peer.on('connection', (connection) => {
+      connections.push(connection);
+      conn = connection; // Handle last connection for simplicity in this demo
+      document.getElementById('playerCount').textContent = connections.length + 1;
+      
+      connection.on('open', () => {
+        connection.on('data', (data) => handleData(data));
+      });
+    });
+    
+  } else {
+    // Joining
+    showScreen('gameScreen');
+    document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Menghubungkan...</p></div>`;
+    
+    peer = new Peer();
+    peer.on('open', () => {
+      conn = peer.connect('RM-' + code);
+      conn.on('open', () => {
+        showToast("Terhubung ke ruang!");
+        setupConnection();
+      });
+      conn.on('error', () => {
+        alert("Kode tidak ditemukan atau ruang penuh.");
+        backToMenu();
+      });
+    });
+  }
+}
+
+function setupConnection() {
+  if (!conn) return;
+  
+  conn.on('data', (data) => handleData(data));
+  
+  // Jika ini host, kirim sinyal mulai saat game dimulai
   if (isHost) {
-    // If host, update directly
-    players[peer.id].score = sessionCorrect;
-    broadcastPlayers();
+    // Host triggers game start via button
   } else {
-    // If guest, send to host
-    conn.send({ type: 'answer-update', id: peer.id, score: sessionCorrect });
+    // Guest waits for game start
+    document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Menunggu Host memulai...</p></div>`;
   }
-
-  // Show Hint
-  const hint = document.createElement('div');
-  hint.className = `answer-hint ${isCorrect ? 'correct-hint' : 'wrong-hint'}`;
-  hint.innerHTML = `<strong>${isCorrect ? 'Benar!' : 'Salah'}</strong><div style="margin-top:8px; font-size:0.9em;">💡 ${explanationText}</div>`;
-  qDiv.appendChild(hint);
 }
 
-function updateUI() {
-  document.getElementById('userName').textContent = currentUser.name;
-  document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+function handleData(data) {
+  if (data.type === 'start') {
+    currentQuestions = data.questions;
+    qIndex = 0;
+    myScore = 0;
+    opponentScore = 0;
+    closeModal('lobbyModal');
+    renderQuestion();
+    updateGameUI();
+  }
+  if (data.type === 'score') {
+    opponentScore = data.score;
+    updateGameUI();
+  }
 }
 
-function renderLeaderboard() {
-  const list = document.getElementById('leaderboardList');
-  const sorted = Object.values(players).sort((a, b) => b.score - a.score);
-
-  let html = '';
-  sorted.forEach((u, i) => {
-    const isMe = u.id === peer.id;
-    html += `
-      <div class="leaderboard-item ${isMe ? 'you' : ''}">
-        <div class="rank ${i < 3 ? 'top3' : ''}">#${i + 1}</div>
-        <div class="lb-avatar" style="background:${isMe ? 'var(--accent)' : '#eee'};color:${isMe ? 'white' : '#333'}">
-          ${u.name.charAt(0)}
-        </div>
-        <div class="lb-details">
-          <div class="lb-name">${isMe ? u.name + ' (Anda)' : u.name}</div>
-          <div class="lb-score">${u.score} Benar</div>
-        </div>
-      </div>
-    `;
-  });
-  list.innerHTML = html;
+function startGame() {
+  if (!conn && connections.length === 0) {
+    alert("Belum ada teman yang join. Main solo saja.");
+  }
+  
+  // Kirim soal ke semua
+  const packet = { type: 'start', questions: shuffle(quizData).slice(0, 5) };
+  if (conn) conn.send(packet); // for single guest in demo
+  // connections.forEach(c => c.send(packet)); // for multiple guests
+  
+  currentQuestions = packet.questions;
+  qIndex = 0;
+  myScore = 0;
+  opponentScore = 0;
+  closeModal('lobbyModal');
+  renderQuestion();
 }
 
-// ================== SYSTEM FUNCTIONS ==================
-function playSound(type) {
-  // Simplified sound
+// ================== UTILS ==================
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function showToast(msg) { 
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function playSound(correct) {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.frequency.value = type === 'correct' ? 600 : 200;
-  gain.gain.value = 0.1;
-  osc.start();
-  osc.stop(ctx.currentTime + 0.1);
-}
-
-function openModal(id) {
-  document.getElementById(id).classList.add('show');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
+  osc.connect(ctx.destination);
+  osc.frequency.value = correct ? 600 : 200;
+  osc.start(); osc.stop(ctx.currentTime + 0.1);
 }
 
 </script>
