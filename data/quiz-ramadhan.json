@@ -1,623 +1,758 @@
-Berikut adalah file **JSON lengkap** yang sudah disertai **penjelasan (explanation)** untuk setiap soal. Anda bisa mengganti variabel `quizDatabase` di dalam tag `<script>` pada kode HTML sebelumnya dengan data ini.
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ramadhan Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050a14;
+            --bg-card: rgba(20, 30, 50, 0.7);
+            --accent-gold: #f0b429;
+            --accent-emerald: #10b981;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --border: rgba(240, 180, 41, 0.2);
+        }
 
-```json
-{
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-amiri { font-family: 'Amiri', serif; }
+
+        /* Dynamic Background */
+        .bg-atmosphere {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 10% 90%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 10%, rgba(240, 180, 41, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #050a14 0%, #0f172a 100%);
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #d69e2e);
+            color: #000;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(240, 180, 41, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(240, 180, 41, 0.5);
+        }
+
+        .btn-primary:active { transform: translateY(0); }
+
+        .input-styled {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-styled:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.1);
+        }
+
+        /* Quiz Options Animation */
+        .option-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .option-item:hover::before { transform: translateX(100%); }
+
+        .option-item:hover {
+            border-color: var(--accent-gold);
+            background: rgba(240, 180, 41, 0.05);
+            transform: translateX(5px);
+        }
+
+        .option-item.correct {
+            border-color: var(--accent-emerald);
+            background: rgba(16, 185, 129, 0.15);
+            animation: pulseCorrect 0.5s ease;
+        }
+
+        .option-item.wrong {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.15);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes pulseCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Progress Bar */
+        .progress-fill {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, var(--accent-emerald), var(--accent-gold));
+        }
+
+        /* Slide Transitions */
+        .slide-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: scale(0.95);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        /* Leaderboard Animations */
+        .leaderboard-row {
+            animation: slideInLeft 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Rank Badges */
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; }
+        .rank-2 { background: linear-gradient(135deg, #e5e7eb, #9ca3af); color: #000; }
+        .rank-3 { background: linear-gradient(135deg, #f97316, #c2410c); color: #fff; }
+
+        /* Category Tags */
+        .category-tag {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Decoration SVG */
+        .mosque-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.03' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom center;
+            background-size: cover;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-atmosphere"></div>
+    <div id="particles"></div>
+    <div class="mosque-bg"></div>
+
+    <div class="slide-container">
+        <!-- SLIDE 1: DASHBOARD -->
+        <div id="slide-home" class="slide active">
+            <div class="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
+                <!-- Left: Welcome & Input -->
+                <div class="space-y-6">
+                    <div>
+                        <h1 class="font-amiri text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200 mb-2">
+                            Quiz Ramadhan
+                        </h1>
+                        <p class="text-slate-400 text-lg">Uji pengetahuan Islamimu dengan 85+ soal seru.</p>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Nama Pemain</label>
+                            <input type="text" id="playerName" placeholder="Masukkan nama..." 
+                                   class="input-styled w-full px-4 py-3 rounded-xl text-white placeholder-slate-500">
+                        </div>
+                        <button onclick="startGame()" class="btn-primary w-full py-4 rounded-xl text-lg font-bold flex items-center justify-center gap-2">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Mulai Quiz
+                        </button>
+                    </div>
+                    
+                    <div class="flex gap-4 text-center text-sm">
+                        <div class="flex-1 glass-card rounded-xl p-3">
+                            <div class="text-2xl font-bold text-amber-400" id="count-players">127</div>
+                            <div class="text-slate-500">Pemain</div>
+                        </div>
+                        <div class="flex-1 glass-card rounded-xl p-3">
+                            <div class="text-2xl font-bold text-emerald-400" id="count-questions">85</div>
+                            <div class="text-slate-500">Soal</div>
+                        </div>
+                        <div class="flex-1 glass-card rounded-xl p-3">
+                            <div class="text-2xl font-bold text-cyan-400" id="count-categories">4</div>
+                            <div class="text-slate-500">Kategori</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Leaderboard -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-amber-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                            Papan Peringkat
+                        </h2>
+                        <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">Multiplayer</span>
+                    </div>
+                    <div id="leaderboard-container" class="space-y-2 max-h-96 overflow-y-auto pr-2">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: QUIZ GAME -->
+        <div id="slide-quiz" class="slide">
+            <div class="w-full max-w-3xl">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="exitGame()" class="text-slate-500 hover:text-white transition p-2 rounded-lg hover:bg-white/5">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    <div class="text-center">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider">Pertanyaan</div>
+                        <div class="text-lg font-bold"><span id="current-q-num">1</span>/10</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider">Skor</div>
+                        <div class="text-lg font-bold text-amber-400" id="current-score">0</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-8">
+                    <div id="progress-bar" class="progress-fill h-full rounded-full" style="width: 0%"></div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="glass-card rounded-3xl p-6 md:p-8 mb-6 transform transition-all duration-300">
+                    <div class="mb-4">
+                        <span id="q-category" class="category-tag">Kategori</span>
+                    </div>
+                    <h2 id="question-text" class="text-xl md:text-2xl font-semibold leading-relaxed">
+                        Loading pertanyaan...
+                    </h2>
+                </div>
+
+                <!-- Options -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be generated here -->
+                </div>
+
+                <!-- Timer -->
+                <div class="mt-8 flex justify-center">
+                    <div class="flex items-center gap-3 bg-slate-900/50 px-5 py-2 rounded-full border border-slate-700">
+                        <div class="relative w-5 h-5">
+                            <svg class="w-5 h-5 transform -rotate-90" viewBox="0 0 36 36">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#334155" stroke-width="4"/>
+                                <path id="timer-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f0b429" stroke-width="4" stroke-dasharray="100, 100"/>
+                            </svg>
+                        </div>
+                        <span id="timer-text" class="font-mono font-bold text-amber-400">20s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: RESULT -->
+        <div id="slide-result" class="slide">
+            <div class="w-full max-w-md text-center space-y-8">
+                <div class="glass-card rounded-3xl p-8 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 to-transparent"></div>
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 flex items-center justify-center text-4xl font-bold text-slate-900">
+                            <span id="final-grade">B</span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">Hasil Quiz</h2>
+                        <p class="text-slate-400" id="result-player-name">Nama Pemain</p>
+                        
+                        <div class="grid grid-cols-3 gap-4 my-8">
+                            <div>
+                                <div class="text-3xl font-bold text-amber-400" id="final-score">0</div>
+                                <div class="text-xs text-slate-500">POIN</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-emerald-400" id="final-correct">0</div>
+                                <div class="text-xs text-slate-500">BENAR</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-red-400" id="final-wrong">0</div>
+                                <div class="text-xs text-slate-500">SALAH</div>
+                            </div>
+                        </div>
+
+                        <button onclick="playAgain()" class="btn-primary w-full py-3 rounded-xl text-lg">
+                            Main Lagi
+                        </button>
+                        <button onclick="goHome()" class="w-full py-3 mt-3 rounded-xl text-slate-400 hover:text-white transition text-lg">
+                            Kembali ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ DATA JSON (Embedded) ============
+        const quizDatabase = {
   "quiz_ramadhan": [
     {
       "category": "Tajwid",
       "questions": [
-        {
-          "id": 1,
-          "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...",
-          "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"],
-          "answer": "Iqlab",
-          "explanation": "Huruf Nun Mati bertemu Huruf Ba (ب) hukumnya Iqlab, yaitu dibaca dengung samar seperti huruf Mim."
-        },
-        {
-          "id": 2,
-          "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...",
-          "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"],
-          "answer": "Idgham Bighunnah",
-          "explanation": "Huruf Nun Mati bertemu huruf Nun (salah satu dari Yarmalun), hukumnya Idgham Bighunnah (disukun dan didengungkan)."
-        },
-        {
-          "id": 3,
-          "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...",
-          "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"],
-          "answer": "Idgham Bila Ghunnah",
-          "explanation": "Huruf Nun Mati bertemu huruf Ra (ر), salah satu huruf Idgham Bila Ghunnah (disukun tanpa dengung)."
-        },
-        {
-          "id": 4,
-          "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...",
-          "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"],
-          "answer": "مِن شَرٍّ",
-          "explanation": "Huruf Nun Mati bertemu huruf Syin (س) termasuk Ikhfa Haqiqi (samar dibaca dengung 1 harakat)."
-        },
-        {
-          "id": 5,
-          "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...",
-          "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"],
-          "answer": "Ikhfa Haqiqi",
-          "explanation": "Huruf Nun Mati bertemu huruf Jim (ج) termasuk salah satu dari 15 huruf Ikhfa Haqiqi."
-        },
-        {
-          "id": 6,
-          "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...",
-          "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"],
-          "answer": "Idgham Mimi",
-          "explanation": "Mim Mati bertemu Mim, hukumnya Idgham Mimi (disatukan bacaannya) atau disebut juga Idgham Mutamasilain."
-        },
-        {
-          "id": 7,
-          "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...",
-          "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
-          "answer": "Ikhfa Syafawi",
-          "explanation": "Mim Mati bertemu Huruf Ba (ب), hukumnya Ikhfa Syafawi (samar dibaca dengung)."
-        },
-        {
-          "id": 8,
-          "question": "Pada kata عَلَيْهِمْ وَلَا, hukum bacaan mim mati bertemu huruf wau adalah...",
-          "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"],
-          "answer": "Idzhar Syafawi",
-          "explanation": "Mim Mati bertemu Huruf Wau (selain Mim dan Ba), hukumnya Idzhar Syafawi (dibaca jelas)."
-        },
-        {
-          "id": 9,
-          "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan (berhenti) adalah...",
-          "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"],
-          "answer": "Qalqalah Kubra",
-          "explanation": "Karena huruf Qalqalah (Qaf) mati karena Waqaf (berhenti), hukumnya Qalqalah Kubra (lebih keras/nyata)."
-        },
-        {
-          "id": 10,
-          "question": "Pada kata يَقْطِينَ, huruf qaf termasuk bacaan qalqalah...",
-          "options": ["Kubra", "Shugra", "Wustha", "Kubra dan Shugra"],
-          "answer": "Shugra",
-          "explanation": "Huruf Qaf mati asli (bukan karena waqaf), hukumnya Qalqalah Shugra (ringan)."
-        },
-        {
-          "id": 11,
-          "question": "Panjang mad pada kata نُوحِيهَا adalah...",
-          "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"],
-          "answer": "2 harakat",
-          "explanation": "Ini adalah Mad Thabi'i (Wajib), panjangnya 1 alif atau 2 harakat."
-        },
-        {
-          "id": 12,
-          "question": "Hukum bacaan mad pada kata جَآءَ adalah...",
-          "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad"],
-          "answer": "Mad Wajib Muttashil",
-          "explanation": "Mad bertemu Hamzah dalam satu kata, hukumnya Mad Wajib Muttashil, panjang 4-5 harakat."
-        },
-        {
-          "id": 13,
-          "question": "Pada kata بِمَآ أُنزِلَ, hukum bacaan madnya adalah...",
-          "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad", "Mad Thabi'i"],
-          "answer": "Mad Jaiz Munfashil",
-          "explanation": "Mad bertemu Hamzah di kata yang berbeda (terpisah), hukumnya Mad Jaiz Munfashil."
-        },
-        {
-          "id": 14,
-          "question": "Jika kita berhenti (waqaf) pada kata الرَّحِيمِ, hukum madnya berubah menjadi...",
-          "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Aridh Lissukun", "Mad Lazim"],
-          "answer": "Mad Aridh Lissukun",
-          "explanation": "Mad bertemu sukun karena waqaf (bukan sukun asli), hukumnya Mad Aridh Lissukun (boleh 2, 4, atau 6 harakat)."
-        },
-        {
-          "id": 15,
-          "question": "Hukum bacaan pada kata دَآبَّةٍ adalah...",
-          "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad Lazim Mutsaqqal Kalimi", "Mad Aridh Lissukun"],
-          "answer": "Mad Lazim Mutsaqqal Kalimi",
-          "explanation": "Mad bertemu sukun asli (tasydid) dalam satu kata, hukumnya Mad Lazim Mutsaqqal Kalimi (wajib panjang 6 harakat)."
-        },
-        {
-          "id": 16,
-          "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...",
-          "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"],
-          "answer": "Tafkhim (Tebal)",
-          "explanation": "Huruf Ra berharakat Fathah, maka dibaca Tafkhim (Tebal)."
-        },
-        {
-          "id": 17,
-          "question": "Huruf Ra pada kata رِجَالٌ dibaca dengan hukum...",
-          "options": ["Tafkhim", "Tarqiq", "Qalqalah", "Ghunnah"],
-          "answer": "Tarqiq",
-          "explanation": "Huruf Ra berharakat Kasrah, maka dibaca Tarqiq (Tipis)."
-        },
-        {
-          "id": 18,
-          "question": "Pada kata فِرْعَوْنَ, huruf Ra dibaca...",
-          "options": ["Tarqiq", "Tafkhim", "Samar", "Jelas"],
-          "answer": "Tarqiq",
-          "explanation": "Huruf Ra sukun setelah Kasrah (bukan untuk menyambung), hukumnya Tarqiq."
-        },
-        {
-          "id": 19,
-          "question": "Hukum bacaan Ghunnah Musyaddadah terdapat pada kata...",
-          "options": ["كَانَ", "إِنَّا", "قُلْ", "مِنْ"],
-          "answer": "إِنَّا",
-          "explanation": "Huruf Nun bertasydid (نّ) dalam kata إِنَّا mengharuskan dibaca Ghunnah Musyaddadah (dengung penuh)."
-        },
-        {
-          "id": 20,
-          "question": "Huruf-huruf Idzhar Halqi berjumlah...",
-          "options": ["4", "5", "6", "7"],
-          "answer": "6",
-          "explanation": "Huruf Idzhar Halqi ada 6: Hamzah (ء), Ha (ه), 'Ain (ع), Ghain (غ), Kha (خ), dan Ha (ح)."
-        },
-        {
-          "id": 21,
-          "question": "Contoh bacaan Idzhar Halqi yang benar terdapat pada kata...",
-          "options": ["مِنْ خَيْرٍ", "مِنۢ بَعْدِ", "مِن نُّورٍ", "مِن وَلِيٍّ"],
-          "answer": "مِنْ خَيْرٍ",
-          "explanation": "Nun mati bertemu Kha (خ) adalah Idzhar Halqi karena Kha adalah salah satu dari 6 huruf halqi."
-        },
-        {
-          "id": 22,
-          "question": "Ikhfa dibaca dengan cara...",
-          "options": ["Jelas", "Dengung", "Samar disertai dengung", "Terputus"],
-          "answer": "Samar disertai dengung",
-          "explanation": "Ikhfa artinya menyembunyikan, dibaca samar antara idzhar dan idgham dengan nada dengung."
-        },
-        {
-          "id": 23,
-          "question": "Pada kata السُّوءَ, mad wajib muttashil dibaca panjang...",
-          "options": ["2 harakat", "4-5 harakat", "6 harakat", "Bebas"],
-          "answer": "4-5 harakat",
-          "explanation": "Mad Wajib Muttashil ketika washal (tersambung) bacaannya panjang 4 atau 5 harakat."
-        },
-        {
-          "id": 24,
-          "question": "Huruf Isti'la (huruf yang dibaca tebal) berjumlah...",
-          "options": ["5", "6", "7", "8"],
-          "answer": "7",
-          "explanation": "Huruf Isti'la ada 7: خ، ص، ض، غ، ط، ق، ظ. Huruf-huruf ini diucapkan dengan menaikkan pangkal lidah."
-        },
-        {
-          "id": 25,
-          "question": "Pada kata طَائِفَةٌ, huruf Tho (ط) termasuk huruf...",
-          "options": ["Istifal", "Isti'la", "Inhiraf", "Qalqalah saja"],
-          "answer": "Isti'la",
-          "explanation": "Huruf Tho (ط) adalah huruf Isti'la (dibaca tebal) sekaligus huruf Qalqalah."
-        }
+        { "id": 1, "question": "Perhatikan potongan ayat berikut: مِنۢ بَعْدِ. Hukum bacaan nun mati bertemu huruf ba pada kata tersebut adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa", "Idgham"], "answer": "Iqlab", "explanation": "Huruf Nun Mati bertemu Huruf Ba (ب) hukumnya Iqlab, yaitu dibaca dengung samar seperti huruf Mim." },
+        { "id": 2, "question": "Pada kata مِن نِّعْمَةٍ, hukum bacaan nun mati bertemu huruf nun adalah...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Ikhfa", "Iqlab"], "answer": "Idgham Bighunnah", "explanation": "Huruf Nun Mati bertemu huruf Nun (salah satu dari Yarmalun), hukumnya Idgham Bighunnah (disukun dan didengungkan)." },
+        { "id": 3, "question": "Bacaan pada kata مِن رَّبِّكَ termasuk hukum...", "options": ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Idzhar"], "answer": "Idgham Bila Ghunnah", "explanation": "Huruf Nun Mati bertemu huruf Ra (ر), salah satu huruf Idgham Bila Ghunnah (disukun tanpa dengung)." },
+        { "id": 4, "question": "Hukum bacaan Ikhfa Haqiqi terdapat pada kata...", "options": ["مِنْ آيَاتٍ", "مِنۢ بَعْدِ", "مِن شَرٍّ", "مِن رَّبِّكَ"], "answer": "مِن شَرٍّ", "explanation": "Huruf Nun Mati bertemu huruf Syin (س) termasuk Ikhfa Haqiqi (samar dibaca dengung 1 harakat)." },
+        { "id": 5, "question": "Pada kata أَنجَيْنَاكُمْ, hukum bacaan nun mati bertemu huruf jim adalah...", "options": ["Idzhar", "Iqlab", "Ikhfa Haqiqi", "Idgham"], "answer": "Ikhfa Haqiqi", "explanation": "Huruf Nun Mati bertemu huruf Jim (ج) termasuk salah satu dari 15 huruf Ikhfa Haqiqi." },
+        { "id": 6, "question": "Perhatikan kata لَهُم مَّغْفِرَةٌ. Hukum bacaan mim mati bertemu mim adalah...", "options": ["Ikhfa Syafawi", "Idgham Mimi", "Idzhar Syafawi", "Iqlab"], "answer": "Idgham Mimi", "explanation": "Mim Mati bertemu Mim, hukumnya Idgham Mimi (disatukan bacaannya) atau disebut juga Idgham Mutamasilain." },
+        { "id": 7, "question": "Hukum bacaan pada kata تَرْمِيهِم بِحِجَارَةٍ adalah...", "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"], "answer": "Ikhfa Syafawi", "explanation": "Mim Mati bertemu Huruf Ba (ب), hukumnya Ikhfa Syafawi (samar dibaca dengung)." },
+        { "id": 8, "question": "Pada kata عَلَيْهِمْ وَلَا, hukum bacaan mim mati bertemu huruf wau adalah...", "options": ["Idgham Mimi", "Idzhar Syafawi", "Ikhfa Syafawi", "Iqlab"], "answer": "Idzhar Syafawi", "explanation": "Mim Mati bertemu Huruf Wau (selain Mim dan Ba), hukumnya Idzhar Syafawi (dibaca jelas)." },
+        { "id": 9, "question": "Cara membaca huruf qaf pada kata قُلْ saat diwaqafkan (berhenti) adalah...", "options": ["Qalqalah Shugra", "Qalqalah Kubra", "Tafkhim", "Tarqiq"], "answer": "Qalqalah Kubra", "explanation": "Karena huruf Qalqalah (Qaf) mati karena Waqaf (berhenti), hukumnya Qalqalah Kubra (lebih keras/nyata)." },
+        { "id": 10, "question": "Pada kata يَقْطِينَ, huruf qaf termasuk bacaan qalqalah...", "options": ["Kubra", "Shugra", "Wustha", "Kubra dan Shugra"], "answer": "Shugra", "explanation": "Huruf Qaf mati asli (bukan karena waqaf), hukumnya Qalqalah Shugra (ringan)." },
+        { "id": 11, "question": "Panjang mad pada kata نُوحِيهَا adalah...", "options": ["1 harakat", "2 harakat", "4 harakat", "6 harakat"], "answer": "2 harakat", "explanation": "Ini adalah Mad Thabi'i (Wajib), panjangnya 1 alif atau 2 harakat." },
+        { "id": 12, "question": "Hukum bacaan mad pada kata جَآءَ adalah...", "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad"], "answer": "Mad Wajib Muttashil", "explanation": "Mad bertemu Hamzah dalam satu kata, hukumnya Mad Wajib Muttashil, panjang 4-5 harakat." },
+        { "id": 13, "question": "Pada kata بِمَآ أُنزِلَ, hukum bacaan madnya adalah...", "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad 'Iwad", "Mad Thabi'i"], "answer": "Mad Jaiz Munfashil", "explanation": "Mad bertemu Hamzah di kata yang berbeda (terpisah), hukumnya Mad Jaiz Munfashil." },
+        { "id": 14, "question": "Jika kita berhenti (waqaf) pada kata الرَّحِيمِ, hukum madnya berubah menjadi...", "options": ["Mad Thabi'i", "Mad Wajib Muttashil", "Mad Aridh Lissukun", "Mad Lazim"], "answer": "Mad Aridh Lissukun", "explanation": "Mad bertemu sukun karena waqaf (bukan sukun asli), hukumnya Mad Aridh Lissukun (boleh 2, 4, atau 6 harakat)." },
+        { "id": 15, "question": "Hukum bacaan pada kata دَآبَّةٍ adalah...", "options": ["Mad Wajib Muttashil", "Mad Jaiz Munfashil", "Mad Lazim Mutsaqqal Kalimi", "Mad Aridh Lissukun"], "answer": "Mad Lazim Mutsaqqal Kalimi", "explanation": "Mad bertemu sukun asli (tasydid) dalam satu kata, hukumnya Mad Lazim Mutsaqqal Kalimi (wajib panjang 6 harakat)." },
+        { "id": 16, "question": "Huruf Ra pada kata رَبُّكَ dibaca dengan hukum...", "options": ["Tafkhim (Tebal)", "Tarqiq (Tipis)", "Ikhfa", "Qalqalah"], "answer": "Tafkhim (Tebal)", "explanation": "Huruf Ra berharakat Fathah, maka dibaca Tafkhim (Tebal)." },
+        { "id": 17, "question": "Huruf Ra pada kata رِجَالٌ dibaca dengan hukum...", "options": ["Tafkhim", "Tarqiq", "Qalqalah", "Ghunnah"], "answer": "Tarqiq", "explanation": "Huruf Ra berharakat Kasrah, maka dibaca Tarqiq (Tipis)." },
+        { "id": 18, "question": "Pada kata فِرْعَوْنَ, huruf Ra dibaca...", "options": ["Tarqiq", "Tafkhim", "Samar", "Jelas"], "answer": "Tarqiq", "explanation": "Huruf Ra sukun setelah Kasrah (bukan untuk menyambung), hukumnya Tarqiq." },
+        { "id": 19, "question": "Hukum bacaan Ghunnah Musyaddadah terdapat pada kata...", "options": ["كَانَ", "إِنَّا", "قُلْ", "مِنْ"], "answer": "إِنَّا", "explanation": "Huruf Nun bertasydid (نّ) dalam kata إِنَّا mengharuskan dibaca Ghunnah Musyaddadah (dengung penuh)." },
+        { "id": 20, "question": "Huruf-huruf Idzhar Halqi berjumlah...", "options": ["4", "5", "6", "7"], "answer": "6", "explanation": "Huruf Idzhar Halqi ada 6: Hamzah (ء), Ha (ه), 'Ain (ع), Ghain (غ), Kha (خ), dan Ha (ح)." },
+        { "id": 21, "question": "Contoh bacaan Idzhar Halqi yang benar terdapat pada kata...", "options": ["مِنْ خَيْرٍ", "مِنۢ بَعْدِ", "مِن نُّورٍ", "مِن وَلِيٍّ"], "answer": "مِنْ خَيْرٍ", "explanation": "Nun mati bertemu Kha (خ) adalah Idzhar Halqi karena Kha adalah salah satu dari 6 huruf halqi." },
+        { "id": 22, "question": "Ikhfa dibaca dengan cara...", "options": ["Jelas", "Dengung", "Samar disertai dengung", "Terputus"], "answer": "Samar disertai dengung", "explanation": "Ikhfa artinya menyembunyikan, dibaca samar antara idzhar dan idgham dengan nada dengung." },
+        { "id": 23, "question": "Pada kata السُّوءَ, mad wajib muttashil dibaca panjang...", "options": ["2 harakat", "4-5 harakat", "6 harakat", "Bebas"], "answer": "4-5 harakat", "explanation": "Mad Wajib Muttashil ketika washal (tersambung) bacaannya panjang 4 atau 5 harakat." },
+        { "id": 24, "question": "Huruf Isti'la (huruf yang dibaca tebal) berjumlah...", "options": ["5", "6", "7", "8"], "answer": "7", "explanation": "Huruf Isti'la ada 7: خ، ص، ض، غ، ط، ق، ظ. Huruf-huruf ini diucapkan dengan menaikkan pangkal lidah." },
+        { "id": 25, "question": "Pada kata طَائِفَةٌ, huruf Tho (ط) termasuk huruf...", "options": ["Istifal", "Isti'la", "Inhiraf", "Qalqalah saja"], "answer": "Isti'la", "explanation": "Huruf Tho (ط) adalah huruf Isti'la (dibaca tebal) sekaligus huruf Qalqalah." }
       ]
     },
     {
       "category": "Sirah Nabawi",
       "questions": [
-        {
-          "id": 1,
-          "question": "Rasulullah ﷺ lahir di kota...",
-          "options": ["Madinah", "Thaif", "Makkah", "Yaman"],
-          "answer": "Makkah",
-          "explanation": "Nabi Muhammad SAW lahir di kota Makkah pada tanggal 12 Rabiul Awal Tahun Gajah."
-        },
-        {
-          "id": 2,
-          "question": "Tahun kelahiran Nabi dikenal sebagai Tahun...",
-          "options": ["Hijrah", "Badar", "Gajah", "Uhud"],
-          "answer": "Gajah",
-          "explanation": "Dinamakan Tahun Gajah karena pasukan gajah Abrahah datang menyerang Ka'bah di tahun yang sama."
-        },
-        {
-          "id": 3,
-          "question": "Nama ayah Nabi Muhammad ﷺ adalah...",
-          "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"],
-          "answer": "Abdullah",
-          "explanation": "Ayah beliau adalah Abdullah bin Abdul Muthalib, wafat saat Nabi masih dalam kandungan."
-        },
-        {
-          "id": 4,
-          "question": "Nama ibu Nabi Muhammad ﷺ adalah...",
-          "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"],
-          "answer": "Aminah",
-          "explanation": "Ibu beliau adalah Aminah binti Wahb, wafat saat Nabi berusia 6 tahun di Abwa."
-        },
-        {
-          "id": 5,
-          "question": "Nabi menerima wahyu pertama di Gua...",
-          "options": ["Hira", "Tsur", "Uhud", "Badar"],
-          "answer": "Hira",
-          "explanation": "Wahyu pertama (Surat Al-Alaq ayat 1-5) diterima di Gua Hira."
-        },
-        {
-          "id": 6,
-          "question": "Malaikat yang menyampaikan wahyu adalah...",
-          "options": ["Mikail", "Israfil", "Jibril", "Izrail"],
-          "answer": "Jibril",
-          "explanation": "Malaikat Jibril adalah penanggung jawab menyampaikan wahyu Allah kepada para Rasul."
-        },
-        {
-          "id": 7,
-          "question": "Istri pertama Nabi Muhammad ﷺ adalah...",
-          "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"],
-          "answer": "Khadijah",
-          "explanation": "Khadijah binti Khuwailid adalah istri pertama dan pertama yang beriman kepada Nabi."
-        },
-        {
-          "id": 8,
-          "question": "Hijrah Nabi terjadi dari Makkah ke...",
-          "options": ["Thaif", "Madinah", "Yaman", "Syam"],
-          "answer": "Madinah",
-          "explanation": "Peristiwa Hijrah (pindah) dari Makkah ke Yatsrib (Madinah) terjadi tahun 622 M."
-        },
-        {
-          "id": 9,
-          "question": "Perang pertama dalam Islam adalah...",
-          "options": ["Uhud", "Badar", "Khandaq", "Hunain"],
-          "answer": "Badar",
-          "explanation": "Perang Badar terjadi pada 17 Ramadhan tahun 2 H, merupakan perang besar pertama umat Islam."
-        },
-        {
-          "id": 10,
-          "question": "Nabi wafat pada usia...",
-          "options": ["60", "61", "62", "63"],
-          "answer": "63",
-          "explanation": "Nabi Muhammad SAW wafat di Madinah pada usia 63 tahun (tahun 11 H)."
-        },
-        {
-          "id": 11,
-          "question": "Masjid pertama dalam Islam adalah...",
-          "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"],
-          "answer": "Masjid Quba",
-          "explanation": "Masjid Quba adalah masjid pertama yang dibangun Nabi saat dalam perjalanan hijrah."
-        },
-        {
-          "id": 12,
-          "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...",
-          "options": ["4", "5", "6", "7"],
-          "answer": "6",
-          "explanation": "Perjanjian damai Hudaibiyah terjadi pada tahun 6 H antara Muslimin dan Quraisy."
-        },
-        {
-          "id": 13,
-          "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...",
-          "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"],
-          "answer": "Terpercaya",
-          "explanation": "Al-Amin berarti 'yang terpercaya', gelar yang diberikan masyarakat Makkah karena kejujurannya."
-        },
-        {
-          "id": 14,
-          "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...",
-          "options": ["Thaif", "Madinah", "Badar", "Uhud"],
-          "answer": "Madinah",
-          "explanation": "Isra Mi'raj terjadi sekitar 1-2 tahun sebelum Hijrah ke Madinah."
-        },
-        {
-          "id": 15,
-          "question": "Shalat lima waktu diwajibkan pada peristiwa...",
-          "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"],
-          "answer": "Isra Mi'raj",
-          "explanation": "Kewajiban shalat 5 waktu ditetapkan saat Nabi Mi'raj ke Sidratul Muntaha."
-        },
-        {
-          "id": 16,
-          "question": "Penaklukan Makkah disebut juga...",
-          "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"],
-          "answer": "Fathu Makkah",
-          "explanation": "Fathu Makkah (Pembukaan Makkah) terjadi tahun 8 H tanpa pertumpahan darah besar."
-        },
-        {
-          "id": 17,
-          "question": "Paman Nabi yang paling membela beliau adalah...",
-          "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"],
-          "answer": "Abu Thalib",
-          "explanation": "Abu Thalib memelihara dan melindungi Nabi sejak kecil hingga dewasa meski ia belum masuk Islam."
-        },
-        {
-          "id": 18,
-          "question": "Nabi berdakwah secara sembunyi-sembunyi selama...",
-          "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"],
-          "answer": "3 tahun",
-          "explanation": "Dakwah tahap pertama (sembunyi) dilakukan selama 3 tahun di rumah Al-Arqam."
-        },
-        {
-          "id": 19,
-          "question": "Istri Nabi yang paling muda adalah...",
-          "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"],
-          "answer": "Aisyah",
-          "explanation": "Aisyah binti Abu Bakar menikah dengan Nabi saat usia muda dan adalah istri yang paling muda."
-        },
-        {
-          "id": 20,
-          "question": "Wafatnya Nabi Muhammad ﷺ terjadi pada bulan...",
-          "options": ["Ramadhan", "Syawal", "Rabiul Awal", "Dzulhijjah"],
-          "answer": "Rabiul Awal",
-          "explanation": "Nabi wafat pada bulan Rabiul Awal tahun 11 Hijriyah, bertepatan dengan bulan kelahirannya."
-        }
+        { "id": 1, "question": "Rasulullah ﷺ lahir di kota...", "options": ["Madinah", "Thaif", "Makkah", "Yaman"], "answer": "Makkah", "explanation": "Nabi Muhammad SAW lahir di kota Makkah pada tanggal 12 Rabiul Awal Tahun Gajah." },
+        { "id": 2, "question": "Tahun kelahiran Nabi dikenal sebagai Tahun...", "options": ["Hijrah", "Badar", "Gajah", "Uhud"], "answer": "Gajah", "explanation": "Dinamakan Tahun Gajah karena pasukan gajah Abrahah datang menyerang Ka'bah di tahun yang sama." },
+        { "id": 3, "question": "Nama ayah Nabi Muhammad ﷺ adalah...", "options": ["Abu Thalib", "Abdullah", "Abdul Muthalib", "Hamzah"], "answer": "Abdullah", "explanation": "Ayah beliau adalah Abdullah bin Abdul Muthalib, wafat saat Nabi masih dalam kandungan." },
+        { "id": 4, "question": "Nama ibu Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Aminah", "Halimah", "Khadijah"], "answer": "Aminah", "explanation": "Ibu beliau adalah Aminah binti Wahb, wafat saat Nabi berusia 6 tahun di Abwa." },
+        { "id": 5, "question": "Nabi menerima wahyu pertama di Gua...", "options": ["Hira", "Tsur", "Uhud", "Badar"], "answer": "Hira", "explanation": "Wahyu pertama (Surat Al-Alaq ayat 1-5) diterima di Gua Hira." },
+        { "id": 6, "question": "Malaikat yang menyampaikan wahyu adalah...", "options": ["Mikail", "Israfil", "Jibril", "Izrail"], "answer": "Jibril", "explanation": "Malaikat Jibril adalah penanggung jawab menyampaikan wahyu Allah kepada para Rasul." },
+        { "id": 7, "question": "Istri pertama Nabi Muhammad ﷺ adalah...", "options": ["Aisyah", "Hafsah", "Khadijah", "Zainab"], "answer": "Khadijah", "explanation": "Khadijah binti Khuwailid adalah istri pertama dan pertama yang beriman kepada Nabi." },
+        { "id": 8, "question": "Hijrah Nabi terjadi dari Makkah ke...", "options": ["Thaif", "Madinah", "Yaman", "Syam"], "answer": "Madinah", "explanation": "Peristiwa Hijrah (pindah) dari Makkah ke Yatsrib (Madinah) terjadi tahun 622 M." },
+        { "id": 9, "question": "Perang pertama dalam Islam adalah...", "options": ["Uhud", "Badar", "Khandaq", "Hunain"], "answer": "Badar", "explanation": "Perang Badar terjadi pada 17 Ramadhan tahun 2 H, merupakan perang besar pertama umat Islam." },
+        { "id": 10, "question": "Nabi wafat pada usia...", "options": ["60", "61", "62", "63"], "answer": "63", "explanation": "Nabi Muhammad SAW wafat di Madinah pada usia 63 tahun (tahun 11 H)." },
+        { "id": 11, "question": "Masjid pertama dalam Islam adalah...", "options": ["Masjid Nabawi", "Masjidil Haram", "Masjid Quba", "Masjid Aqsa"], "answer": "Masjid Quba", "explanation": "Masjid Quba là masjid pertama yang dibangun Nabi saat dalam perjalanan hijrah." },
+        { "id": 12, "question": "Perjanjian Hudaibiyah terjadi pada tahun Hijriyah ke...", "options": ["4", "5", "6", "7"], "answer": "6", "explanation": "Perjanjian damai Hudaibiyah terjadi pada tahun 6 H antara Muslimin dan Quraisy." },
+        { "id": 13, "question": "Nabi Muhammad ﷺ mendapat gelar Al-Amin yang artinya...", "options": ["Pintar", "Terpercaya", "Pemimpin", "Pemberani"], "answer": "Terpercaya", "explanation": "Al-Amin berarti 'yang terpercaya', gelar yang diberikan masyarakat Makkah karena kejujurannya." },
+        { "id": 14, "question": "Peristiwa Isra Mi'raj terjadi sebelum hijrah ke...", "options": ["Thaif", "Madinah", "Badar", "Uhud"], "answer": "Madinah", "explanation": "Isra Mi'raj terjadi sekitar 1-2 tahun sebelum Hijrah ke Madinah." },
+        { "id": 15, "question": "Shalat lima waktu diwajibkan pada peristiwa...", "options": ["Hijrah", "Badar", "Isra Mi'raj", "Fathu Makkah"], "answer": "Isra Mi'raj", "explanation": "Kewajiban shalat 5 waktu ditetapkan saat Nabi Mi'raj ke Sidratul Muntaha." },
+        { "id": 16, "question": "Penaklukan Makkah disebut juga...", "options": ["Hijrah", "Fathu Makkah", "Hudaibiyah", "Hunain"], "answer": "Fathu Makkah", "explanation": "Fathu Makkah (Pembukaan Makkah) terjadi tahun 8 H tanpa pertumpahan darah besar." },
+        { "id": 17, "question": "Paman Nabi yang paling membela beliau adalah...", "options": ["Abu Lahab", "Abu Thalib", "Hamzah", "Abbas"], "answer": "Abu Thalib", "explanation": "Abu Thalib memelihara dan melindungi Nabi sejak kecil hingga dewasa meski ia belum masuk Islam." },
+        { "id": 18, "question": "Nabi berdakwah secara sembunyi-sembunyi selama...", "options": ["2 tahun", "3 tahun", "5 tahun", "10 tahun"], "answer": "3 tahun", "explanation": "Dakwah tahap pertama (sembunyi) dilakukan selama 3 tahun di rumah Al-Arqam." },
+        { "id": 19, "question": "Istri Nabi yang paling muda adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah", "explanation": "Aisyah binti Abu Bakar menikah dengan Nabi saat usia muda dan adalah istri yang paling muda." },
+        { "id": 20, "question": "Wafatnya Nabi Muhammad ﷺ terjadi pada bulan...", "options": ["Ramadhan", "Syawal", "Rabiul Awal", "Dzulhijjah"], "answer": "Rabiul Awal", "explanation": "Nabi wafat pada bulan Rabiul Awal tahun 11 Hijriyah, bertepatan dengan bulan kelahirannya." }
       ]
     },
     {
       "category": "Asmaul Husna",
       "questions": [
-        {
-          "id": 1,
-          "question": "Ar-Rahman artinya...",
-          "options": ["Maha Adil", "Maha Penyayang", "Maha Pengasih", "Maha Bijaksana"],
-          "answer": "Maha Pengasih",
-          "explanation": "Ar-Rahman berarti Maha Pengasih, kasih sayang-Nya bersifat universal untuk semua makhluk."
-        },
-        {
-          "id": 2,
-          "question": "Al-Malik artinya...",
-          "options": ["Maha Raja", "Maha Mengetahui", "Maha Kuasa", "Maha Kaya"],
-          "answer": "Maha Raja",
-          "explanation": "Al-Malik bermakna Raja yang menguasai seluruh alam semesta."
-        },
-        {
-          "id": 3,
-          "question": "Al-Quddus artinya...",
-          "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"],
-          "answer": "Maha Suci",
-          "explanation": "Al-Quddus berarti Maha Suci dari segala kekurangan dan cacat."
-        },
-        {
-          "id": 4,
-          "question": "As-Salam artinya...",
-          "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"],
-          "answer": "Maha Pemberi Keselamatan",
-          "explanation": "As-Salam berarti Yang Maha Memberi Kesejahteraan dan Keselamatan."
-        },
-        {
-          "id": 5,
-          "question": "Al-Khaliq artinya...",
-          "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"],
-          "answer": "Maha Pencipta",
-          "explanation": "Al-Khaliq artinya Yang Maha Menciptakan segala sesuatu dari ketiadaan."
-        },
-        {
-          "id": 6,
-          "question": "Ar-Razzaq artinya...",
-          "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"],
-          "answer": "Maha Pemberi Rezeki",
-          "explanation": "Ar-Razzaq artinya Yang Maha Memberi Rezeki kepada seluruh makhluk-Nya."
-        },
-        {
-          "id": 7,
-          "question": "Al-Ghaffar artinya...",
-          "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"],
-          "answer": "Maha Pengampun",
-          "explanation": "Al-Ghaffar artinya Yang Maha Mengampuni dosa-dosa hamba-Nya."
-        },
-        {
-          "id": 8,
-          "question": "Al-Alim artinya...",
-          "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"],
-          "answer": "Maha Mengetahui",
-          "explanation": "Al-Alim artinya Yang Maha Mengetahui segala rahasia dan yang lahir."
-        },
-        {
-          "id": 9,
-          "question": "As-Sami artinya...",
-          "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"],
-          "answer": "Maha Mendengar",
-          "explanation": "As-Sami artinya Yang Maha Mendengar segala suara dan permohonan."
-        },
-        {
-          "id": 10,
-          "question": "Al-Bashir artinya...",
-          "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"],
-          "answer": "Maha Melihat",
-          "explanation": "Al-Bashir artinya Yang Maha Melihat segala gerak-gerik dan niat hati."
-        },
-        {
-          "id": 11,
-          "question": "Al-Adl artinya...",
-          "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"],
-          "answer": "Maha Adil",
-          "explanation": "Al-Adl artinya Yang Maha Adil, tidak pernah berbuat zalim kepada siapapun."
-        },
-        {
-          "id": 12,
-          "question": "Al-Latif artinya...",
-          "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"],
-          "answer": "Maha Lembut",
-          "explanation": "Al-Latif artinya Yang Maha Lembut dan Halus kasih sayang-Nya."
-        },
-        {
-          "id": 13,
-          "question": "Al-Hakim artinya...",
-          "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"],
-          "answer": "Maha Bijaksana",
-          "explanation": "Al-Hakim artinya Yang Maha Bijaksana dalam menetapkan hukum."
-        },
-        {
-          "id": 14,
-          "question": "Al-Aziz artinya...",
-          "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"],
-          "answer": "Maha Perkasa",
-          "explanation": "Al-Aziz artinya Yang Maha Perkasa dan mempunyai keagungan."
-        },
-        {
-          "id": 15,
-          "question": "Al-Ghafur artinya...",
-          "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"],
-          "answer": "Maha Pengampun",
-          "explanation": "Al-Ghafur sinonim dengan Al-Ghaffar, artinya Maha Pengampun."
-        },
-        {
-          "id": 16,
-          "question": "Al-Wadud artinya...",
-          "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"],
-          "answer": "Maha Pencinta",
-          "explanation": "Al-Wadud artinya Yang Maha Mencintai hamba-Nya dan dicintai."
-        },
-        {
-          "id": 17,
-          "question": "Al-Hafizh artinya...",
-          "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"],
-          "answer": "Maha Menjaga",
-          "explanation": "Al-Hafizh artinya Yang Maha Menjaga dan Memelihara seluruh alam."
-        },
-        {
-          "id": 18,
-          "question": "Al-Matin artinya...",
-          "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"],
-          "answer": "Maha Kokoh",
-          "explanation": "Al-Matin artinya Yang Maha Kokoh dan kuat tidak tergoyahkan."
-        },
-        {
-          "id": 19,
-          "question": "Al-Hayy artinya...",
-          "options": ["Maha Hidup", "Maha Kekal", "Maha Ada", "Maha Kuasa"],
-          "answer": "Maha Hidup",
-          "explanation": "Al-Hayy artinya Yang Maha Hidup, hidup-Nya kekal dan tidak akan mati."
-        },
-        {
-          "id": 20,
-          "question": "Al-Qayyum artinya...",
-          "options": ["Maha Berdiri Sendiri", "Maha Kekal", "Maha Mengatur", "Maha Menolong"],
-          "answer": "Maha Berdiri Sendiri",
-          "explanation": "Al-Qayyum artinya Yang Maha Berdiri Sendiri (Mandiri) dan mengurus semua makhluk."
-        }
+        { "id": 1, "question": "Ar-Rahman artinya...", "options": ["Maha Adil", "Maha Penyayang", "Maha Pengasih", "Maha Bijaksana"], "answer": "Maha Pengasih", "explanation": "Ar-Rahman berarti Maha Pengasih, kasih sayang-Nya bersifat universal untuk semua makhluk." },
+        { "id": 2, "question": "Al-Malik artinya...", "options": ["Maha Raja", "Maha Mengetahui", "Maha Kuasa", "Maha Kaya"], "answer": "Maha Raja", "explanation": "Al-Malik bermakna Raja yang menguasai seluruh alam semesta." },
+        { "id": 3, "question": "Al-Quddus artinya...", "options": ["Maha Suci", "Maha Tinggi", "Maha Besar", "Maha Mulia"], "answer": "Maha Suci", "explanation": "Al-Quddus berarti Maha Suci dari segala kekurangan dan cacat." },
+        { "id": 4, "question": "As-Salam artinya...", "options": ["Maha Damai", "Maha Pemberi Keselamatan", "Maha Adil", "Maha Bijaksana"], "answer": "Maha Pemberi Keselamatan", "explanation": "As-Salam berarti Yang Maha Memberi Kesejahteraan dan Keselamatan." },
+        { "id": 5, "question": "Al-Khaliq artinya...", "options": ["Maha Pencipta", "Maha Pemberi Rezeki", "Maha Pengampun", "Maha Mengetahui"], "answer": "Maha Pencipta", "explanation": "Al-Khaliq artinya Yang Maha Menciptakan segala sesuatu dari ketiadaan." },
+        { "id": 6, "question": "Ar-Razzaq artinya...", "options": ["Maha Pemberi Rezeki", "Maha Kaya", "Maha Pemelihara", "Maha Menolong"], "answer": "Maha Pemberi Rezeki", "explanation": "Ar-Razzaq artinya Yang Maha Memberi Rezeki kepada seluruh makhluk-Nya." },
+        { "id": 7, "question": "Al-Ghaffar artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemaaf", "Maha Bijaksana"], "answer": "Maha Pengampun", "explanation": "Al-Ghaffar artinya Yang Maha Mengampuni dosa-dosa hamba-Nya." },
+        { "id": 8, "question": "Al-Alim artinya...", "options": ["Maha Mengetahui", "Maha Mendengar", "Maha Melihat", "Maha Kuat"], "answer": "Maha Mengetahui", "explanation": "Al-Alim artinya Yang Maha Mengetahui segala rahasia dan yang lahir." },
+        { "id": 9, "question": "As-Sami artinya...", "options": ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Kuasa"], "answer": "Maha Mendengar", "explanation": "As-Sami artinya Yang Maha Mendengar segala suara dan permohonan." },
+        { "id": 10, "question": "Al-Bashir artinya...", "options": ["Maha Melihat", "Maha Mendengar", "Maha Mengetahui", "Maha Menolong"], "answer": "Maha Melihat", "explanation": "Al-Bashir artinya Yang Maha Melihat segala gerak-gerik dan niat hati." },
+        { "id": 11, "question": "Al-Adl artinya...", "options": ["Maha Adil", "Maha Benar", "Maha Tinggi", "Maha Mulia"], "answer": "Maha Adil", "explanation": "Al-Adl artinya Yang Maha Adil, tidak pernah berbuat zalim kepada siapapun." },
+        { "id": 12, "question": "Al-Latif artinya...", "options": ["Maha Lembut", "Maha Halus", "Maha Baik", "Maha Penyayang"], "answer": "Maha Lembut", "explanation": "Al-Latif artinya Yang Maha Lembut dan Halus kasih sayang-Nya." },
+        { "id": 13, "question": "Al-Hakim artinya...", "options": ["Maha Bijaksana", "Maha Mengetahui", "Maha Benar", "Maha Adil"], "answer": "Maha Bijaksana", "explanation": "Al-Hakim artinya Yang Maha Bijaksana dalam menetapkan hukum." },
+        { "id": 14, "question": "Al-Aziz artinya...", "options": ["Maha Perkasa", "Maha Kuat", "Maha Mulia", "Maha Besar"], "answer": "Maha Perkasa", "explanation": "Al-Aziz artinya Yang Maha Perkasa dan mempunyai keagungan." },
+        { "id": 15, "question": "Al-Ghafur artinya...", "options": ["Maha Pengampun", "Maha Penyayang", "Maha Pemurah", "Maha Lembut"], "answer": "Maha Pengampun", "explanation": "Al-Ghafur sinonim dengan Al-Ghaffar, artinya Maha Pengampun." },
+        { "id": 16, "question": "Al-Wadud artinya...", "options": ["Maha Pencinta", "Maha Penyayang", "Maha Pengasih", "Maha Baik"], "answer": "Maha Pencinta", "explanation": "Al-Wadud artinya Yang Maha Mencintai hamba-Nya dan dicintai." },
+        { "id": 17, "question": "Al-Hafizh artinya...", "options": ["Maha Memelihara", "Maha Menjaga", "Maha Mengetahui", "Maha Mengawasi"], "answer": "Maha Menjaga", "explanation": "Al-Hafizh artinya Yang Maha Menjaga dan Memelihara seluruh alam." },
+        { "id": 18, "question": "Al-Matin artinya...", "options": ["Maha Kokoh", "Maha Kuat", "Maha Perkasa", "Maha Besar"], "answer": "Maha Kokoh", "explanation": "Al-Matin artinya Yang Maha Kokoh dan kuat tidak tergoyahkan." },
+        { "id": 19, "question": "Al-Hayy artinya...", "options": ["Maha Hidup", "Maha Kekal", "Maha Ada", "Maha Kuasa"], "answer": "Maha Hidup", "explanation": "Al-Hayy artinya Yang Maha Hidup, hidup-Nya kekal dan tidak akan mati." },
+        { "id": 20, "question": "Al-Qayyum artinya...", "options": ["Maha Berdiri Sendiri", "Maha Kekal", "Maha Mengatur", "Maha Menolong"], "answer": "Maha Berdiri Sendiri", "explanation": "Al-Qayyum artinya Yang Maha Berdiri Sendiri (Mandiri) dan mengurus semua makhluk." }
       ]
     },
     {
       "category": "Sahabat Nabi",
       "questions": [
-        {
-          "id": 1,
-          "question": "Sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa adalah...",
-          "options": ["Ali bin Abi Thalib", "Abu Bakar", "Umar bin Khattab", "Utsman bin Affan"],
-          "answer": "Abu Bakar",
-          "explanation": "Abu Bakar ash-Shiddiq adalah orang dewasa pertama yang memeluk Islam tanpa ragu."
-        },
-        {
-          "id": 2,
-          "question": "Sahabat yang dijuluki Al-Faruq adalah...",
-          "options": ["Ali", "Umar", "Abu Bakar", "Utsman"],
-          "answer": "Umar",
-          "explanation": "Umar bin Khattab dijuluki Al-Faruq (Pembeda) karena Islamnya membedakan kebenaran dan kebatilan."
-        },
-        {
-          "id": 3,
-          "question": "Sahabat yang terkenal sangat pemalu adalah...",
-          "options": ["Ali", "Umar", "Utsman", "Abu Bakar"],
-          "answer": "Utsman",
-          "explanation": "Utsman bin Affan dikenal sangat pemalu (Malu), bahkan malaikat pun malu kepadanya."
-        },
-        {
-          "id": 4,
-          "question": "Sepupu Nabi sekaligus menantu beliau adalah...",
-          "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"],
-          "answer": "Ali",
-          "explanation": "Ali bin Abi Thalib adalah sepupu Nabi yang menikah dengan Fatimah az-Zahra."
-        },
-        {
-          "id": 5,
-          "question": "Bilal bin Rabah adalah seorang...",
-          "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"],
-          "answer": "Budak yang dimerdekakan",
-          "explanation": "Bilal adalah budak hitam yang disiksa karena iman, lalu dimerdekakan oleh Abu Bakar."
-        },
-        {
-          "id": 6,
-          "question": "Muadzin pertama dalam Islam adalah...",
-          "options": ["Abu Bakar", "Bilal", "Umar", "Ali"],
-          "answer": "Bilal",
-          "explanation": "Bilal bin Rabah dipilih Nabi sebagai muadzin pertama karena suaranya yang merdu."
-        },
-        {
-          "id": 7,
-          "question": "Sahabat yang mendapat julukan pedang Allah adalah...",
-          "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"],
-          "answer": "Khalid bin Walid",
-          "explanation": "Khalid bin Walid dijuluki Saifullah (Pedang Allah) karena keberaniannya di medan perang."
-        },
-        {
-          "id": 8,
-          "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...",
-          "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"],
-          "answer": "Aisyah",
-          "explanation": "Aisyah binti Abu Bakar meriwayatkan lebih dari 2.000 hadits."
-        },
-        {
-          "id": 9,
-          "question": "Abu Hurairah terkenal karena...",
-          "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"],
-          "answer": "Banyak meriwayatkan hadits",
-          "explanation": "Abu Hurairah adalah sahabat yang paling banyak meriwayatkan hadits (lebih dari 5000 hadits)."
-        },
-        {
-          "id": 10,
-          "question": "Sahabat yang menemani Nabi di gua Tsur adalah...",
-          "options": ["Ali", "Umar", "Abu Bakar", "Bilal"],
-          "answer": "Abu Bakar",
-          "explanation": "Saat hijrah, Nabi bersembunyi di Gua Tsur bersama Abu Bakar ash-Shiddiq."
-        },
-        {
-          "id": 11,
-          "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...",
-          "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"],
-          "answer": "Umar",
-          "explanation": "Keislaman Umar memberi kekuatan besar bagi umat Islam, ia berani shalat di Ka'bah."
-        },
-        {
-          "id": 12,
-          "question": "Hamzah bin Abdul Muthalib adalah...",
-          "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"],
-          "answer": "Paman Nabi",
-          "explanation": "Hamzah adalah paman Nabi yang seumuran, gugur syahid di Perang Uhud."
-        },
-        {
-          "id": 13,
-          "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...",
-          "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"],
-          "answer": "Mus'ab bin Umair",
-          "explanation": "Mus'ab bin Umair adalah duta pertama yang diutus Nabi hijrah ke Madinah untuk mengajar."
-        },
-        {
-          "id": 14,
-          "question": "Sahabat yang menjadi khalifah pertama adalah...",
-          "options": ["Umar", "Ali", "Abu Bakar", "Utsman"],
-          "answer": "Abu Bakar",
-          "explanation": "Abu Bakar ash-Shiddiq menjadi Khalifah pertama menggantikan Nabi Muhammad SAW."
-        },
-        {
-          "id": 15,
-          "question": "Utsman bin Affan menikah dengan berapa putri Nabi?",
-          "options": ["1", "2", "3", "4"],
-          "answer": "2",
-          "explanation": "Utsman menikah dengan Ruqayyah, setelah wafat menikah dengan Ummu Kultsum. Digelar Dzun-Nurain."
-        },
-        {
-          "id": 16,
-          "question": "Sahabat yang dijuluki Asadullah adalah...",
-          "options": ["Ali", "Hamzah", "Khalid", "Zubair"],
-          "answer": "Hamzah",
-          "explanation": "Hamzah bin Abdul Muthalib dijuluki Asadullah (Singa Allah) karena keberaniannya."
-        },
-        {
-          "id": 17,
-          "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...",
-          "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"],
-          "answer": "Panglima",
-          "explanation": "Zubair adalah salah satu panglima perang utama dan termasuk 10 sahabat yang dijanjikan surga."
-        },
-        {
-          "id": 18,
-          "question": "Sahabat perempuan pertama yang gugur syahid adalah...",
-          "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"],
-          "answer": "Sumayyah",
-          "explanation": "Sumayyah binti Khayyat adalah syuhada pertama dalam Islam, disiksa hingga wafat oleh Abu Jahal."
-        },
-        {
-          "id": 19,
-          "question": "Abdurrahman bin Auf terkenal karena...",
-          "options": ["Ilmu", "Kedermawanan", "Keberanian", "Kepemimpinan"],
-          "answer": "Kedermawanan",
-          "explanation": "Abdurrahman bin Auf adalah sahabat yang sangat kaya dan dermawan."
-        },
-        {
-          "id": 20,
-          "question": "Sahabat yang dikenal sangat jujur adalah...",
-          "options": ["Ali", "Abu Bakar", "Umar", "Utsman"],
-          "answer": "Abu Bakar",
-          "explanation": "Gelar 'Ash-Shiddiq' (Yang Membenarkan) diberikan karena kejujurannya membenarkan Isra Mi'raj."
-        }
+        { "id": 1, "question": "Sahabat pertama yang masuk Islam dari kalangan laki-laki dewasa adalah...", "options": ["Ali bin Abi Thalib", "Abu Bakar", "Umar bin Khattab", "Utsman bin Affan"], "answer": "Abu Bakar", "explanation": "Abu Bakar ash-Shiddiq adalah orang dewasa pertama yang memeluk Islam tanpa ragu." },
+        { "id": 2, "question": "Sahabat yang dijuluki Al-Faruq adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Utsman"], "answer": "Umar", "explanation": "Umar bin Khattab dijuluki Al-Faruq (Pembeda) karena Islamnya membedakan kebenaran dan kebatilan." },
+        { "id": 3, "question": "Sahabat yang terkenal sangat pemalu adalah...", "options": ["Ali", "Umar", "Utsman", "Abu Bakar"], "answer": "Utsman", "explanation": "Utsman bin Affan dikenal sangat pemalu (Malu), bahkan malaikat pun malu kepadanya." },
+        { "id": 4, "question": "Sepupu Nabi sekaligus menantu beliau adalah...", "options": ["Abu Bakar", "Umar", "Ali", "Hamzah"], "answer": "Ali", "explanation": "Ali bin Abi Thalib adalah sepupu Nabi yang menikah dengan Fatimah az-Zahra." },
+        { "id": 5, "question": "Bilal bin Rabah adalah seorang...", "options": ["Pedagang", "Budak yang dimerdekakan", "Panglima", "Hakim"], "answer": "Budak yang dimerdekakan", "explanation": "Bilal adalah budak hitam yang disiksa karena iman, lalu dimerdekakan oleh Abu Bakar." },
+        { "id": 6, "question": "Muadzin pertama dalam Islam adalah...", "options": ["Abu Bakar", "Bilal", "Umar", "Ali"], "answer": "Bilal", "explanation": "Bilal bin Rabah dipilih Nabi sebagai muadzin pertama karena suaranya yang merdu." },
+        { "id": 7, "question": "Sahabat yang mendapat julukan pedang Allah adalah...", "options": ["Hamzah", "Khalid bin Walid", "Ali", "Zubair"], "answer": "Khalid bin Walid", "explanation": "Khalid bin Walid dijuluki Saifullah (Pedang Allah) karena keberaniannya di medan perang." },
+        { "id": 8, "question": "Sahabat perempuan istri Nabi yang paling banyak meriwayatkan hadits adalah...", "options": ["Khadijah", "Hafsah", "Aisyah", "Zainab"], "answer": "Aisyah", "explanation": "Aisyah binti Abu Bakar meriwayatkan lebih dari 2.000 hadits." },
+        { "id": 9, "question": "Abu Hurairah terkenal karena...", "options": ["Keberanian", "Ilmu fiqih", "Banyak meriwayatkan hadits", "Kepemimpinan"], "answer": "Banyak meriwayatkan hadits", "explanation": "Abu Hurairah là sahabat yang paling banyak meriwayatkan hadits (lebih dari 5000 hadits)." },
+        { "id": 10, "question": "Sahabat yang menemani Nabi di gua Tsur adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Bilal"], "answer": "Abu Bakar", "explanation": "Saat hijrah, Nabi bersembunyi di Gua Tsur bersama Abu Bakar ash-Shiddiq." },
+        { "id": 11, "question": "Sahabat yang dikenal paling kuat imannya setelah masuk Islam adalah...", "options": ["Ali", "Umar", "Abu Bakar", "Hamzah"], "answer": "Umar", "explanation": "Keislaman Umar memberi kekuatan besar bagi umat Islam, ia berani shalat di Ka'bah." },
+        { "id": 12, "question": "Hamzah bin Abdul Muthalib adalah...", "options": ["Ayah Nabi", "Paman Nabi", "Sepupu Nabi", "Mertua Nabi"], "answer": "Paman Nabi", "explanation": "Hamzah adalah paman Nabi yang seumuran, gugur syahid di Perang Uhud." },
+        { "id": 13, "question": "Sahabat yang pertama kali hijrah ke Madinah adalah...", "options": ["Abu Bakar", "Umar", "Mus'ab bin Umair", "Ali"], "answer": "Mus'ab bin Umair", "explanation": "Mus'ab bin Umair adalah duta pertama yang diutus Nabi hijrah ke Madinah untuk mengajar." },
+        { "id": 14, "question": "Sahabat yang menjadi khalifah pertama adalah...", "options": ["Umar", "Ali", "Abu Bakar", "Utsman"], "answer": "Abu Bakar", "explanation": "Abu Bakar ash-Shiddiq menjadi Khalifah pertama menggantikan Nabi Muhammad SAW." },
+        { "id": 15, "question": "Utsman bin Affan menikah dengan berapa putri Nabi?", "options": ["1", "2", "3", "4"], "answer": "2", "explanation": "Utsman menikah dengan Ruqayyah, setelah wafat menikah dengan Ummu Kultsum. Digelar Dzun-Nurain." },
+        { "id": 16, "question": "Sahabat yang dijuluki Asadullah adalah...", "options": ["Ali", "Hamzah", "Khalid", "Zubair"], "answer": "Hamzah", "explanation": "Hamzah bin Abdul Muthalib dijuluki Asadullah (Singa Allah) karena keberaniannya." },
+        { "id": 17, "question": "Zubair bin Awwam adalah sahabat yang dikenal sebagai...", "options": ["Pedagang", "Panglima", "Ahli hadits", "Hakim"], "answer": "Panglima", "explanation": "Zubair là salah satu panglima perang utama dan termasuk 10 sahabat yang dijanjikan surga." },
+        { "id": 18, "question": "Sahabat perempuan pertama yang gugur syahid adalah...", "options": ["Aisyah", "Sumayyah", "Hafsah", "Zainab"], "answer": "Sumayyah", "explanation": "Sumayyah binti Khayyat adalah syuhada pertama dalam Islam, disiksa hingga wafat oleh Abu Jahal." },
+        { "id": 19, "question": "Abdurrahman bin Auf terkenal karena...", "options": ["Ilmu", "Kedermawanan", "Keberanian", "Kepemimpinan"], "answer": "Kedermawanan", "explanation": "Abdurrahman bin Auf adalah sahabat yang sangat kaya dan dermawan." },
+        { "id": 20, "question": "Sahabat yang dikenal sangat jujur adalah...", "options": ["Ali", "Abu Bakar", "Umar", "Utsman"], "answer": "Abu Bakar", "explanation": "Gelar 'Ash-Shiddiq' (Yang Membenarkan) diberikan karena kejujurannya membenarkan Isra Mi'raj." }
       ]
     }
   ]
-}
-```
+};
+
+        // ============ GLOBAL VARIABLES ============
+        let allQuestions = [];
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let playerName = 'Player';
+        let timerInterval = null;
+        let timeLeft = 20;
+
+        // Leaderboard simulation (stored in localStorage for persistence)
+        let leaderboard = JSON.parse(localStorage.getItem('quizLeaderboard')) || [
+            { name: "Ahmad Fauzi", score: 950 },
+            { name: "Fatimah Azzahra", score: 920 },
+            { name: "Muhammad Rizki", score: 890 },
+            { name: "Aisyah Putri", score: 850 },
+            { name: "Umar Abdullah", score: 820 }
+        ];
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            flattenQuestions();
+            renderLeaderboard();
+        });
+
+        // Create floating particles
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for(let i=0; i<15; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}%`;
+                p.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                p.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(p);
+            }
+        }
+
+        // Flatten JSON structure for easier randomization
+        function flattenQuestions() {
+            allQuestions = [];
+            quizDatabase.quiz_ramadhan.forEach(category => {
+                category.questions.forEach(q => {
+                    allQuestions.push({
+                        ...q,
+                        category: category.category
+                    });
+                });
+            });
+            // Update stats
+            document.getElementById('count-questions').textContent = allQuestions.length;
+            document.getElementById('count-categories').textContent = quizDatabase.quiz_ramadhan.length;
+        }
+
+        // ============ LEADERBOARD ============
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-container');
+            // Sort by score
+            const sorted = [...leaderboard].sort((a, b) => b.score - a.score).slice(0, 10);
+            
+            container.innerHTML = sorted.map((item, index) => `
+                <div class="leaderboard-row flex items-center gap-4 p-3 rounded-xl ${index < 3 ? 'bg-slate-800/50' : 'bg-transparent'}" style="animation-delay: ${index * 0.05}s">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${getRankClass(index)}">
+                        ${index + 1}
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-semibold text-sm">${item.name}</div>
+                    </div>
+                    <div class="text-amber-400 font-bold">${item.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function getRankClass(index) {
+            if(index === 0) return 'rank-1';
+            if(index === 1) return 'rank-2';
+            if(index === 2) return 'rank-3';
+            return 'bg-slate-700 text-slate-300';
+        }
+
+        function saveToLeaderboard(name, finalScore) {
+            leaderboard.push({ name, score: finalScore });
+            localStorage.setItem('quizLeaderboard', JSON.stringify(leaderboard));
+        }
+
+        // ============ QUIZ LOGIC ============
+        function startGame() {
+            playerName = document.getElementById('playerName').value.trim() || 'Anonim';
+            
+            // Shuffle and pick 10 questions
+            currentQuestions = shuffleArray(allQuestions).slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswers = 0;
+
+            goToSlide('quiz');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestionIndex >= currentQuestions.length) {
+                endGame();
+                return;
+            }
+
+            const q = currentQuestions[currentQuestionIndex];
+            
+            // Update UI
+            document.getElementById('current-q-num').textContent = currentQuestionIndex + 1;
+            document.getElementById('current-score').textContent = score;
+            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex) / 10) * 100}%`;
+            document.getElementById('q-category').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+
+            // Shuffle options
+            const shuffledOptions = shuffleArray([...q.options]);
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = shuffledOptions.map((opt, i) => `
+                <div class="option-item glass-card rounded-xl p-4 flex items-center gap-4" onclick="selectAnswer(this, '${opt.replace(/'/g, "\\'")}')">
+                    <div class="w-8 h-8 rounded-full border border-slate-600 flex items-center justify-center text-sm font-bold text-slate-400">
+                        ${String.fromCharCode(65 + i)}
+                    </div>
+                    <div class="flex-1 font-medium">${opt}</div>
+                </div>
+            `).join('');
+
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 20;
+            document.getElementById('timer-text').textContent = timeLeft + 's';
+            document.getElementById('timer-circle').style.strokeDasharray = '100, 100';
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').textContent = timeLeft + 's';
+                // stroke-dasharray logic for circular progress
+                const percent = 100 - ((20 - timeLeft) / 20 * 100);
+                document.getElementById('timer-circle').style.strokeDasharray = `${percent}, 100`;
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function handleTimeout() {
+            // Auto-select wrong (no selection)
+            const q = currentQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-item');
+            
+            options.forEach(opt => {
+                const optText = opt.querySelector('.flex-1').textContent;
+                if(optText === q.answer) {
+                    opt.classList.add('correct');
+                }
+                opt.style.pointerEvents = 'none'; // Disable clicks
+            });
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function selectAnswer(element, selectedOpt) {
+            clearInterval(timerInterval);
+            const q = currentQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-item');
+            
+            let isCorrect = false;
+            if(selectedOpt === q.answer) {
+                element.classList.add('correct');
+                isCorrect = true;
+                correctAnswers++;
+                score += 10 + timeLeft; // Points + time bonus
+            } else {
+                element.classList.add('wrong');
+                // Highlight correct answer
+                options.forEach(opt => {
+                    const optText = opt.querySelector('.flex-1').textContent;
+                    if(optText === q.answer) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+
+            // Disable all options
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            // Show explanation (optional UI feedback)
+            // For now, we just proceed
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1200);
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            // Save to leaderboard
+            saveToLeaderboard(playerName, score);
+            renderLeaderboard();
+
+            // Calculate Grade
+            let grade = 'C';
+            if(correctAnswers >= 9) grade = 'A+';
+            else if(correctAnswers >= 8) grade = 'A';
+            else if(correctAnswers >= 7) grade = 'B+';
+            else if(correctAnswers >= 6) grade = 'B';
+            else if(correctAnswers >= 5) grade = 'C';
+
+            // Update Result Slide
+            document.getElementById('result-player-name').textContent = playerName;
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-correct').textContent = correctAnswers;
+            document.getElementById('final-wrong').textContent = 10 - correctAnswers;
+            document.getElementById('final-grade').textContent = grade;
+
+            goToSlide('result');
+        }
+
+        // ============ NAVIGATION ============
+        function goToSlide(slideName) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide-' + slideName).classList.add('active');
+        }
+
+        function playAgain() {
+            startGame();
+        }
+
+        function goHome() {
+            goToSlide('home');
+        }
+
+        function exitGame() {
+            if(confirm('Yakin ingin keluar dari quiz?')) {
+                goHome();
+                clearInterval(timerInterval);
+            }
+        }
+
+        // ============ UTILITIES ============
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
