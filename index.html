@@ -1,612 +1,1116 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Ramadhan - Pusat Permainan</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-
-<style>
-:root{
-  --bg-primary:#2d8659;
-  --bg-secondary:#1e6b47;
-  --bg-light:#4ba376;
-  --accent:#d4af37;
-  --accent-light:#f0d77a;
-  --text-dark:#1a3d2e;
-  --text-light:#ffffff;
-  --success:#2ecc71;
-  --error:#e74c3c;
-  --card-bg:rgba(255,255,255,0.98);
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:'Poppins', sans-serif;
-  min-height:100vh;
-  color:var(--text-dark);
-  position:relative;
-  overflow-x:hidden;
-}
-
-/* Background */
-.sky{position:fixed;inset:0;background:linear-gradient(180deg, #87ceeb 0%, #98d4ee 15%, #b8e4f7 30%, #d4f0fa 45%, #2d8659 55%, #246b47 70%, #1e5a3a 100%);z-index:-3;}
-.sun{position:fixed;top:8%;right:12%;width:80px;height:80px;z-index:-1;}
-.sun-core{width:100%;height:100%;background:radial-gradient(circle, #fff7e0 0%, #ffd93d 40%, #ff9500 100%);border-radius:50%;box-shadow:0 0 60px rgba(255,217,61,0.8);animation:sunPulse 4s ease-in-out infinite;}
-@keyframes sunPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
-.moon{position:fixed;top:12%;left:10%;width:60px;height:60px;z-index:-1;animation:moonFloat 8s ease-in-out infinite;}
-.moon-crescent{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg, #fef9e7 0%, #f4d03f 100%);box-shadow:inset -15px -5px 0 0 #2d8659, 0 0 30px rgba(244,208,63,0.5);}
-@keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
-
-/* Layout Containers */
-.screen{display:none; min-height:100vh; position:relative;}
-.screen.active{display:block;}
-
-/* ================== LOGIN SCREEN ================== */
-#loginScreen{display:flex;align-items:center;justify-content:center;background:rgba(30,90,58,0.95);}
-.login-card{background:white;padding:40px;border-radius:24px;width:100%;max-width:400px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:scaleIn 0.5s ease;}
-.login-logo{font-size:3rem;margin-bottom:10px;}
-.login-title{color:var(--bg-primary);font-size:1.8em;margin-bottom:10px;}
-.input-group{margin-bottom:20px;text-align:left;}
-.input-group label{display:block;margin-bottom:8px;font-weight:600;}
-.input-group input{width:100%;padding:14px;border:2px solid #eee;border-radius:12px;font-size:1em;}
-.btn-main{width:100%;padding:16px;background:linear-gradient(135deg, var(--accent), var(--accent-light));border:none;border-radius:12px;font-size:1.1em;font-weight:700;cursor:pointer;transition:transform 0.2s;}
-.btn-main:hover{transform:translateY(-2px);}
-
-/* ================== MAIN MENU (LOBBY) ================== */
-#menuScreen{padding-top:80px; padding-bottom:40px;}
-.top-bar{position:fixed;top:0;left:0;right:0;background:rgba(45,134,89,0.95);backdrop-filter:blur(10px);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
-.user-profile{display:flex;align-items:center;gap:12px;color:white;}
-.avatar{width:45px;height:45px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-dark);font-size:1.2em;border:2px solid rgba(255,255,255,0.3);}
-.user-info div:first-child{font-weight:600;}
-.user-coins{font-size:0.9em;color:var(--accent-light);}
-
-.menu-container{max-width:800px;margin:0 auto;padding:20px;}
-.menu-title{text-align:center;color:white;margin-bottom:30px;text-shadow:0 2px 4px rgba(0,0,0,0.2);}
-.menu-title h1{font-size:2em;margin-bottom:5px;}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;}
-
-/* Menu Cards */
-.menu-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.1);transition:transform 0.3s, box-shadow 0.3s;cursor:pointer;position:relative;}
-.menu-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,0.2);}
-.card-header{height:140px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden;}
-.card-header.solo{background:linear-gradient(135deg, #43cea2 0%, #185a9d 100%);}
-.card-header.private{background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);}
-.card-header.random{background:linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);}
-.card-body{padding:20px;text-align:center;}
-.card-title{font-size:1.3em;font-weight:700;margin-bottom:8px;color:var(--text-dark);}
-.card-desc{font-size:0.9em;color:#666;line-height:1.5;}
-.card-badge{position:absolute;top:15px;right:15px;background:rgba(255,255,255,0.9);padding:5px 12px;border-radius:20px;font-size:0.8em;font-weight:700;color:#333;}
-
-/* ================== GAME AREA ================== */
-#gameScreen{padding-top:80px; padding-bottom:40px;}
-.container{max-width:900px;margin:0 auto;padding:20px;position:relative;z-index:10;}
-.stats-bar{display:flex;gap:15px;justify-content:center;margin-bottom:25px;flex-wrap:wrap;}
-.stat-card{background:rgba(255,255,255,0.95);padding:15px 25px;border-radius:16px;text-align:center;min-width:100px;box-shadow:0 4px 15px rgba(0,0,0,0.05);flex:1;}
-.stat-label{font-size:0.85em;color:#888;}
-.stat-value{font-size:1.8em;font-weight:800;}
-
-/* Quiz Elements */
-.question{background:var(--card-bg);margin-bottom:14px;padding:22px;border-radius:16px;box-shadow:0 6px 25px rgba(0,0,0,0.08);position:relative;overflow:hidden;}
-.question-text{font-family: 'Amiri', serif;font-size: 1.3rem;line-height: 2;margin-bottom: 18px;color: var(--text-dark);direction: rtl;text-align: right;}
-.options{display:flex;flex-direction:column;gap:10px;}
-.option-label{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(45,134,89,0.05);border:2px solid rgba(45,134,89,0.15);border-radius:14px;cursor:pointer;transition:all 0.25s ease;}
-.option-label input{display:none;}
-.option-marker{width:28px;height:28px;border:2px solid var(--bg-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85em;font-weight:700;flex-shrink:0;}
-.option-label.correct{border-color:var(--success);background:rgba(46,204,113,0.2);}
-.option-label.wrong{border-color:var(--error);background:rgba(231,76,60,0.2);}
-.answer-hint{margin-top:14px;padding:12px;border-radius:12px;font-size:0.9em;}
-
-/* Modals */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1500;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal-content{background:white;width:100%;max-width:500px;border-radius:24px;animation:scaleIn 0.3s ease;overflow:hidden;}
-.modal-header{padding:20px;background:var(--bg-primary);color:white;display:flex;justify-content:space-between;align-items:center;}
-.modal-body{padding:25px;}
-.btn{padding:12px 24px;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;}
-.btn-primary{background:var(--accent);color:var(--text-dark);}
-.btn-secondary{background:#eee;color:#333;}
-.input-code{width:100%;padding:15px;border:2px solid #eee;border-radius:12px;font-size:1.2em;text-align:center;letter-spacing:4px;font-weight:700;margin:10px 0;}
-
-/* Animations */
-@keyframes scaleIn{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
-.spinner{width:40px;height:40px;border:4px solid #eee;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:50px;display:none;z-index:2000;}
-.toast.show{display:block;animation:fadein 0.5s;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ramadhan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a1628;
+            --bg-secondary: #132238;
+            --accent-gold: #d4a853;
+            --accent-emerald: #2d8a5f;
+            --text-light: #f0ead6;
+            --text-muted: #8a9bb4;
+            --card-bg: rgba(19, 34, 56, 0.85);
+            --border-color: rgba(212, 168, 83, 0.3);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+        
+        .font-amiri {
+            font-family: 'Amiri', serif;
+        }
+        
+        .slide {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 168, 83, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(45, 138, 95, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(19, 34, 56, 1) 0%, var(--bg-primary) 100%);
+            z-index: -1;
+        }
+        
+        .geometric-pattern {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23d4a853' stroke-width='1'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, #d4a853 0%, #b8923f 100%);
+            color: #0a1628;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 168, 83, 0.3);
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 168, 83, 0.5);
+        }
+        
+        .btn-emerald {
+            background: linear-gradient(135deg, #2d8a5f 0%, #236b4a 100%);
+            color: var(--text-light);
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-emerald:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(45, 138, 95, 0.4);
+        }
+        
+        .input-field {
+            background: rgba(10, 22, 40, 0.8);
+            border: 2px solid var(--border-color);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.2);
+        }
+        
+        .leaderboard-item {
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            background: rgba(212, 168, 83, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .rank-badge {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 800;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #0a1628; }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0 0%, #808080 100%); color: #0a1628; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%); color: #fff; }
+        .rank-default { background: rgba(138, 155, 180, 0.3); color: var(--text-muted); }
+        
+        .quiz-option {
+            background: rgba(19, 34, 56, 0.9);
+            border: 2px solid rgba(138, 155, 180, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--accent-gold);
+            background: rgba(212, 168, 83, 0.1);
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--accent-gold);
+            background: rgba(212, 168, 83, 0.2);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--accent-emerald);
+            background: rgba(45, 138, 95, 0.3);
+        }
+        
+        .quiz-option.wrong {
+            border-color: #dc2626;
+            background: rgba(220, 38, 38, 0.3);
+        }
+        
+        /* Ular Tangga Board */
+        .snake-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            background: rgba(212, 168, 83, 0.1);
+            padding: 4px;
+            border-radius: 8px;
+        }
+        
+        .board-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .cell-even { background: rgba(45, 138, 95, 0.3); }
+        .cell-odd { background: rgba(19, 34, 56, 0.8); }
+        .cell-special { background: rgba(212, 168, 83, 0.4); }
+        .cell-snake { background: rgba(220, 38, 38, 0.3); }
+        .cell-ladder { background: rgba(34, 197, 94, 0.3); }
+        
+        .player-token {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+        
+        .dice {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f0ead6 0%, #d4cbb8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--bg-primary);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dice:hover {
+            transform: scale(1.05);
+        }
+        
+        .dice.rolling {
+            animation: diceRoll 0.5s ease;
+        }
+        
+        @keyframes diceRoll {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1); }
+            75% { transform: rotate(270deg) scale(1.1); }
+        }
+        
+        /* Network Animation */
+        .network-node {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            transform-origin: left center;
+            opacity: 0.4;
+        }
+        
+        .status-online {
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+        
+        .status-offline {
+            background: #6b7280;
+        }
+        
+        .floating-lamp {
+            position: absolute;
+            opacity: 0.15;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        .player-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
-<body>
-
-<!-- Background -->
-<div class="sky"></div>
-<div class="sun"><div class="sun-core"></div></div>
-<div class="moon"><div class="moon-crescent"></div></div>
-
-<!-- 1. LOGIN SCREEN -->
-<div class="screen active" id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">🕌</div>
-    <h1 class="login-title">Quiz Ramadhan</h1>
-    <div class="input-group">
-      <label>Siapa namamu?</label>
-      <input type="text" id="usernameInput" placeholder="Masukkan nama">
-    </div>
-    <button class="btn-main" onclick="enterLobby()">MASUK</button>
-  </div>
-</div>
-
-<!-- 2. MAIN MENU (LOBBY) -->
-<div class="screen" id="menuScreen">
-  <div class="top-bar">
-    <div class="user-profile">
-      <div class="avatar" id="menuAvatar">A</div>
-      <div class="user-info">
-        <div id="menuName">User</div>
-        <div class="user-coins">🪙 <span id="menuCoins">0</span></div>
-      </div>
-    </div>
-    <button class="icon-btn" onclick="showToast('Fitur hadiah coming soon!')">🎁</button>
-  </div>
-
-  <div class="menu-container">
-    <div class="menu-title">
-      <h1>Pilih Mode Permainan</h1>
-      <p>Main seru, kumpulkan koin!</p>
-    </div>
-
-    <div class="menu-grid">
-      <!-- KARTU 1: SOLO -->
-      <div class="menu-card" onclick="startSoloMode()">
-        <div class="card-header solo">🚀</div>
-        <div class="card-body">
-          <div class="card-title">Mode Solo</div>
-          <div class="card-desc">Main sendiri, belajar sambil kumpulkan koin santai.</div>
+<body class="min-h-screen">
+    <div class="bg-pattern"></div>
+    <div class="geometric-pattern"></div>
+    
+    <!-- Decorative Elements -->
+    <svg class="floating-lamp" style="top: 10%; left: 5%; width: 60px;" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 15h-4v-1h4v1zm0-3h-4v-1h4v1z"/>
+    </svg>
+    <svg class="floating-lamp" style="top: 30%; right: 8%; width: 50px; animation-delay: 2s;" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/>
+    </svg>
+    
+    <!-- Slide 1: Dashboard -->
+    <div id="slide1" class="slide active flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8 fade-in">
+                <h1 class="font-amiri text-4xl md:text-6xl font-bold mb-2" style="color: var(--accent-gold);">
+                    Quiz Ramadhan
+                </h1>
+                <p class="text-lg md:text-xl" style="color: var(--text-muted);">
+                    Uji pengetahuan Islami Anda
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Input Nama & Menu -->
+                <div class="card rounded-2xl p-6 fade-in stagger-1">
+                    <h2 class="font-amiri text-2xl font-bold mb-4" style="color: var(--accent-gold);">
+                        Mulai Bermain
+                    </h2>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold mb-2" style="color: var(--text-muted);">Nama Pemain</label>
+                        <input type="text" id="playerName" placeholder="Masukkan nama Anda..." 
+                               class="input-field w-full px-4 py-3 rounded-xl text-lg">
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <button onclick="startQuiz()" class="btn-gold w-full py-4 rounded-xl text-lg">
+                            Mulai Quiz
+                        </button>
+                        <button onclick="goToSlide(3)" class="btn-emerald w-full py-4 rounded-xl text-lg">
+                            Ular Tangga Islami
+                        </button>
+                        <button onclick="goToSlide(4)" class="w-full py-4 rounded-xl text-lg bg-opacity-50" 
+                                style="background: rgba(138, 155, 180, 0.2); border: 2px solid var(--border-color);">
+                            Jaringan Multiplayer
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Leaderboard -->
+                <div class="card rounded-2xl p-6 fade-in stagger-2">
+                    <h2 class="font-amiri text-2xl font-bold mb-4" style="color: var(--accent-gold);">
+                        Papan Peringkat
+                    </h2>
+                    
+                    <div id="leaderboard" class="space-y-2 max-h-80 overflow-y-auto scrollbar-hide">
+                        <!-- Leaderboard items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-4 mt-6 fade-in stagger-3">
+                <div class="card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold" style="color: var(--accent-gold);" id="totalPlayers">127</div>
+                    <div class="text-sm" style="color: var(--text-muted);">Pemain</div>
+                </div>
+                <div class="card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold" style="color: var(--accent-emerald);" id="totalGames">489</div>
+                    <div class="text-sm" style="color: var(--text-muted);">Permainan</div>
+                </div>
+                <div class="card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold" style="color: var(--accent-gold);" id="avgScore">78%</div>
+                    <div class="text-sm" style="color: var(--text-muted);">Rata-rata Skor</div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <!-- KARTU 2: RUANG PRIVAT -->
-      <div class="menu-card" onclick="openPrivateMode()">
-        <div class="card-header private">🔐</div>
-        <div class="card-body">
-          <div class="card-title">Ruang Teman</div>
-          <div class="card-desc">Buat ruang khusus & share kode ke teman for competiisi.</div>
+    </div>
+    
+    <!-- Slide 2: Quiz -->
+    <div id="slide2" class="slide flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-3xl mx-auto">
+            <!-- Quiz Header -->
+            <div class="flex items-center justify-between mb-6 fade-in">
+                <button onclick="goToSlide(1)" class="p-2 rounded-lg hover:bg-white/10 transition">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <div class="text-center">
+                    <div class="font-amiri text-xl font-bold" style="color: var(--accent-gold);">Quiz Ramadhan</div>
+                    <div class="text-sm" style="color: var(--text-muted);">Soal <span id="currentQuestion">1</span> dari <span id="totalQuestions">10</span></div>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold" style="color: var(--accent-gold);" id="quizScore">0</div>
+                    <div class="text-sm" style="color: var(--text-muted);">Poin</div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full h-2 rounded-full mb-6" style="background: rgba(138, 155, 180, 0.2);">
+                <div id="progressBar" class="h-full rounded-full transition-all duration-500" style="width: 10%; background: var(--accent-gold);"></div>
+            </div>
+            
+            <!-- Question Card -->
+            <div class="card rounded-2xl p-6 md:p-8 fade-in stagger-1">
+                <div id="questionText" class="font-amiri text-xl md:text-2xl font-bold mb-8 text-center" style="color: var(--text-light);">
+                    <!-- Question will be inserted here -->
+                </div>
+                
+                <div id="optionsContainer" class="space-y-3">
+                    <!-- Options will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Timer -->
+            <div class="flex justify-center mt-6 fade-in stagger-2">
+                <div class="flex items-center gap-3 card px-6 py-3 rounded-full">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-gold);">
+                        <circle cx="10" cy="10" r="8"/>
+                        <path d="M10 6v4l2 2"/>
+                    </svg>
+                    <span class="font-bold" id="timer">30</span>
+                    <span style="color: var(--text-muted);">detik</span>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <!-- KARTU 3: RANDOM MATCH -->
-      <div class="menu-card" onclick="startRandomMatch()">
-        <div class="card-header random">🌍</div>
-        <div class="card-body">
-          <div class="card-title">Lawan Random</div>
-          <div class="card-desc">Cari lawan acak dari seluruh dunia secara instan.</div>
+    </div>
+    
+    <!-- Slide 3: Ular Tangga Islami -->
+    <div id="slide3" class="slide flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6 fade-in">
+                <button onclick="goToSlide(1)" class="p-2 rounded-lg hover:bg-white/10 transition">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 class="font-amiri text-2xl font-bold" style="color: var(--accent-gold);">Ular Tangga Islami</h2>
+                <div></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Game Board -->
+                <div class="md:col-span-2 card rounded-2xl p-4 fade-in stagger-1">
+                    <div id="snakeBoard" class="snake-board">
+                        <!-- Board cells will be generated -->
+                    </div>
+                    
+                    <!-- Legend -->
+                    <div class="flex flex-wrap gap-4 mt-4 text-xs justify-center">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: rgba(34, 197, 94, 0.5);"></div>
+                            <span>Tangga</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: rgba(220, 38, 38, 0.5);"></div>
+                            <span>Ular</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 rounded" style="background: rgba(212, 168, 83, 0.5);"></div>
+                            <span>Spesial</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Controls -->
+                <div class="card rounded-2xl p-6 fade-in stagger-2">
+                    <h3 class="font-bold mb-4" style="color: var(--accent-gold);">Pemain</h3>
+                    
+                    <div id="playerList" class="space-y-3 mb-6">
+                        <!-- Player list will be generated -->
+                    </div>
+                    
+                    <div class="text-center mb-6">
+                        <div class="dice mx-auto mb-4" id="dice" onclick="rollDice()">
+                            <span id="diceValue">?</span>
+                        </div>
+                        <p class="text-sm" style="color: var(--text-muted);">Klik dadu untuk mengocok</p>
+                    </div>
+                    
+                    <div class="card rounded-xl p-4" style="background: rgba(212, 168, 83, 0.1);">
+                        <h4 class="font-bold text-sm mb-2" style="color: var(--accent-gold);">Hadis Tentang Ilmu</h4>
+                        <p class="text-sm" style="color: var(--text-muted);" id="hadisText">
+                            "Barangsiapa menempuh jalan untuk mencari ilmu, maka Allah akan memudahkan jalan baginya ke surga."
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 3. GAME SCREEN -->
-<div class="screen" id="gameScreen">
-  <div class="top-bar">
-    <div class="user-profile" onclick="backToMenu()">
-      <div class="avatar" style="font-size:1.5em;">←</div>
-      <div class="user-info">
-        <div id="gameStatus">Mode: Solo</div>
-        <div style="font-size:0.8em; opacity:0.8;">Tap untuk kembali</div>
-      </div>
-    </div>
-    <div style="color:white; font-weight:700; font-size:1.1em;" id="timerDisplay"></div>
-  </div>
-
-  <div class="container">
-    <div class="stats-bar">
-      <div class="stat-card"><div class="stat-label">Skor</div><div class="stat-value score" id="scoreDisplay">0</div></div>
-      <div class="stat-card"><div class="stat-label">Lawan</div><div class="stat-value coins" id="opponentDisplay">-</div></div>
     </div>
     
-    <div id="quizArea"></div>
-  </div>
-</div>
-
-<!-- MODAL: PRIVATE ROOM -->
-<div class="modal-overlay" id="privateModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>🔐 Ruang Teman</h3>
-      <span style="cursor:pointer" onclick="closeModal('privateModal')">&times;</span>
+    <!-- Slide 4: Jaringan Multiplayer -->
+    <div id="slide4" class="slide flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6 fade-in">
+                <button onclick="goToSlide(1)" class="p-2 rounded-lg hover:bg-white/10 transition">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h2 class="font-amiri text-2xl font-bold" style="color: var(--accent-gold);">Jaringan Multiplayer</h2>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full status-online"></div>
+                    <span class="text-sm">Online</span>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Network Visualization -->
+                <div class="md:col-span-2 card rounded-2xl p-6 fade-in stagger-1" style="min-height: 400px; position: relative; overflow: hidden;">
+                    <canvas id="networkCanvas" class="w-full h-full"></canvas>
+                    
+                    <!-- Connection Status -->
+                    <div class="absolute top-4 left-4 flex items-center gap-2 card px-3 py-2 rounded-lg text-sm">
+                        <div class="w-2 h-2 rounded-full status-online"></div>
+                        <span id="connectedCount">12 pemain terhubung</span>
+                    </div>
+                </div>
+                
+                <!-- Network Controls -->
+                <div class="space-y-4 fade-in stagger-2">
+                    <!-- Room Code -->
+                    <div class="card rounded-xl p-4">
+                        <label class="block text-sm font-semibold mb-2" style="color: var(--text-muted);">Kode Ruangan</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="roomCode" value="RMDH-2024" readonly
+                                   class="input-field flex-1 px-3 py-2 rounded-lg text-center font-mono text-lg">
+                            <button onclick="copyRoomCode()" class="btn-gold px-4 rounded-lg">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="8" y="8" width="12" height="12" rx="2"/>
+                                    <path d="M4 16V4h12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Create/Join Room -->
+                    <div class="card rounded-xl p-4">
+                        <h3 class="font-bold mb-3" style="color: var(--accent-gold);">Ruangan</h3>
+                        <div class="space-y-2">
+                            <button onclick="createRoom()" class="btn-gold w-full py-3 rounded-xl">
+                                Buat Ruangan Baru
+                            </button>
+                            <button onclick="joinRoom()" class="btn-emerald w-full py-3 rounded-xl">
+                                Gabung Ruangan
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Online Players -->
+                    <div class="card rounded-xl p-4">
+                        <h3 class="font-bold mb-3" style="color: var(--accent-gold);">Pemain Online</h3>
+                        <div id="onlinePlayers" class="space-y-2 max-h-48 overflow-y-auto scrollbar-hide">
+                            <!-- Online players will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Chat -->
+                    <div class="card rounded-xl p-4">
+                        <h3 class="font-bold mb-3" style="color: var(--accent-gold);">Chat</h3>
+                        <div id="chatMessages" class="space-y-2 max-h-32 overflow-y-auto scrollbar-hide mb-3">
+                            <div class="text-sm" style="color: var(--text-muted);">Selamat datang di Quiz Ramadhan!</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="chatInput" placeholder="Ketik pesan..." 
+                                   class="input-field flex-1 px-3 py-2 rounded-lg text-sm">
+                            <button onclick="sendMessage()" class="btn-gold px-4 rounded-lg">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-body" style="text-align:center">
-      <p>Buat ruang baru atau gabung ke ruang teman.</p>
-      
-      <button class="btn btn-primary" onclick="createPrivateRoom()">Buat Ruang Baru</button>
-      
-      <div style="margin:20px 0; border-bottom:1px solid #eee;"></div>
 
-      <input type="text" id="inputRoomCode" class="input-code" placeholder="KODE RUANG" maxlength="4">
-      <button class="btn btn-secondary" onclick="joinPrivateRoom()">Gabung Ruang</button>
-    </div>
-  </div>
-</div>
+    <script>
+        // ============ DATA ============
+        const quizQuestions = [
+            {
+                question: "Berapa jumlah rakaat salat Tarawih yang umum dilakukan?",
+                options: ["8 rakaat", "11 rakaat", "20 rakaat", "Semua benar"],
+                correct: 3,
+                explanation: "Tarawih bisa 8, 11, atau 20 rakaat sesuai madzhab"
+            },
+            {
+                question: "Pada malam berapa Lailatul Qadr kemungkinan besar terjadi?",
+                options: ["Malam 17", "Malam 21, 23, 25, 27, 29", "Malam 15", "Malam 1"],
+                correct: 1,
+                explanation: "Lailatul Qadr dicari di malam ganjil 10 hari terakhir"
+            },
+            {
+                question: "Apa yang membatalkan puasa?",
+                options: ["Makan dengan sengaja", "Berkumur-kumur", "Mandi", "Tidur sepanjang hari"],
+                correct: 0,
+                explanation: "Makan dan minum dengan sengaja membatalkan puasa"
+            },
+            {
+                question: "Siapa yang diwajibkan membayar zakat fitrah?",
+                options: ["Hanya orang kaya", "Setiap Muslim yang mampu", "Hanya laki-laki", "Hanya yang berpuasa"],
+                correct: 1,
+                explanation: "Zakat fitrah wajib bagi setiap Muslim yang mampu"
+            },
+            {
+                question: "Bulan puasa Ramadhan diwajibkan pada tahun berapa Hijriyah?",
+                options: ["Tahun 1 H", "Tahun 2 H", "Tahun 3 H", "Tahun 5 H"],
+                correct: 1,
+                explanation: "Puasa Ramadhan diwajibkan pada tahun 2 Hijriyah"
+            },
+            {
+                question: "Apa nama malam yang lebih baik dari seribu bulan?",
+                options: ["Malam Nisfus Sya'ban", "Lailatul Qadr", "Malam Jumat", "Malam Tahun Baru"],
+                correct: 1,
+                explanation: "Lailatul Qadr lebih baik dari seribu bulan"
+            },
+            {
+                question: "Berapa jumlah ayat dalam Surah Al-Baqarah?",
+                options: ["200 ayat", "286 ayat", "287 ayat", "300 ayat"],
+                correct: 1,
+                explanation: "Surah Al-Baqarah memiliki 286 ayat"
+            },
+            {
+                question: "Apa arti dari 'Ramadhan'?",
+                options: ["Bulan suci", "Membakar dosa", "Bulan penuh berkah", "Bulan puasa"],
+                correct: 1,
+                explanation: "Ramadhan berasal dari kata 'ramad' yang artinya membakar"
+            },
+            {
+                question: "Iftar adalah waktu untuk...",
+                options: ["Sahur", "Berbuka puasa", "Salat", "Tidur"],
+                correct: 1,
+                explanation: "Iftar adalah waktu berbuka puasa"
+            },
+            {
+                question: "Apa sunnah ketika berbuka puasa?",
+                options: ["Makan nasi dulu", "Minum air putih", "Makan kurma", "Minum kopi"],
+                correct: 2,
+                explanation: "Sunnah berbuka dengan kurma"
+            }
+        ];
 
-<!-- MODAL: WAITING LOBBY -->
-<div class="modal-overlay" id="lobbyModal">
-  <div class="modal-content">
-    <div class="modal-header" style="background:#333;">
-      <h3>Menunggu Pemain...</h3>
-    </div>
-    <div class="modal-body" style="text-align:center">
-      <div class="spinner"></div>
-      <p style="margin:20px 0 10px;">Kode Ruang Anda:</p>
-      <h1 style="font-size:2.5em; letter-spacing:5px; color:var(--bg-primary)" id="displayRoomCode">XXXX</h1>
-      <p style="font-size:0.9em; color:#666;">Bagikan kode ini ke teman.</p>
-      <p style="margin-top:20px;">Pemain Terhubung: <span id="playerCount">1</span></p>
-      <button class="btn btn-primary" id="btnStartGame" style="display:none; margin-top:20px;" onclick="startGame()">Mulai Sekarang</button>
-    </div>
-  </div>
-</div>
+        const leaderboardData = [
+            { name: "Ahmad Fauzi", score: 950, games: 12 },
+            { name: "Fatimah Azzahra", score: 920, games: 10 },
+            { name: "Muhammad Rizki", score: 890, games: 15 },
+            { name: "Aisyah Putri", score: 850, games: 8 },
+            { name: "Umar Abdullah", score: 820, games: 11 },
+            { name: "Khadijah Nur", score: 780, games: 9 },
+            { name: "Ibrahim Hassan", score: 750, games: 7 },
+            { name: "Zainab Salsabila", score: 720, games: 6 }
+        ];
 
-<div class="toast" id="toast"></div>
+        const onlinePlayersData = [
+            { name: "Ahmad Fauzi", status: "online", inGame: false },
+            { name: "Fatimah Azzahra", status: "online", inGame: true },
+            { name: "Muhammad Rizki", status: "online", inGame: false },
+            { name: "Aisyah Putri", status: "away", inGame: false },
+            { name: "Umar Abdullah", status: "online", inGame: true }
+        ];
 
-<script>
-// ================== DATA & STATE ==================
-const quizData = [
-  { q: "مِنۢ بَعْدِ - Hukum bacaan Nun Mati bertemu Ba adalah...", opts: ["Idzhar", "Iqlab", "Ikhfa", "Idgham"], ans: "Iqlab", exp: "Karena Nun mati bertemu Ba, hukumnya Iqlab." },
-  { q: "Hukum bacaan pada kata مِن نُّورٍ adalah...", opts: ["Idgham Bighunnah", "Idgham Bila Ghunnah", "Iqlab", "Ikhfa"], ans: "Idgham Bighunnah", exp: "Karena Nun mati bertemu Nun, dimasukkan dan didengungkan." },
-  { q: "Rasulullah SAW lahir di kota...", opts: ["Madinah", "Makkah", "Thaif", "Yaman"], ans: "Makkah", exp: "Nabi lahir di Makkah pada Tahun Gajah." },
-  { q: "Nama ayah Nabi Muhammad adalah...", opts: ["Abdullah", "Abdul Muthalib", "Abu Thalib", "Hamzah"], ans: "Abdullah", exp: "Ayah beliau adalah Abdullah bin Abdul Muthalib." },
-  { q: "Ar-Rahman artinya...", opts: ["Maha Kuasa", "Maha Pengasih", "Maha Mengetahui", "Maha Esa"], ans: "Maha Pengasih", exp: "Ar-Rahman berarti Maha Pengasih di dunia." },
-  { q: "Sahabat yang pertama masuk Islam dari orang dewasa...", opts: ["Ali bin Abi Thalib", "Umar bin Khattab", "Abu Bakar", "Utsman"], ans: "Abu Bakar", exp: "Abu Bakar adalah orang dewasa pertama yang masuk Islam." }
-];
+        const hadisList = [
+            "Barangsiapa menempuh jalan untuk mencari ilmu, maka Allah akan memudahkan jalan baginya ke surga.",
+            "Orang yang berpuasa akan mendapatkan dua kebahagiaan: kebahagiaan saat berbuka dan kebahagiaan saat bertemu Tuhannya.",
+            "Sedekah tidak akan mengurangi harta. Allah tidak menambah bagi hamba yang memaafkan kecuali kemuliaan.",
+            "Perumpamaan orang-orang yang beriman dalam hal kasih sayang adalah seperti satu tubuh.",
+            "Sebaik-baik kalian adalah yang mempelajari Al-Quran dan mengajarkannya."
+        ];
 
-let currentUser = { name: "User", coins: 0 };
-let myScore = 0;
-let opponentScore = 0;
-let currentQuestions = [];
-let qIndex = 0;
-let peer = null;
-let conn = null;
-let connections = [];
-let isHost = false;
-let roomCode = null;
-let gameMode = "solo"; // solo, private, random
+        const snakeAndLadders = {
+            ladders: { 3: 22, 8: 30, 20: 41, 28: 49, 36: 55 },
+            snakes: { 62: 18, 48: 9, 53: 34, 56: 37, 61: 42 }
+        };
 
-// ================== NAVIGATION ==================
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+        // ============ STATE ============
+        let currentSlide = 1;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer = null;
+        let timeLeft = 30;
+        let playerName = '';
+        let players = [];
+        let networkNodes = [];
+        let animationId = null;
 
-function enterLobby() {
-  const name = document.getElementById('usernameInput').value.trim();
-  if (!name) return alert("Masukkan nama dulu!");
-  currentUser.name = name;
-  document.getElementById('menuName').textContent = name;
-  document.getElementById('menuAvatar').textContent = name.charAt(0);
-  document.getElementById('menuCoins').textContent = currentUser.coins;
-  showScreen('menuScreen');
-}
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLeaderboard();
+            renderOnlinePlayers();
+            initSnakeBoard();
+            initPlayers();
+            initNetwork();
+        });
 
-function backToMenu() {
-  if (conn) conn.close();
-  if (peer) peer.destroy();
-  peer = null; conn = null;
-  showScreen('menuScreen');
-}
+        // ============ SLIDE NAVIGATION ============
+        function goToSlide(slideNum) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + slideNum).classList.add('active');
+            currentSlide = slideNum;
+            
+            if (slideNum === 4) {
+                initNetwork();
+            }
+        }
 
-// ================== GAME LOGIC ==================
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+        // ============ QUIZ FUNCTIONS ============
+        function startQuiz() {
+            playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                playerName = 'Pemain ' + Math.floor(Math.random() * 1000);
+            }
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('quizScore').textContent = '0';
+            document.getElementById('totalQuestions').textContent = quizQuestions.length;
+            
+            goToSlide(2);
+            loadQuestion();
+        }
 
-function loadQuestions() {
-  currentQuestions = shuffle(quizData).slice(0, 5); // Ambil 5 soal acak
-  qIndex = 0;
-  myScore = 0;
-  opponentScore = 0;
-  renderQuestion();
-  updateGameUI();
-}
+        function loadQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('progressBar').style.width = ((currentQuestionIndex + 1) / quizQuestions.length * 100) + '%';
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            question.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option w-full text-left px-6 py-4 rounded-xl transition-all';
+                btn.innerHTML = `
+                    <span class="font-bold mr-3" style="color: var(--accent-gold);">${String.fromCharCode(65 + index)}.</span>
+                    ${opt}
+                `;
+                btn.onclick = () => selectAnswer(index);
+                container.appendChild(btn);
+            });
+            
+            startTimer();
+        }
 
-function renderQuestion() {
-  if (qIndex >= currentQuestions.length) {
-    endGame();
-    return;
-  }
-  const data = currentQuestions[qIndex];
-  const area = document.getElementById('quizArea');
-  
-  let html = `
-    <div class="question">
-      <div style="margin-bottom:10px; font-weight:700; color:var(--bg-primary)">Soal ${qIndex + 1}</div>
-      <p class="question-text">${data.q}</p>
-      <div class="options">
-        ${shuffle(data.opts).map((o, i) => `
-          <label class="option-label" onclick="selectAnswer(this, '${o}', '${data.ans}')">
-            <input type="radio" name="opt">
-            <span class="option-marker">${'ABCDE'[i]}</span>
-            <span>${o}</span>
-          </label>
-        `).join('')}
-      </div>
-    </div>`;
-  area.innerHTML = html;
-}
+        function selectAnswer(index) {
+            clearInterval(timer);
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((opt, i) => {
+                opt.onclick = null;
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== question.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            if (index === question.correct) {
+                score += 10 + Math.floor(timeLeft / 3);
+                document.getElementById('quizScore').textContent = score;
+            }
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizQuestions.length) {
+                    loadQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 1500);
+        }
 
-function selectAnswer(el, selected, correct) {
-  if (el.parentElement.querySelector('.disabled')) return; // Prevent double answer
-  
-  const parent = el.closest('.question');
-  const labels = parent.querySelectorAll('.option-label');
-  
-  labels.forEach(l => {
-    l.classList.add('disabled');
-    if (l.querySelector('span:last-child').textContent === correct) {
-      l.classList.add('correct');
-    }
-  });
-  
-  if (selected === correct) {
-    el.classList.add('correct');
-    myScore += 20;
-    playSound(1);
-    showHint(parent, true, currentQuestions[qIndex].exp);
-  } else {
-    el.classList.add('wrong');
-    playSound(0);
-    showHint(parent, false, currentQuestions[qIndex].exp);
-  }
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    selectAnswer(-1);
+                }
+            }, 1000);
+        }
 
-  // Kirim skor ke lawan jika online
-  if (gameMode !== 'solo' && conn) {
-    conn.send({ type: 'score', score: myScore });
-  }
-  if (gameMode !== 'solo' && isHost) {
-    connections.forEach(c => c.send({ type: 'score', score: myScore }));
-  }
+        function endQuiz() {
+            // Add to leaderboard
+            leaderboardData.push({ name: playerName, score: score, games: 1 });
+            leaderboardData.sort((a, b) => b.score - a.score);
+            
+            alert(`Quiz selesai! Skor Anda: ${score} poin`);
+            goToSlide(1);
+            renderLeaderboard();
+        }
 
-  updateGameUI();
-  
-  // Next question delay
-  setTimeout(() => {
-    qIndex++;
-    renderQuestion();
-  }, 2000);
-}
+        // ============ LEADERBOARD ============
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            container.innerHTML = '';
+            
+            const sortedData = [...leaderboardData].sort((a, b) => b.score - a.score).slice(0, 10);
+            
+            sortedData.forEach((player, index) => {
+                const rankClass = index < 3 ? `rank-${index + 1}` : 'rank-default';
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item flex items-center gap-4 p-3 rounded-xl';
+                item.innerHTML = `
+                    <div class="rank-badge ${rankClass}">${index + 1}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold truncate">${player.name}</div>
+                        <div class="text-sm" style="color: var(--text-muted);">${player.games} permainan</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold" style="color: var(--accent-gold);">${player.score}</div>
+                        <div class="text-xs" style="color: var(--text-muted);">poin</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
 
-function showHint(parent, isCorrect, text) {
-  const div = document.createElement('div');
-  div.className = 'answer-hint';
-  div.style.border = `1px solid ${isCorrect ? 'var(--success)' : 'var(--error)'}`;
-  div.style.background = isCorrect ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)';
-  div.innerHTML = `<strong>${isCorrect ? 'Benar!' : 'Salah!'}</strong><br>${text}`;
-  parent.appendChild(div);
-}
+        // ============ SNAKE & LADDER ============
+        function initSnakeBoard() {
+            const board = document.getElementById('snakeBoard');
+            board.innerHTML = '';
+            
+            for (let i = 63; i >= 0; i--) {
+                const cell = document.createElement('div');
+                const row = Math.floor(i / 8);
+                const actualNum = row % 2 === 0 ? i : (row * 8) + (7 - (i % 8));
+                
+                let cellClass = 'board-cell ' + (actualNum % 2 === 0 ? 'cell-even' : 'cell-odd');
+                
+                if (snakeAndLadders.ladders[actualNum]) {
+                    cellClass = 'board-cell cell-ladder';
+                } else if (snakeAndLadders.snakes[actualNum]) {
+                    cellClass = 'board-cell cell-snake';
+                } else if ([0, 63].includes(actualNum)) {
+                    cellClass = 'board-cell cell-special';
+                }
+                
+                cell.className = cellClass;
+                cell.id = 'cell-' + actualNum;
+                cell.innerHTML = `<span class="relative z-0">${actualNum + 1}</span>`;
+                board.appendChild(cell);
+            }
+        }
 
-function updateGameUI() {
-  document.getElementById('scoreDisplay').textContent = myScore;
-  document.getElementById('opponentDisplay').textContent = opponentScore;
-  document.getElementById('gameStatus').textContent = `Mode: ${gameMode.charAt(0).toUpperCase() + gameMode.slice(1)}`;
-}
+        function initPlayers() {
+            players = [
+                { name: playerName || 'Pemain 1', position: 0, color: '#d4a853' },
+                { name: 'Komputer', position: 0, color: '#2d8a5f' }
+            ];
+            renderPlayerList();
+            updatePlayerPositions();
+        }
 
-function endGame() {
-  let result = "Imbang!";
-  if (myScore > opponentScore) result = "Kamu Menang! 🎉";
-  if (myScore < opponentScore) result = "Kamu Kalah 😢";
-  
-  currentUser.coins += myScore;
-  document.getElementById('menuCoins').textContent = currentUser.coins;
+        function renderPlayerList() {
+            const container = document.getElementById('playerList');
+            container.innerHTML = '';
+            
+            players.forEach((player, index) => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-3 p-2 rounded-lg';
+                item.style.background = 'rgba(255,255,255,0.05)';
+                item.innerHTML = `
+                    <div class="player-dot" style="background: ${player.color};"></div>
+                    <div class="flex-1">
+                        <div class="font-semibold text-sm">${player.name}</div>
+                        <div class="text-xs" style="color: var(--text-muted);">Posisi: ${player.position + 1}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
 
-  document.getElementById('quizArea').innerHTML = `
-    <div style="text-align:center; padding:40px; background:white; border-radius:20px;">
-      <h2 style="color:var(--bg-primary)">${result}</h2>
-      <div style="font-size:2em; margin:20px 0;">Skor Kamu: ${myScore}</div>
-      <div style="color:#888; margin-bottom:20px">Skor Lawan: ${opponentScore}</div>
-      <p>🪙 Kamu mendapat ${myScore} koin!</p>
-      <button class="btn btn-primary" onclick="backToMenu()" style="max-width:200px; margin:20px auto 0;">Kembali ke Menu</button>
-    </div>
-  `;
-}
+        function updatePlayerPositions() {
+            document.querySelectorAll('.player-token').forEach(t => t.remove());
+            
+            players.forEach((player, index) => {
+                const cell = document.getElementById('cell-' + player.position);
+                if (cell) {
+                    const token = document.createElement('div');
+                    token.className = 'player-token';
+                    token.style.background = player.color;
+                    token.style.left = (index * 12 + 4) + 'px';
+                    token.style.top = '50%';
+                    token.style.transform = 'translateY(-50%)';
+                    cell.appendChild(token);
+                }
+            });
+        }
 
-// ================== MODE 1: SOLO ==================
-function startSoloMode() {
-  gameMode = "solo";
-  showScreen('gameScreen');
-  document.getElementById('opponentDisplay').parentElement.style.display = 'none'; // Hide opponent
-  loadQuestions();
-}
+        function rollDice() {
+            const dice = document.getElementById('dice');
+            const diceValue = document.getElementById('diceValue');
+            
+            dice.classList.add('rolling');
+            
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                diceValue.textContent = Math.floor(Math.random() * 6) + 1;
+                rolls++;
+                if (rolls > 10) {
+                    clearInterval(rollInterval);
+                    const result = Math.floor(Math.random() * 6) + 1;
+                    diceValue.textContent = result;
+                    dice.classList.remove('rolling');
+                    movePlayer(0, result);
+                    
+                    // Update hadis
+                    document.getElementById('hadisText').textContent = hadisList[Math.floor(Math.random() * hadisList.length)];
+                }
+            }, 50);
+        }
 
-// ================== MODE 2: PRIVATE ROOM ==================
-function openPrivateMode() {
-  document.getElementById('privateModal').classList.add('show');
-}
+        function movePlayer(playerIndex, steps) {
+            const player = players[playerIndex];
+            let newPos = player.position + steps;
+            
+            if (newPos > 63) {
+                newPos = 63 - (newPos - 63);
+            }
+            
+            // Check for ladders
+            if (snakeAndLadders.ladders[newPos]) {
+                setTimeout(() => {
+                    player.position = snakeAndLadders.ladders[newPos];
+                    updatePlayerPositions();
+                    renderPlayerList();
+                }, 500);
+            }
+            // Check for snakes
+            else if (snakeAndLadders.snakes[newPos]) {
+                setTimeout(() => {
+                    player.position = snakeAndLadders.snakes[newPos];
+                    updatePlayerPositions();
+                    renderPlayerList();
+                }, 500);
+            }
+            
+            player.position = newPos;
+            updatePlayerPositions();
+            renderPlayerList();
+            
+            if (player.position === 63) {
+                setTimeout(() => {
+                    alert(`${player.name} menang!`);
+                    players.forEach(p => p.position = 0);
+                    updatePlayerPositions();
+                    renderPlayerList();
+                }, 500);
+            }
+        }
 
-function createPrivateRoom() {
-  closeModal('privateModal');
-  initNetworking(true);
-}
+        // ============ NETWORK ============
+        function initNetwork() {
+            const canvas = document.getElementById('networkCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.parentElement.getBoundingClientRect();
+            
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            networkNodes = [];
+            const nodeCount = 15;
+            
+            for (let i = 0; i < nodeCount; i++) {
+                networkNodes.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: Math.random() * (canvas.height - 40) + 20,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: Math.random() * 4 + 4,
+                    status: Math.random() > 0.3 ? 'online' : 'offline'
+                });
+            }
+            
+            if (animationId) cancelAnimationFrame(animationId);
+            animateNetwork(canvas, ctx);
+        }
 
-function joinPrivateRoom() {
-  const code = document.getElementById('inputRoomCode').value.trim().toUpperCase();
-  if (!code) return alert("Masukkan kode!");
-  closeModal('privateModal');
-  initNetworking(false, code);
-}
+        function animateNetwork(canvas, ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update positions
+            networkNodes.forEach(node => {
+                node.x += node.vx;
+                node.y += node.vy;
+                
+                if (node.x < 20 || node.x > canvas.width - 20) node.vx *= -1;
+                if (node.y < 20 || node.y > canvas.height - 20) node.vy *= -1;
+            });
+            
+            // Draw connections
+            ctx.strokeStyle = 'rgba(212, 168, 83, 0.15)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < networkNodes.length; i++) {
+                for (let j = i + 1; j < networkNodes.length; j++) {
+                    const dx = networkNodes[i].x - networkNodes[j].x;
+                    const dy = networkNodes[i].y - networkNodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(networkNodes[i].x, networkNodes[i].y);
+                        ctx.lineTo(networkNodes[j].x, networkNodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Draw nodes
+            networkNodes.forEach(node => {
+                ctx.beginPath();
+                const safeRadius = Math.max(1, node.radius);
+                ctx.arc(node.x, node.y, safeRadius, 0, Math.PI * 2);
+                
+                if (node.status === 'online') {
+                    ctx.fillStyle = '#22c55e';
+                    ctx.shadowColor = '#22c55e';
+                    ctx.shadowBlur = 10;
+                } else {
+                    ctx.fillStyle = '#6b7280';
+                    ctx.shadowBlur = 0;
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+            
+            animationId = requestAnimationFrame(() => animateNetwork(canvas, ctx));
+        }
 
-// ================== MODE 3: RANDOM MATCH ==================
-function startRandomMatch() {
-  // Logic: Menggunakan ID global yang berganti setiap 10 detik.
-  // Siapa yang join di rentang waktu yang sama akan ketemu.
-  const timeSlot = Math.floor(Date.now() / 10000); // Berganti tiap 10 detik
-  const randomRoomId = "RND-" + timeSlot;
-  
-  gameMode = "random";
-  showScreen('gameScreen');
-  document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Mencari lawan...</p></div>`;
-  
-  // Coba jadi Guest dulu, kalau gagal jadi Host
-  const tempPeer = new Peer();
-  
-  tempPeer.on('open', () => {
-    const c = tempPeer.connect(randomRoomId);
-    
-    c.on('open', () => {
-      // Sukses jadi Guest
-      peer = tempPeer;
-      conn = c;
-      isHost = false;
-      setupConnection();
-      showToast("Lawan ditemukan!");
-      loadQuestions();
-    });
+        function renderOnlinePlayers() {
+            const container = document.getElementById('onlinePlayers');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            onlinePlayersData.forEach(player => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-3 p-2 rounded-lg';
+                item.style.background = 'rgba(255,255,255,0.05)';
+                
+                const statusClass = player.status === 'online' ? 'status-online' : 
+                                   player.status === 'away' ? 'status-offline' : 'status-offline';
+                
+                item.innerHTML = `
+                    <div class="w-2 h-2 rounded-full ${statusClass}"></div>
+                    <div class="flex-1 text-sm">${player.name}</div>
+                    ${player.inGame ? '<span class="text-xs px-2 py-1 rounded" style="background: rgba(45, 138, 95, 0.3);">Bermain</span>' : ''}
+                `;
+                container.appendChild(item);
+            });
+        }
 
-    c.on('error', () => {
-      // Gagal connect, jadi Host
-      tempPeer.destroy(); // Hapus peer sementara
-      createRandomRoom(randomRoomId);
-    });
-    
-    // Timeout jika tidak found dalam 3 detik
-    setTimeout(() => {
-      if(!c.open) {
-        c.close();
-        tempPeer.destroy();
-        createRandomRoom(randomRoomId);
-      }
-    }, 3000);
-  });
-}
+        // ============ NETWORK FUNCTIONS ============
+        function copyRoomCode() {
+            const code = document.getElementById('roomCode').value;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Kode ruangan disalin!');
+            });
+        }
 
-function createRandomRoom(id) {
-  peer = new Peer(id);
-  isHost = true;
-  
-  peer.on('connection', (connection) => {
-    conn = connection;
-    setupConnection();
-    showToast("Lawan ditemukan!");
-    loadQuestions();
-  });
-  
-  // Timeout jika 10 detik ga ada lawan
-  setTimeout(() => {
-    if(!conn) {
-      showToast("Tidak ada lawan. Main solo dulu ya.");
-      loadQuestions();
-    }
-  }, 10000);
-}
+        function createRoom() {
+            const code = 'RMDH-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+            document.getElementById('roomCode').value = code;
+            alert('Ruangan dibuat! Bagikan kode ini ke teman Anda.');
+        }
 
-// ================== NETWORKING CORE ==================
-function initNetworking(isCreating, code = null) {
-  gameMode = "private";
-  
-  if (isCreating) {
-    roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
-    peer = new Peer('RM-' + roomCode);
-    isHost = true;
-    
-    peer.on('open', (id) => {
-      showScreen('gameScreen');
-      document.getElementById('displayRoomCode').textContent = roomCode;
-      document.getElementById('lobbyModal').classList.add('show');
-      document.getElementById('btnStartGame').style.display = 'block';
-    });
-    
-    peer.on('connection', (connection) => {
-      connections.push(connection);
-      conn = connection; // Handle last connection for simplicity in this demo
-      document.getElementById('playerCount').textContent = connections.length + 1;
-      
-      connection.on('open', () => {
-        connection.on('data', (data) => handleData(data));
-      });
-    });
-    
-  } else {
-    // Joining
-    showScreen('gameScreen');
-    document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Menghubungkan...</p></div>`;
-    
-    peer = new Peer();
-    peer.on('open', () => {
-      conn = peer.connect('RM-' + code);
-      conn.on('open', () => {
-        showToast("Terhubung ke ruang!");
-        setupConnection();
-      });
-      conn.on('error', () => {
-        alert("Kode tidak ditemukan atau ruang penuh.");
-        backToMenu();
-      });
-    });
-  }
-}
+        function joinRoom() {
+            const code = prompt('Masukkan kode ruangan:');
+            if (code) {
+                document.getElementById('roomCode').value = code;
+                alert('Menghubungkan ke ruangan ' + code + '...');
+            }
+        }
 
-function setupConnection() {
-  if (!conn) return;
-  
-  conn.on('data', (data) => handleData(data));
-  
-  // Jika ini host, kirim sinyal mulai saat game dimulai
-  if (isHost) {
-    // Host triggers game start via button
-  } else {
-    // Guest waits for game start
-    document.getElementById('quizArea').innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner"></div><p>Menunggu Host memulai...</p></div>`;
-  }
-}
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            const container = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'text-sm';
+            msgDiv.innerHTML = `<span style="color: var(--accent-gold);">${playerName || 'Anda'}:</span> ${message}`;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            input.value = '';
+        }
 
-function handleData(data) {
-  if (data.type === 'start') {
-    currentQuestions = data.questions;
-    qIndex = 0;
-    myScore = 0;
-    opponentScore = 0;
-    closeModal('lobbyModal');
-    renderQuestion();
-    updateGameUI();
-  }
-  if (data.type === 'score') {
-    opponentScore = data.score;
-    updateGameUI();
-  }
-}
-
-function startGame() {
-  if (!conn && connections.length === 0) {
-    alert("Belum ada teman yang join. Main solo saja.");
-  }
-  
-  // Kirim soal ke semua
-  const packet = { type: 'start', questions: shuffle(quizData).slice(0, 5) };
-  if (conn) conn.send(packet); // for single guest in demo
-  // connections.forEach(c => c.send(packet)); // for multiple guests
-  
-  currentQuestions = packet.questions;
-  qIndex = 0;
-  myScore = 0;
-  opponentScore = 0;
-  closeModal('lobbyModal');
-  renderQuestion();
-}
-
-// ================== UTILS ==================
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-function showToast(msg) { 
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-function playSound(correct) {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  osc.connect(ctx.destination);
-  osc.frequency.value = correct ? 600 : 200;
-  osc.start(); osc.stop(ctx.currentTime + 0.1);
-}
-
-</script>
+        // Enter key for chat
+        document.addEventListener('keypress', function(e) {
+            if (e.target.id === 'chatInput' && e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
